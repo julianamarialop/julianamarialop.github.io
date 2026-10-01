@@ -123,7 +123,7 @@ params:
   # Vazio, nenhum script e carregado. So conta no dominio publicado: build local
   # e `hugo server` nao entram na estatistica.
   umami:
-    websiteId: ""
+    websiteId: "bcd6c3a7-485f-4331-a3e8-f2d26e6ba927"
     script: "https://cloud.umami.is/script.js"
     domain: "julianamarialop.github.io"
 
