@@ -1,0 +1,123 @@
+baseURL: https://julianamarialop.github.io/
+title: Ahead of the AI
+theme: PaperMod
+
+defaultContentLanguage: pt
+defaultContentLanguageInSubdir: false
+enableRobotsTXT: true
+enableEmoji: true
+buildFuture: false
+
+pagination:
+  pagerSize: 10
+
+outputs:
+  home: [HTML, RSS, JSON]   # JSON alimenta a busca do PaperMod
+
+taxonomies:
+  tag: tags
+  series: series
+
+markup:
+  goldmark:
+    renderer:
+      unsafe: false
+  highlight:
+    codeFences: true
+    guessSyntax: false
+    noClasses: false
+    style: monokai
+
+languages:
+  pt:
+    label: "Português"
+    locale: pt-BR
+    contentDir: content/pt
+    weight: 1
+    params:
+      description: "Arquitetura, IA e o que o mercado ainda não viu. Artigos de Juliana Maria Lopes."
+      homeInfoParams:
+        Title: "Ahead of the AI"
+        Content: >
+          Arquitetura, IA e o que o mercado ainda não viu. Artigos de Juliana Maria Lopes
+          sobre dados, agentes de IA e plataformas modernas, explicados com analogias
+          que ficam na memória.
+    menus:
+      main:
+        - { identifier: articles, name: "Artigos", pageRef: /articles, weight: 10 }
+        - { identifier: events, name: "Eventos", pageRef: /events, weight: 20 }
+        - { identifier: tags, name: "Tags", pageRef: /tags, weight: 30 }
+        - { identifier: archives, name: "Arquivo", pageRef: /archives, weight: 40 }
+        - { identifier: search, name: "Busca", pageRef: /search, weight: 50 }
+        - { identifier: about, name: "Sobre", pageRef: /about, weight: 60 }
+  en:
+    label: "English"
+    locale: en-US
+    contentDir: content/en
+    weight: 2
+    params:
+      description: "Architecture, AI and what the market has not seen yet. Articles by Juliana Maria Lopes."
+      homeInfoParams:
+        Title: "Ahead of the AI"
+        Content: >
+          Architecture, AI and what the market has not seen yet. Articles by Juliana Maria
+          Lopes on data, AI agents and modern platforms.
+    menus:
+      main:
+        - { identifier: articles, name: "Articles", pageRef: /articles, weight: 10 }
+        - { identifier: events, name: "Events", pageRef: /events, weight: 20 }
+        - { identifier: tags, name: "Tags", pageRef: /tags, weight: 30 }
+        - { identifier: archives, name: "Archive", pageRef: /archives, weight: 40 }
+        - { identifier: search, name: "Search", pageRef: /search, weight: 50 }
+        - { identifier: about, name: "About", pageRef: /about, weight: 60 }
+
+params:
+  env: production
+  author: Juliana Maria Lopes
+  mainSections: [articles]
+  defaultTheme: auto
+  disableThemeToggle: false
+  displayFullLangName: true
+
+  ShowReadingTime: true
+  ShowWordCount: false
+  ShowShareButtons: true
+  ShareButtons: [linkedin, x, whatsapp, telegram]
+  ShowPostNavLinks: true
+  ShowBreadCrumbs: true
+  ShowCodeCopyButtons: true
+  ShowRssButtonInSectionTermList: true
+  ShowToc: true
+  TocOpen: false
+  ShowFullTextinRSS: false
+
+  cover:
+    responsiveImages: true
+    hiddenInList: false
+    hiddenInSingle: false
+
+  socialIcons:
+    - { name: linkedin, url: "https://www.linkedin.com/in/julianamarialopes/" }
+    - { name: github, url: "https://github.com/julianamarialop" }
+    - { name: x, url: "https://x.com/julianamarialop" }
+    - { name: rss, url: "index.xml" }
+
+  schema:
+    publisherType: Person
+    sameAs:
+      - https://www.linkedin.com/in/julianamarialopes/
+      - https://github.com/julianamarialop
+
+  # Bloco de inscricao no rodape. Fica oculto enquanto `url` estiver vazio.
+  # Substack: https://<nome>.substack.com/subscribe
+  newsletter:
+    url: ""
+
+  fuseOpts:
+    isCaseSensitive: false
+    shouldSort: true
+    location: 0
+    distance: 1000
+    threshold: 0.4
+    minMatchCharLength: 2
+    keys: [title, permalink, summary, content]

@@ -1,0 +1,17 @@
+{{- /* Bloco de inscricao na newsletter. So aparece com params.newsletter.url preenchido. */ -}}
+{{- with site.Params.newsletter.url }}
+<section class="newsletter-cta" aria-label="{{ i18n "newsletter_titulo" }}">
+  <p class="newsletter-cta__titulo">{{ i18n "newsletter_titulo" }}</p>
+  <p class="newsletter-cta__texto">{{ i18n "newsletter_texto" }}</p>
+  <a class="newsletter-cta__botao" href="{{ . }}" target="_blank" rel="noopener">{{ i18n "newsletter_botao" }}</a>
+</section>
+<style>
+  .newsletter-cta { max-width: var(--main-width); margin: 24px auto 0; padding: 20px 24px;
+    border: 1px solid var(--border); border-radius: var(--radius); background: var(--entry);
+    text-align: center; }
+  .newsletter-cta__titulo { font-weight: 600; font-size: 1.1rem; margin-bottom: 4px; color: var(--primary); }
+  .newsletter-cta__texto { color: var(--secondary); margin-bottom: 12px; }
+  .newsletter-cta__botao { display: inline-block; padding: 8px 20px; border-radius: var(--radius);
+    background: var(--primary); color: var(--theme); font-weight: 600; }
+</style>
+{{- end }}

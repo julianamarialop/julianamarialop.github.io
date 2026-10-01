@@ -1,0 +1,6 @@
+- id: newsletter_titulo
+  translation: "Assine a Ahead of the AI"
+- id: newsletter_texto
+  translation: "Um artigo novo por e-mail, sem depender do algoritmo."
+- id: newsletter_botao
+  translation: "Quero assinar"

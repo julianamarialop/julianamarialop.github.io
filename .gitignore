@@ -1,0 +1,12 @@
+# Saida do Hugo
+public/
+resources/_gen/
+.hugo_build.lock
+
+# Conversor do LinkedIn
+.cache/
+tools/ultima-migracao.md
+__pycache__/
+
+# O export do LinkedIn traz dados pessoais (mensagens, conexoes, logins): nunca versionar
+*LinkedInDataExport*
