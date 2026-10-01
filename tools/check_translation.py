@@ -108,9 +108,11 @@ def conferir(slug: str) -> list[str]:
     fpt, cpt = separar(pt_txt)
     fen, cen = separar(en_txt)
 
-    for campo in ("title", "slug", "date", "summary", "tags"):
+    for campo in ("title", "slug", "date", "summary"):
         if not fen.get(campo):
             erros.append(f"front matter sem {campo}")
+    if "tags" not in fen:
+        erros.append("front matter sem tags")
     for campo in ("date", "linkedin"):
         if fpt.get(campo) != fen.get(campo):
             erros.append(f"{campo} diferente do original")
