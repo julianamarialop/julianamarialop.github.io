@@ -1,61 +1,68 @@
-- id: newsletter_titulo
-  translation: "Subscribe to Ahead of the AI"
-- id: newsletter_texto
-  translation: "Architecture, AI and what the market has not seen yet. One new article per issue, explained with analogies that stick."
-- id: newsletter_botao
-  translation: "Subscribe"
-- id: newsletter_botao_linkedin
-  translation: "Subscribe on LinkedIn"
+- id: headline
+  translation: "3x Microsoft MVP · AI & Data Executive · Big Data & BI Architect"
+- id: headline_longo
+  translation: "3x Microsoft MVP · AI & Data Executive · Big Data & BI Architect Specialist · Microsoft MCT · 10x Microsoft Certified · 3x Databricks Certified"
+- id: inicio
+  translation: "Home"
+- id: pesquisar
+  translation: "Search articles"
+- id: navegacao
+  translation: "Main navigation"
+- id: tema_visual
+  translation: "Theme"
 
-- id: kicker_home
-  translation: "A newsletter on architecture, data and AI"
 - id: artigos
   translation: "articles"
-- id: desde
-  translation: "the first one"
-- id: temas
-  translation: "topics"
-- id: mais_recente
-  translation: "Latest article"
-- id: ler_artigo
-  translation: "Read the article"
-- id: ultimos_artigos
-  translation: "Latest articles"
-- id: ver_todos
-  translation: "See all"
-- id: explore_por_tema
-  translation: "Explore by topic"
-- id: todos_os_temas
-  translation: "All topics"
-- id: do_arquivo
-  translation: "From the archive"
+- id: artigos_publicados
+  translation: "Published articles"
+- id: temas_cobertos
+  translation: "Topics"
+- id: por
+  translation: "By"
+- id: assinar
+  translation: "Subscribe"
+- id: assinar_newsletter
+  translation: "Subscribe to the newsletter"
+- id: sobre_a_autora
+  translation: "About the author"
+- id: artigos_recentes
+  translation: "Recent articles"
+- id: ver_todos_os_artigos
+  translation: "See all articles"
 - id: sem_artigos
   translation: "English articles are on their way. Meanwhile, the full archive is available in Portuguese."
 - id: secao_vazia
   translation: "Nothing published here yet."
-- id: tema
-  translation: "Topic"
+- id: publico
+  translation: "Public"
+
+- id: ler_artigo
+  translation: "Read article"
+- id: compartilhar
+  translation: "Share"
+- id: original
+  translation: "See on LinkedIn"
+- id: min_de_leitura
+  translation: "min read"
+- id: publicado_em
+  translation: "Published on"
+- id: mais_artigos
+  translation: "More articles by Juliana"
+
+- id: temas_em_alta
+  translation: "Trending topics"
+- id: ver_todos_os_temas
+  translation: "See all topics"
+- id: sobre_a_newsletter
+  translation: "About the newsletter"
+- id: newsletter_texto
+  translation: "Architecture, AI and what the market has not seen yet. Each article explains a technical topic through an analogy that sticks: X-Men, Pokémon, Star Wars, mythology."
+- id: links_do_site
+  translation: "Site links"
 - id: paginacao
   translation: "Pagination"
 
-- id: quem_escreve
-  translation: "Who writes"
-- id: sobre_a_autora
-  translation: "About the author"
-- id: credenciais
-  translation: "3x Microsoft MVP · AI & Data Executive · Microsoft MCT"
-- id: bio_curta
-  translation: "More than 20 years building data and AI platforms at large companies. I write for people who make architecture decisions and want to understand what comes before it becomes a trend."
-- id: conheca
-  translation: "Meet the author"
-
-- id: min_de_leitura
-  translation: "min read"
-- id: neste_artigo
-  translation: "In this article"
-- id: compartilhar
-  translation: "Share"
-- id: original_linkedin
-  translation: "See the original post on LinkedIn"
-- id: continue_lendo
-  translation: "Keep reading"
+- id: conectar_linkedin
+  translation: "Connect on LinkedIn"
+- id: ler_newsletter
+  translation: "Read the newsletter"

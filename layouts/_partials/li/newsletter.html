@@ -1,0 +1,24 @@
+{{- /* Cabecalho da newsletter, como a pagina de newsletter do LinkedIn. */ -}}
+{{- $logo := (resources.Get "images/newsletter-logo.png").Fill "160x160 Center webp q90" }}
+{{- $foto := (resources.Get "images/juliana.jpg").Fill "48x48 Center webp q85" }}
+{{- $url := site.Params.newsletter.url | default "https://www.linkedin.com/in/julianamarialopes/" }}
+<section class="li-card newsletter">
+  <div class="newsletter-banner" aria-hidden="true"></div>
+  <div class="newsletter-corpo">
+    <img class="newsletter-logo" src="{{ $logo.RelPermalink }}" width="80" height="80" alt="Ahead of the AI">
+    <h1 class="newsletter-nome">Ahead of the AI</h1>
+    <p class="newsletter-desc">{{ site.Params.description }}</p>
+    <p class="newsletter-por">
+      <img src="{{ $foto.RelPermalink }}" width="24" height="24" alt="">
+      {{ i18n "por" }} <strong>Juliana Maria Lopes</strong>
+      <span aria-hidden="true">·</span> {{ len (where site.RegularPages "Section" "articles") }} {{ i18n "artigos" }}
+    </p>
+    <div class="newsletter-acoes">
+      <a class="li-botao li-botao-cheio" href="{{ $url }}" target="_blank" rel="noopener">
+        <svg viewBox="0 0 16 16" width="16" height="16" aria-hidden="true"><path d="M14 9H9v5H7V9H2V7h5V2h2v5h5z"/></svg>
+        {{ i18n "assinar" }}
+      </a>
+      {{- with site.GetPage "/about" }}<a class="li-botao" href="{{ .RelPermalink }}">{{ i18n "sobre_a_autora" }}</a>{{ end }}
+    </div>
+  </div>
+</section>

@@ -1,0 +1,15 @@
+{{- /* Linha de artigo para listas, como a aba "Artigos" de um perfil do LinkedIn. */ -}}
+{{- $p := . }}
+{{- $capa := "" }}
+{{- with $p.Params.cover.image }}{{ with $p.Resources.Get . }}{{ $capa = . }}{{ end }}{{ end }}
+<a class="linha" href="{{ $p.RelPermalink }}">
+  {{- if $capa }}
+  {{- $img := $capa.Fill "400x225 Smart webp q78" }}
+  <img src="{{ $img.RelPermalink }}" width="200" height="112" alt="" loading="lazy" decoding="async">
+  {{- else }}<span class="linha-sem-capa" aria-hidden="true"></span>{{ end }}
+  <span class="linha-texto">
+    <span class="linha-titulo">{{ $p.Title }}</span>
+    <span class="linha-resumo">{{ $p.Summary | plainify | htmlUnescape }}</span>
+    <span class="linha-meta">{{ $p.Date | time.Format ":date_long" }} <span aria-hidden="true">·</span> {{ $p.ReadingTime }} {{ i18n "min_de_leitura" }}</span>
+  </span>
+</a>

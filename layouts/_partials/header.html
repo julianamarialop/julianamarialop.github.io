@@ -1,0 +1,56 @@
+{{- /* Barra superior no estilo do LinkedIn: logo, busca, itens com icone e rotulo.
+       Mantem o id "theme-toggle", que o script do rodape do PaperMod usa. */ -}}
+{{- $logo := (resources.Get "images/newsletter-logo.png").Fill "80x80 Center webp q90" }}
+{{- $atual := .RelPermalink }}
+{{- $icones := dict
+  "home" `<path d="M23 9v2h-2v7a3 3 0 01-3 3h-4v-6h-4v6H6a3 3 0 01-3-3v-7H1V9l11-7z"/>`
+  "articles" `<path d="M21 3H3a1 1 0 00-1 1v16a1 1 0 001 1h18a1 1 0 001-1V4a1 1 0 00-1-1zM11 17H5v-2h6zm0-4H5v-2h6zm8 4h-6v-6h6zm0-8H5V7h14z"/>`
+  "events" `<path d="M19 4h-1V2h-2v2H8V2H6v2H5a3 3 0 00-3 3v12a3 3 0 003 3h14a3 3 0 003-3V7a3 3 0 00-3-3zm1 15a1 1 0 01-1 1H5a1 1 0 01-1-1v-9h16zM7 12h4v4H7z"/>`
+  "tags" `<path d="M20 9V7h-3.6l.7-4h-2l-.7 4h-4l.7-4h-2l-.7 4H4v2h3.1l-.7 4H3v2h3.1l-.7 4h2l.7-4h4l-.7 4h2l.7-4H19v-2h-3.6l.7-4zm-6.6 4h-4l.7-4h4z"/>`
+  "archives" `<path d="M12 2a10 10 0 1010 10A10 10 0 0012 2zm1 10.4l3.7 2.1-1 1.7L11 13.6V6h2z"/>`
+  "about" `<path d="M12 12a5 5 0 10-5-5 5 5 0 005 5zm0 2c-5 0-9 2.2-9 5v3h18v-3c0-2.8-4-5-9-5z"/>`
+}}
+<header class="header topo">
+  <div class="topo-miolo">
+    <a class="topo-logo" href="{{ "" | absLangURL }}" accesskey="h" title="{{ site.Title }}">
+      <img src="{{ $logo.RelPermalink }}" width="34" height="34" alt="">
+      <span>{{ site.Title }}</span>
+    </a>
+
+    {{- with site.GetPage "/search" }}
+    <a class="topo-busca" href="{{ .RelPermalink }}" accesskey="/">
+      <svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><path d="M21.4 19.6l-5.3-5.3a7.5 7.5 0 10-1.8 1.8l5.3 5.3zM5 10a5 5 0 115 5 5 5 0 01-5-5z"/></svg>
+      <span>{{ i18n "pesquisar" }}</span>
+    </a>
+    {{- end }}
+
+    <nav class="topo-nav" aria-label="{{ i18n "navegacao" }}">
+      <a class="topo-item{{ if $.IsHome }} ativo{{ end }}" href="{{ "" | absLangURL }}">
+        <svg viewBox="0 0 24 24" width="24" height="24" aria-hidden="true">{{ index $icones "home" | safeHTML }}</svg>
+        <span>{{ i18n "inicio" }}</span>
+      </a>
+      {{- range site.Menus.main }}
+      {{- if ne .Identifier "search" }}
+      {{- $url := .URL | relLangURL }}
+      {{- $ativo := and (ne $url "/") (hasPrefix $atual $url) }}
+      <a class="topo-item{{ if $ativo }} ativo{{ end }}" href="{{ $url }}">
+        <svg viewBox="0 0 24 24" width="24" height="24" aria-hidden="true">{{ index $icones .Identifier | default "" | safeHTML }}</svg>
+        <span>{{ .Name }}</span>
+      </a>
+      {{- end }}
+      {{- end }}
+      <span class="topo-divisor" aria-hidden="true"></span>
+      <button id="theme-toggle" class="topo-item theme-toggle" accesskey="t" type="button" aria-label="{{ i18n "tema_visual" }}">
+        <svg class="moon" viewBox="0 0 24 24" width="24" height="24" aria-hidden="true"><path d="M21 12.8A9 9 0 1111.2 3a7 7 0 009.8 9.8z"/></svg>
+        <svg class="sun" viewBox="0 0 24 24" width="24" height="24" aria-hidden="true"><path d="M12 7a5 5 0 105 5 5 5 0 00-5-5zm-1-6h2v3h-2zm0 19h2v3h-2zM1 11h3v2H1zm19 0h3v2h-3zM4.2 2.8l2.1 2.1-1.4 1.4-2.1-2.1zm14.9 14.9l2.1 2.1-1.4 1.4-2.1-2.1zM2.8 19.8l2.1-2.1 1.4 1.4-2.1 2.1zM17.7 4.9l2.1-2.1 1.4 1.4-2.1 2.1z"/></svg>
+        <span>{{ i18n "tema_visual" }}</span>
+      </button>
+      {{- range site.Home.Translations }}
+      <a class="topo-item" href="{{ .Permalink }}" hreflang="{{ .Lang }}">
+        <svg viewBox="0 0 24 24" width="24" height="24" aria-hidden="true"><path d="M12 2a10 10 0 1010 10A10 10 0 0012 2zm7.9 9h-3.5a15.5 15.5 0 00-1.4-6.2A8 8 0 0119.9 11zM12 4c.9 1.2 2.1 3.6 2.4 7H9.6C9.9 7.6 11.1 5.2 12 4zM9 4.8A15.5 15.5 0 007.6 11H4.1A8 8 0 019 4.8zM4.1 13h3.5A15.5 15.5 0 009 19.2 8 8 0 014.1 13zM12 20c-.9-1.2-2.1-3.6-2.4-7h4.8c-.3 3.4-1.5 5.8-2.4 7zm3-.8a15.5 15.5 0 001.4-6.2h3.5a8 8 0 01-4.9 6.2z"/></svg>
+        <span>{{ .Lang | upper }}</span>
+      </a>
+      {{- end }}
+    </nav>
+  </div>
+</header>

@@ -1,27 +1,30 @@
 {{- define "main" }}
 {{- $paginas := .RegularPages.ByDate.Reverse }}
 {{- $pag := .Paginate $paginas }}
-
-<header class="lista-cabecalho">
-  {{- if eq .Kind "term" }}<p class="rotulo">{{ i18n "tema" }}</p>{{ else }}<p class="rotulo">Ahead of the AI</p>{{ end }}
-  <h1 class="lista-titulo">{{ .Title }}</h1>
-  {{- with .Description }}<p class="lista-descricao">{{ . }}</p>{{ end }}
-  {{- with $paginas }}<p class="meta">{{ len . }} {{ i18n "artigos" }}</p>{{ end }}
-</header>
-
-{{- if $pag.Pages }}
-<div class="grade grade-lista">
-  {{- range $pag.Pages }}{{ partial "card.html" (dict "p" . "tam" "m") }}{{ end }}
+<div class="leitura">
+  <div class="coluna-principal">
+    <section class="li-card lista">
+      <header class="lista-cabecalho">
+        <h1 class="lista-titulo">{{ if eq .Kind "term" }}#{{ end }}{{ .Title }}</h1>
+        <p class="lista-meta">
+          {{- with .Description }}{{ . }} <span aria-hidden="true">·</span> {{ end -}}
+          {{ len $paginas }} {{ i18n "artigos" }}
+        </p>
+      </header>
+      {{- if $pag.Pages }}
+      {{- range $pag.Pages }}{{ partial "li/linha.html" . }}{{ end }}
+      {{- else }}
+      <p class="vazio">{{ i18n "secao_vazia" }}</p>
+      {{- end }}
+      {{- if gt $pag.TotalPages 1 }}
+      <nav class="paginacao" aria-label="{{ i18n "paginacao" }}">
+        {{- with $pag.Prev }}<a class="li-botao" href="{{ .URL }}">← {{ i18n "prev_page" }}</a>{{ else }}<span></span>{{ end }}
+        <span>{{ $pag.PageNumber }} / {{ $pag.TotalPages }}</span>
+        {{- with $pag.Next }}<a class="li-botao" href="{{ .URL }}">{{ i18n "next_page" }} →</a>{{ else }}<span></span>{{ end }}
+      </nav>
+      {{- end }}
+    </section>
+  </div>
+  {{ partial "li/direita.html" . }}
 </div>
-{{- else }}
-<p class="vazio">{{ i18n "secao_vazia" }}</p>
-{{- end }}
-
-{{- if gt $pag.TotalPages 1 }}
-<nav class="paginacao" aria-label="{{ i18n "paginacao" }}">
-  {{- with $pag.Prev }}<a class="link-seta" href="{{ .URL }}"><span aria-hidden="true">←</span> {{ i18n "prev_page" }}</a>{{ else }}<span></span>{{ end }}
-  <span class="meta">{{ $pag.PageNumber }} / {{ $pag.TotalPages }}</span>
-  {{- with $pag.Next }}<a class="link-seta" href="{{ .URL }}">{{ i18n "next_page" }} <span aria-hidden="true">→</span></a>{{ else }}<span></span>{{ end }}
-</nav>
-{{- end }}
 {{- end }}

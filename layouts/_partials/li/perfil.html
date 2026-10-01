@@ -1,0 +1,32 @@
+{{- /* Card de perfil da coluna esquerda, como o do feed do LinkedIn. */ -}}
+{{- $foto := (resources.Get "images/juliana.jpg").Fill "160x160 Center webp q85" }}
+{{- $artigos := where site.RegularPages "Section" "articles" }}
+<section class="li-card perfil">
+  <div class="perfil-banner" aria-hidden="true"></div>
+  <a class="perfil-foto" href="{{ with site.GetPage "/about" }}{{ .RelPermalink }}{{ end }}">
+    <img src="{{ $foto.RelPermalink }}" width="72" height="72" alt="Juliana Maria Lopes">
+  </a>
+  <div class="perfil-corpo">
+    <a class="perfil-nome" href="{{ with site.GetPage "/about" }}{{ .RelPermalink }}{{ end }}">Juliana Maria Lopes</a>
+    <p class="perfil-titulo">{{ i18n "headline" }}</p>
+    <p class="perfil-local">São Paulo, Brasil</p>
+  </div>
+  <dl class="perfil-numeros">
+    <div><dt>{{ i18n "artigos_publicados" }}</dt><dd>{{ len $artigos }}</dd></div>
+    <div><dt>{{ i18n "temas_cobertos" }}</dt><dd>{{ len site.Taxonomies.tags }}</dd></div>
+  </dl>
+  <div class="perfil-links">
+    <a href="https://www.linkedin.com/in/julianamarialopes/" target="_blank" rel="noopener">
+      <svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><path d="M20.5 2h-17A1.5 1.5 0 002 3.5v17A1.5 1.5 0 003.5 22h17a1.5 1.5 0 001.5-1.5v-17A1.5 1.5 0 0020.5 2zM8 19H5v-9h3zM6.5 8.3A1.8 1.8 0 118.3 6.5 1.8 1.8 0 016.5 8.3zM19 19h-3v-4.7c0-1.1 0-2.6-1.6-2.6s-1.8 1.2-1.8 2.5V19h-3v-9h2.9v1.2a3.1 3.1 0 012.8-1.5c3 0 3.6 2 3.6 4.6z"/></svg>
+      LinkedIn
+    </a>
+    <a href="https://github.com/julianamarialop" target="_blank" rel="noopener">
+      <svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><path d="M12 2a10 10 0 00-3.2 19.5c.5.1.7-.2.7-.5v-1.7c-2.8.6-3.4-1.3-3.4-1.3a2.7 2.7 0 00-1.1-1.5c-.9-.6.1-.6.1-.6a2.1 2.1 0 011.5 1 2.2 2.2 0 003 .9 2.2 2.2 0 01.7-1.4c-2.2-.3-4.6-1.1-4.6-5a3.9 3.9 0 011-2.7 3.6 3.6 0 01.1-2.7s.8-.3 2.8 1a9.6 9.6 0 015 0c1.9-1.3 2.7-1 2.7-1a3.6 3.6 0 01.1 2.7 3.9 3.9 0 011 2.7c0 3.9-2.3 4.7-4.6 5a2.4 2.4 0 01.7 1.9v2.8c0 .3.2.6.7.5A10 10 0 0012 2z"/></svg>
+      GitHub
+    </a>
+    <a href="{{ "index.xml" | absLangURL }}">
+      <svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><path d="M4 11a9 9 0 019 9h-2.5A6.5 6.5 0 004 13.5zm0-7a16 16 0 0116 16h-2.5A13.5 13.5 0 004 6.5zM6 20a2 2 0 112-2 2 2 0 01-2 2z"/></svg>
+      RSS
+    </a>
+  </div>
+</section>

@@ -1,0 +1,29 @@
+{{- /* Coluna direita: sobre a newsletter, temas em alta e rodape de links, como o
+       "LinkedIn Notícias" e o rodape lateral do feed. */ -}}
+<aside class="coluna-direita">
+  <section class="li-card lateral">
+    <h2 class="lateral-titulo">{{ i18n "temas_em_alta" }}</h2>
+    <ul class="em-alta">
+      {{- range first 8 site.Taxonomies.tags.ByCount }}
+      <li>
+        <a href="{{ .Page.RelPermalink }}">
+          <span class="em-alta-nome">#{{ .Page.LinkTitle }}</span>
+          <span class="em-alta-qtd">{{ .Count }} {{ i18n "artigos" }}</span>
+        </a>
+      </li>
+      {{- end }}
+    </ul>
+    {{- with site.GetPage "/tags" }}<a class="lateral-mais" href="{{ .RelPermalink }}">{{ i18n "ver_todos_os_temas" }} <span aria-hidden="true">→</span></a>{{ end }}
+  </section>
+
+  <section class="li-card lateral">
+    <h2 class="lateral-titulo">{{ i18n "sobre_a_newsletter" }}</h2>
+    <p class="lateral-texto">{{ i18n "newsletter_texto" }}</p>
+  </section>
+
+  <nav class="rodape-lateral" aria-label="{{ i18n "links_do_site" }}">
+    {{- range site.Menus.main }}<a href="{{ .URL | relLangURL }}">{{ .Name }}</a>{{ end }}
+    <a href="{{ "index.xml" | absLangURL }}">RSS</a>
+    <p><strong>Ahead of the AI</strong> © {{ now.Year }} Juliana Maria Lopes</p>
+  </nav>
+</aside>

@@ -1,90 +1,134 @@
 {{- define "main" }}
-{{- $artigo := eq .Section "articles" }}
+{{- if eq .Section "articles" }}
+{{- /* ---------- artigo, como a pagina de artigo do LinkedIn ---------- */ -}}
 {{- $capa := "" }}
 {{- with .Params.cover.image }}{{ with $.Resources.Get . }}{{ $capa = . }}{{ end }}{{ end }}
-{{- $tema := index (.GetTerms "tags") 0 }}
-{{- $toc := and $artigo (.Param "ShowToc") (gt (len (findRE "<li>" .TableOfContents)) 2) }}
-
-<article class="artigo{{ if not $artigo }} artigo-simples{{ end }}">
-  <header class="artigo-cabecalho">
-    {{- if $artigo }}
-    <p class="rotulo">
-      {{- with $tema }}<a href="{{ .RelPermalink }}">{{ .LinkTitle }}</a>{{ end }}
-      {{- with index (.GetTerms "series") 0 }}<span class="rotulo-sep" aria-hidden="true">·</span><a href="{{ .RelPermalink }}">{{ .LinkTitle }}</a>{{ end }}
-    </p>
-    {{- end }}
-    <h1 class="artigo-titulo">{{ .Title }}</h1>
-    {{- /* Linha fina so com description escrita: o summary migrado e o primeiro paragrafo,
-           e repeti-lo acima do texto duplica a abertura. */ -}}
-    {{- with .Description }}<p class="artigo-linha-fina">{{ . }}</p>{{ end }}
-    {{- if $artigo }}
-    {{- $foto := (resources.Get "images/juliana.jpg").Fill "96x96 Center webp q85" }}
-    <div class="assinatura">
-      <img src="{{ $foto.RelPermalink }}" width="44" height="44" alt="">
-      <div>
-        <p class="assinatura-nome">Juliana Maria Lopes</p>
-        <p class="meta">
-          <time datetime="{{ .Date.Format "2006-01-02" }}">{{ .Date | time.Format ":date_long" }}</time>
-          <span aria-hidden="true">·</span> {{ .ReadingTime }} {{ i18n "min_de_leitura" }}
-        </p>
-      </div>
-    </div>
-    {{- end }}
-  </header>
-
-  {{- if $capa }}
-  {{- $img := $capa.Resize "1600x webp q82" }}
-  <figure class="artigo-capa">
-    <img src="{{ $img.RelPermalink }}" width="{{ $img.Width }}" height="{{ $img.Height }}"
+{{- $foto := (resources.Get "images/juliana.jpg").Fill "112x112 Center webp q85" }}
+{{- $logo := (resources.Get "images/newsletter-logo.png").Fill "80x80 Center webp q90" }}
+{{- $assinar := site.Params.newsletter.url | default "https://www.linkedin.com/in/julianamarialopes/" }}
+<div class="leitura">
+  <article class="li-card artigo">
+    {{- if $capa }}
+    {{- $img := $capa.Resize "1488x webp q82" }}
+    <img class="artigo-capa" src="{{ $img.RelPermalink }}" width="{{ $img.Width }}" height="{{ $img.Height }}"
          alt="{{ .Params.cover.alt | default .Title }}" fetchpriority="high">
-  </figure>
-  {{- end }}
-
-  <div class="artigo-corpo{{ if $toc }} com-sumario{{ end }}">
-    {{- if $toc }}
-    <aside class="sumario" aria-label="{{ i18n "toc" }}">
-      <p class="rotulo">{{ i18n "neste_artigo" }}</p>
-      {{ .TableOfContents }}
-    </aside>
-    {{- end }}
-    <div class="artigo-texto post-content md-content">
-      {{- if not (.Param "disableAnchoredHeadings") }}
-      {{- partial "anchored_headings.html" .Content -}}
-      {{- else }}{{ .Content }}{{ end }}
-    </div>
-  </div>
-
-  {{- if $artigo }}
-  <footer class="artigo-rodape">
-    {{- with .GetTerms "tags" }}
-    <ul class="temas temas-artigo">
-      {{- range . }}<li><a href="{{ .RelPermalink }}">{{ .LinkTitle }}</a></li>{{ end }}
-    </ul>
     {{- end }}
 
-    <div class="artigo-acoes">
-      {{- if (and site.Params.ShowShareButtons (ne .Params.disableShare true)) }}
-      <div class="compartilhar"><span class="rotulo">{{ i18n "compartilhar" }}</span>{{ partial "share_icons.html" . }}</div>
-      {{- end }}
-      {{- with .Params.linkedin }}
-      <a class="link-seta" href="{{ . }}" target="_blank" rel="noopener">{{ i18n "original_linkedin" }} <span aria-hidden="true">↗</span></a>
-      {{- end }}
-    </div>
+    <div class="artigo-miolo">
+      <a class="artigo-serie" href="{{ "" | absLangURL }}">
+        <img src="{{ $logo.RelPermalink }}" width="40" height="40" alt="">
+        <span>
+          <strong>Ahead of the AI</strong>
+          <span>{{ site.Params.description }}</span>
+        </span>
+      </a>
 
-    {{ partial "autora.html" (dict "ctx" . "modo" "artigo") }}
+      <h1 class="artigo-titulo">{{ .Title }}</h1>
 
-    {{- $rel := first 3 (site.RegularPages.Related .) }}
-    {{- with $rel }}
-    <section class="bloco relacionados">
-      <div class="bloco-cabecalho"><h2 class="bloco-titulo">{{ i18n "continue_lendo" }}</h2></div>
-      <div class="grade">
-        {{- range . }}{{ partial "card.html" (dict "p" . "tam" "m") }}{{ end }}
+      <div class="artigo-autor">
+        <img src="{{ $foto.RelPermalink }}" width="56" height="56" alt="">
+        <div class="artigo-autor-texto">
+          <p class="artigo-autor-nome">Juliana Maria Lopes</p>
+          <p class="artigo-autor-titulo">{{ i18n "headline" }}</p>
+          <p class="artigo-autor-data">
+            {{ i18n "publicado_em" }} <time datetime="{{ .Date.Format "2006-01-02" }}">{{ .Date | time.Format ":date_long" }}</time>
+            <span aria-hidden="true">·</span> {{ .ReadingTime }} {{ i18n "min_de_leitura" }}
+          </p>
+        </div>
+        <a class="li-botao li-botao-contorno" href="{{ $assinar }}" target="_blank" rel="noopener">
+          <svg viewBox="0 0 16 16" width="16" height="16" aria-hidden="true"><path d="M14 9H9v5H7V9H2V7h5V2h2v5h5z"/></svg>
+          {{ i18n "assinar" }}
+        </a>
       </div>
-    </section>
-    {{- end }}
+
+      <div class="artigo-texto post-content md-content">
+        {{- if not (.Param "disableAnchoredHeadings") }}
+        {{- partial "anchored_headings.html" .Content -}}
+        {{- else }}{{ .Content }}{{ end }}
+      </div>
+
+      {{- with .GetTerms "tags" }}
+      <p class="hashtags">{{ range . }}<a href="{{ .RelPermalink }}">#{{ .LinkTitle }}</a> {{ end }}</p>
+      {{- end }}
+    </div>
+
+    <footer class="post-acoes artigo-acoes">
+      <a href="https://www.linkedin.com/sharing/share-offsite/?url={{ .Permalink | urlquery }}" target="_blank" rel="noopener">
+        <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path d="M23 12l-7.5-7v4.1C7.3 9.6 3 14.4 2 20c2.6-3.6 6.5-5.4 13.5-5.4V19z"/></svg>
+        {{ i18n "compartilhar" }}
+      </a>
+      <a href="https://wa.me/?text={{ printf "%s %s" .Title .Permalink | urlquery }}" target="_blank" rel="noopener">
+        <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path d="M12 2a10 10 0 00-8.6 15.1L2 22l5-1.3A10 10 0 1012 2zm5.4 14.2c-.2.6-1.3 1.2-1.8 1.3s-1 .2-3.3-.7a11.5 11.5 0 01-4.5-4 5 5 0 01-1-2.7 2.9 2.9 0 01.9-2.2 1 1 0 01.7-.3h.5c.2 0 .4 0 .6.5l.8 2a.6.6 0 010 .5 2 2 0 01-.3.5l-.4.5c-.2.1-.3.3-.1.6a8.8 8.8 0 001.6 2 7.9 7.9 0 002.3 1.4c.3.1.5.1.6-.1l.9-1.1c.2-.3.4-.2.7-.1l1.9.9c.3.1.5.2.5.3a2.4 2.4 0 01-.1 1.2z"/></svg>
+        WhatsApp
+      </a>
+      {{- with .Params.linkedin }}
+      <a href="{{ . }}" target="_blank" rel="noopener">
+        <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path d="M20.5 2h-17A1.5 1.5 0 002 3.5v17A1.5 1.5 0 003.5 22h17a1.5 1.5 0 001.5-1.5v-17A1.5 1.5 0 0020.5 2zM8 19H5v-9h3zM6.5 8.3A1.8 1.8 0 118.3 6.5 1.8 1.8 0 016.5 8.3zM19 19h-3v-4.7c0-1.1 0-2.6-1.6-2.6s-1.8 1.2-1.8 2.5V19h-3v-9h2.9v1.2a3.1 3.1 0 012.8-1.5c3 0 3.6 2 3.6 4.6z"/></svg>
+        {{ i18n "original" }}
+      </a>
+      {{- end }}
+    </footer>
 
     {{- partial "post_nav_links.html" . }}
-  </footer>
-  {{- end }}
-</article>
+  </article>
+
+  <aside class="coluna-direita">
+    <section class="li-card lateral cartao-autora">
+      <div class="perfil-banner" aria-hidden="true"></div>
+      <img class="perfil-foto-solta" src="{{ $foto.RelPermalink }}" width="72" height="72" alt="Juliana Maria Lopes">
+      <p class="perfil-nome">Juliana Maria Lopes</p>
+      <p class="perfil-titulo">{{ i18n "headline" }}</p>
+      <a class="li-botao li-botao-cheio" href="{{ $assinar }}" target="_blank" rel="noopener">{{ i18n "assinar_newsletter" }}</a>
+    </section>
+
+    {{- $rel := first 5 (site.RegularPages.Related .) }}
+    {{- with $rel }}
+    <section class="li-card lateral">
+      <h2 class="lateral-titulo">{{ i18n "mais_artigos" }}</h2>
+      <ul class="mais-artigos">
+        {{- range . }}
+        <li><a href="{{ .RelPermalink }}">
+          <span class="mais-titulo">{{ .Title }}</span>
+          <span class="mais-meta">{{ .Date | time.Format ":date_medium" }}</span>
+        </a></li>
+        {{- end }}
+      </ul>
+    </section>
+    {{- end }}
+  </aside>
+</div>
+
+{{- else }}
+{{- /* ---------- pagina simples (Sobre), como um perfil do LinkedIn ---------- */ -}}
+{{- $foto := (resources.Get "images/juliana.jpg").Fill "320x320 Center webp q85" }}
+<div class="leitura">
+  <div class="coluna-principal">
+    {{- if eq .File.ContentBaseName "about" }}
+    <section class="li-card perfil-grande">
+      <div class="perfil-banner perfil-banner-grande" aria-hidden="true"></div>
+      <img class="perfil-foto-grande" src="{{ $foto.RelPermalink }}" width="152" height="152" alt="Juliana Maria Lopes">
+      <div class="perfil-grande-corpo">
+        <h1 class="perfil-grande-nome">Juliana Maria Lopes</h1>
+        <p class="perfil-grande-titulo">{{ i18n "headline_longo" }}</p>
+        <p class="perfil-local">São Paulo, Brasil</p>
+        <div class="newsletter-acoes">
+          <a class="li-botao li-botao-cheio" href="https://www.linkedin.com/in/julianamarialopes/" target="_blank" rel="noopener">{{ i18n "conectar_linkedin" }}</a>
+          <a class="li-botao li-botao-contorno" href="{{ "" | absLangURL }}">{{ i18n "ler_newsletter" }}</a>
+        </div>
+      </div>
+    </section>
+    <section class="li-card secao">
+      <h2 class="secao-titulo">{{ .Title }}</h2>
+      <div class="artigo-texto md-content">{{ .Content }}</div>
+    </section>
+    {{- else }}
+    <section class="li-card secao">
+      <h1 class="secao-titulo">{{ .Title }}</h1>
+      <div class="artigo-texto post-content md-content">{{ .Content }}</div>
+    </section>
+    {{- end }}
+  </div>
+  {{ partial "li/direita.html" . }}
+</div>
+{{- end }}
 {{- end }}

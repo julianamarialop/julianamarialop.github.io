@@ -1,0 +1,49 @@
+{{- /* Artigo no formato de post do feed: autora, texto, previa do artigo, barra de acoes. */ -}}
+{{- $p := . }}
+{{- $foto := (resources.Get "images/juliana.jpg").Fill "96x96 Center webp q85" }}
+{{- $capa := "" }}
+{{- with $p.Params.cover.image }}{{ with $p.Resources.Get . }}{{ $capa = . }}{{ end }}{{ end }}
+<article class="li-card post">
+  <header class="post-autor">
+    <img src="{{ $foto.RelPermalink }}" width="48" height="48" alt="">
+    <div>
+      <p class="post-autor-nome">Juliana Maria Lopes</p>
+      <p class="post-autor-titulo">{{ i18n "headline" }}</p>
+      <p class="post-autor-data">
+        <time datetime="{{ $p.Date.Format "2006-01-02" }}">{{ $p.Date | time.Format ":date_long" }}</time>
+        <span aria-hidden="true">·</span>
+        <svg viewBox="0 0 16 16" width="14" height="14" aria-label="{{ i18n "publico" }}"><path d="M8 1a7 7 0 107 7 7 7 0 00-7-7zM3 8a5 5 0 01.3-1.6L5 8v1l2 2v1.9A5 5 0 013 8zm8.5 3.5L10 10H9V8l-2-2h2V4.3a5 5 0 012.5 7.2z"/></svg>
+      </p>
+    </div>
+  </header>
+
+  {{- with $p.Summary | plainify | htmlUnescape }}<p class="post-texto">{{ . }}</p>{{ end }}
+
+  <a class="post-previa" href="{{ $p.RelPermalink }}">
+    {{- if $capa }}
+    {{- $img := $capa.Fill "1110x624 Smart webp q80" }}
+    <img src="{{ $img.RelPermalink }}" width="{{ $img.Width }}" height="{{ $img.Height }}" alt="" loading="lazy" decoding="async">
+    {{- end }}
+    <span class="post-previa-texto">
+      <span class="post-previa-titulo">{{ $p.Title }}</span>
+      <span class="post-previa-meta">Ahead of the AI <span aria-hidden="true">·</span> {{ $p.ReadingTime }} {{ i18n "min_de_leitura" }}</span>
+    </span>
+  </a>
+
+  <footer class="post-acoes">
+    <a href="{{ $p.RelPermalink }}">
+      <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path d="M21 3H3a1 1 0 00-1 1v16a1 1 0 001 1h18a1 1 0 001-1V4a1 1 0 00-1-1zm-1 16H4V5h16zM6 7h12v2H6zm0 4h12v2H6zm0 4h8v2H6z"/></svg>
+      {{ i18n "ler_artigo" }}
+    </a>
+    <a href="https://www.linkedin.com/sharing/share-offsite/?url={{ $p.Permalink | urlquery }}" target="_blank" rel="noopener">
+      <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path d="M23 12l-7.5-7v4.1C7.3 9.6 3 14.4 2 20c2.6-3.6 6.5-5.4 13.5-5.4V19z"/></svg>
+      {{ i18n "compartilhar" }}
+    </a>
+    {{- with $p.Params.linkedin }}
+    <a href="{{ . }}" target="_blank" rel="noopener">
+      <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path d="M20.5 2h-17A1.5 1.5 0 002 3.5v17A1.5 1.5 0 003.5 22h17a1.5 1.5 0 001.5-1.5v-17A1.5 1.5 0 0020.5 2zM8 19H5v-9h3zM6.5 8.3A1.8 1.8 0 118.3 6.5 1.8 1.8 0 016.5 8.3zM19 19h-3v-4.7c0-1.1 0-2.6-1.6-2.6s-1.8 1.2-1.8 2.5V19h-3v-9h2.9v1.2a3.1 3.1 0 012.8-1.5c3 0 3.6 2 3.6 4.6z"/></svg>
+      {{ i18n "original" }}
+    </a>
+    {{- end }}
+  </footer>
+</article>
