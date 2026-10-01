@@ -1,30 +1,23 @@
 {{- define "main" }}
 {{- $paginas := .RegularPages.ByDate.Reverse }}
 {{- $pag := .Paginate $paginas }}
-<div class="leitura">
-  <div class="coluna-principal">
-    <section class="li-card lista">
-      <header class="lista-cabecalho">
-        <h1 class="lista-titulo">{{ if eq .Kind "term" }}#{{ end }}{{ .Title }}</h1>
-        <p class="lista-meta">
-          {{- with .Description }}{{ . }} <span aria-hidden="true">·</span> {{ end -}}
-          {{ len $paginas }} {{ i18n "artigos" }}
-        </p>
-      </header>
-      {{- if $pag.Pages }}
-      {{- range $pag.Pages }}{{ partial "li/linha.html" . }}{{ end }}
-      {{- else }}
-      <p class="vazio">{{ i18n "secao_vazia" }}</p>
-      {{- end }}
-      {{- if gt $pag.TotalPages 1 }}
-      <nav class="paginacao" aria-label="{{ i18n "paginacao" }}">
-        {{- with $pag.Prev }}<a class="li-botao" href="{{ .URL }}">← {{ i18n "prev_page" }}</a>{{ else }}<span></span>{{ end }}
-        <span>{{ $pag.PageNumber }} / {{ $pag.TotalPages }}</span>
-        {{- with $pag.Next }}<a class="li-botao" href="{{ .URL }}">{{ i18n "next_page" }} →</a>{{ else }}<span></span>{{ end }}
-      </nav>
-      {{- end }}
-    </section>
-  </div>
-  {{ partial "li/direita.html" . }}
-</div>
+<header class="lista-topo">
+  <p class="sobretitulo">{{ if eq .Kind "term" }}{{ i18n "tema" }}{{ else }}Ahead of the AI{{ end }}</p>
+  <h1 class="lista-titulo">{{ .Title }}</h1>
+  <p class="meta">{{ with .Description }}{{ . }} · {{ end }}{{ len $paginas }} {{ i18n "artigos" }}</p>
+</header>
+<section class="faixa">
+  {{- if $pag.Pages }}
+  <div class="grade">{{ range $pag.Pages }}{{ partial "card.html" (dict "p" .) }}{{ end }}</div>
+  {{- else }}
+  <p class="vazio">{{ i18n "secao_vazia" }}</p>
+  {{- end }}
+  {{- if gt $pag.TotalPages 1 }}
+  <nav class="paginacao" aria-label="{{ i18n "paginacao" }}">
+    {{- with $pag.Prev }}<a class="botao" href="{{ .URL }}">← {{ i18n "prev_page" }}</a>{{ else }}<span></span>{{ end }}
+    <span class="meta">{{ $pag.PageNumber }} / {{ $pag.TotalPages }}</span>
+    {{- with $pag.Next }}<a class="botao" href="{{ .URL }}">{{ i18n "next_page" }} →</a>{{ else }}<span></span>{{ end }}
+  </nav>
+  {{- end }}
+</section>
 {{- end }}

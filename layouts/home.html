@@ -1,23 +1,66 @@
 {{- define "main" }}
 {{- $artigos := (where site.RegularPages "Section" "articles").ByDate.Reverse }}
-<div class="feed">
-  <aside class="coluna-esquerda">
-    {{ partial "li/perfil.html" . }}
-  </aside>
+{{- $foto := (resources.Get "images/juliana.jpg").Fill "320x320 Center webp q85" }}
+{{- $assinar := site.Params.newsletter.url | default "https://www.linkedin.com/in/julianamarialopes/" }}
 
-  <div class="coluna-centro">
-    {{ partial "li/newsletter.html" . }}
-    {{- if $artigos }}
-    <div class="feed-separador"><span>{{ i18n "artigos_recentes" }}</span></div>
-    {{- range first 10 $artigos }}{{ partial "li/post.html" . }}{{ end }}
-    {{- with site.GetPage "/articles" }}
-    <a class="li-card feed-mais" href="{{ .RelPermalink }}">{{ i18n "ver_todos_os_artigos" }} <span aria-hidden="true">→</span></a>
-    {{- end }}
-    {{- else }}
-    <section class="li-card vazio"><p>{{ i18n "sem_artigos" }}</p></section>
-    {{- end }}
+<section class="apresentacao">
+  <img class="apresentacao-foto" src="{{ $foto.RelPermalink }}" width="160" height="160" alt="Juliana Maria Lopes">
+  <div class="apresentacao-texto">
+    <p class="sobretitulo">{{ i18n "newsletter_de" }}</p>
+    <h1 class="apresentacao-titulo">{{ i18n "ola" }}</h1>
+    <p class="apresentacao-desc">{{ i18n "apresentacao" }}</p>
+    <div class="apresentacao-acoes">
+      <a class="botao botao-acento" href="{{ $assinar }}" target="_blank" rel="noopener">{{ i18n "assinar_newsletter" }}</a>
+      {{- with site.GetPage "/about" }}<a class="botao" href="{{ .RelPermalink }}">{{ i18n "sobre_mim" }}</a>{{ end }}
+    </div>
+    <ul class="numeros">
+      <li><strong>{{ len $artigos }}</strong> {{ i18n "artigos" }}</li>
+      <li><strong>{{ len site.Taxonomies.tags }}</strong> {{ i18n "temas" }}</li>
+      {{- with $artigos }}<li>{{ i18n "desde" }} <strong>{{ (index (last 1 $artigos) 0).Date.Year }}</strong></li>{{ end }}
+    </ul>
   </div>
+</section>
 
-  {{ partial "li/direita.html" . }}
-</div>
+{{- if $artigos }}
+<section class="faixa">
+  {{ partial "card.html" (dict "p" (index $artigos 0) "destaque" true) }}
+</section>
+
+<section class="faixa">
+  <div class="faixa-topo">
+    <h2>{{ i18n "artigos_recentes" }}</h2>
+    {{- with site.GetPage "/articles" }}<a class="link" href="{{ .RelPermalink }}">{{ i18n "ver_todos" }} →</a>{{ end }}
+  </div>
+  <div class="grade">
+    {{- range first 9 (after 1 $artigos) }}{{ partial "card.html" (dict "p" .) }}{{ end }}
+  </div>
+  {{- with site.GetPage "/articles" }}
+  <p class="centro"><a class="botao" href="{{ .RelPermalink }}">{{ i18n "ver_todos_os_artigos" }} ({{ len $artigos }})</a></p>
+  {{- end }}
+</section>
+{{- else }}
+<section class="faixa vazio"><p>{{ i18n "sem_artigos" }}</p></section>
+{{- end }}
+
+{{- with site.Taxonomies.tags.ByCount }}
+<section class="faixa">
+  <div class="faixa-topo">
+    <h2>{{ i18n "explore_por_tema" }}</h2>
+    {{- with site.GetPage "/tags" }}<a class="link" href="{{ .RelPermalink }}">{{ i18n "todos_os_temas" }} →</a>{{ end }}
+  </div>
+  <ul class="temas">
+    {{- range first 16 . }}<li><a class="chip chip-grande" href="{{ .Page.RelPermalink }}">{{ .Page.LinkTitle }} <span>{{ .Count }}</span></a></li>{{ end }}
+  </ul>
+</section>
+{{- end }}
+
+<section class="faixa">
+  <div class="convite">
+    <div>
+      <h2>{{ i18n "convite_titulo" }}</h2>
+      <p>{{ i18n "convite_texto" }}</p>
+    </div>
+    <a class="botao botao-acento" href="{{ $assinar }}" target="_blank" rel="noopener">{{ i18n "assinar_newsletter" }}</a>
+  </div>
+</section>
 {{- end }}

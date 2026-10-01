@@ -1,0 +1,27 @@
+{{- /* Card de artigo. Recebe (dict "p" <pagina> "destaque" true|false). */ -}}
+{{- $p := .p }}
+{{- $destaque := .destaque | default false }}
+{{- $capa := "" }}
+{{- with $p.Params.cover.image }}{{ with $p.Resources.Get . }}{{ $capa = . }}{{ end }}{{ end }}
+{{- $tema := index ($p.GetTerms "tags") 0 }}
+<article class="card{{ if $destaque }} card-destaque{{ end }}">
+  <a class="card-capa" href="{{ $p.RelPermalink }}" tabindex="-1" aria-hidden="true">
+    {{- if $capa }}
+    {{- $img := cond $destaque ($capa.Fill "1200x750 Smart webp q82") ($capa.Fill "720x450 Smart webp q80") }}
+    <img src="{{ $img.RelPermalink }}" width="{{ $img.Width }}" height="{{ $img.Height }}" alt=""
+         loading="{{ cond $destaque "eager" "lazy" }}" decoding="async">
+    {{- end }}
+  </a>
+  <div class="card-corpo">
+    <p class="card-topo">
+      {{- if $destaque }}<span class="selo">{{ i18n "mais_recente" }}</span>{{ end }}
+      {{- with $tema }}<a class="chip" href="{{ .RelPermalink }}">{{ .LinkTitle }}</a>{{ end }}
+    </p>
+    <h3 class="card-titulo"><a href="{{ $p.RelPermalink }}">{{ $p.Title }}</a></h3>
+    <p class="card-resumo">{{ $p.Summary | plainify | htmlUnescape }}</p>
+    <p class="meta">
+      <time datetime="{{ $p.Date.Format "2006-01-02" }}">{{ $p.Date | time.Format ":date_long" }}</time>
+      <span aria-hidden="true">·</span> {{ $p.ReadingTime }} min
+    </p>
+  </div>
+</article>
