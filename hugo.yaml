@@ -57,7 +57,6 @@ languages:
     menus:
       main:
         - { identifier: articles, name: "Artigos", pageRef: /articles, weight: 10 }
-        - { identifier: events, name: "Eventos", pageRef: /events, weight: 20 }
         - { identifier: tags, name: "Tags", pageRef: /tags, weight: 30 }
         - { identifier: archives, name: "Arquivo", pageRef: /archives, weight: 40 }
         - { identifier: search, name: "Busca", pageRef: /search, weight: 50 }
@@ -77,7 +76,6 @@ languages:
     menus:
       main:
         - { identifier: articles, name: "Articles", pageRef: /articles, weight: 10 }
-        - { identifier: events, name: "Events", pageRef: /events, weight: 20 }
         - { identifier: tags, name: "Tags", pageRef: /tags, weight: 30 }
         - { identifier: archives, name: "Archive", pageRef: /archives, weight: 40 }
         - { identifier: search, name: "Search", pageRef: /search, weight: 50 }
