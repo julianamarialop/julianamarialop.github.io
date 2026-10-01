@@ -11,8 +11,8 @@
   translation: "Ahead of the AI"
 - id: apresentacao
   translation: "Architecture, AI and what the market has not seen yet. By Juliana Maria Lopes, 3x Microsoft MVP and AI & Data executive."
-- id: assinar_newsletter
-  translation: "Subscribe to the newsletter"
+- id: contato_linkedin
+  translation: "Connect on LinkedIn"
 - id: sobre_mim
   translation: "About me"
 - id: artigos
@@ -33,10 +33,6 @@
   translation: "Explore by topic"
 - id: todos_os_temas
   translation: "All topics"
-- id: convite_titulo
-  translation: "Get the next article"
-- id: convite_texto
-  translation: "Architecture, AI and what the market has not seen yet, straight to you."
 - id: sem_artigos
   translation: "English articles are on their way. Meanwhile, the full archive is available in Portuguese."
 - id: secao_vazia

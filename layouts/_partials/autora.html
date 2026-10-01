@@ -1,6 +1,5 @@
 {{- /* Caixa da autora no fim do artigo. */ -}}
 {{- $foto := (resources.Get "images/juliana.jpg").Fill "176x176 Center webp q85" }}
-{{- $assinar := site.Params.newsletter.url | default "https://www.linkedin.com/in/julianamarialopes/" }}
 <section class="autora">
   <img src="{{ $foto.RelPermalink }}" width="88" height="88" alt="Juliana Maria Lopes" loading="lazy">
   <div>
@@ -8,7 +7,7 @@
     <p class="autora-nome">Juliana Maria Lopes</p>
     <p class="autora-bio">{{ i18n "bio_curta" }}</p>
     <p class="autora-acoes">
-      <a class="botao botao-acento" href="{{ $assinar }}" target="_blank" rel="noopener">{{ i18n "assinar_newsletter" }}</a>
+      <a class="botao botao-acento" href="https://www.linkedin.com/in/julianamarialopes/" target="_blank" rel="noopener">{{ i18n "contato_linkedin" }}</a>
       {{- with site.GetPage "/about" }}<a class="link" href="{{ .RelPermalink }}">{{ i18n "sobre_mim" }} →</a>{{ end }}
     </p>
   </div>

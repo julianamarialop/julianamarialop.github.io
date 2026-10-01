@@ -1,7 +1,6 @@
 {{- define "main" }}
 {{- $artigos := (where site.RegularPages "Section" "articles").ByDate.Reverse }}
 {{- $foto := (resources.Get "images/juliana.jpg").Fill "320x320 Center webp q85" }}
-{{- $assinar := site.Params.newsletter.url | default "https://www.linkedin.com/in/julianamarialopes/" }}
 
 <section class="apresentacao">
   <img class="apresentacao-foto" src="{{ $foto.RelPermalink }}" width="160" height="160" alt="Juliana Maria Lopes">
@@ -10,7 +9,7 @@
     <h1 class="apresentacao-titulo">{{ i18n "ola" }}</h1>
     <p class="apresentacao-desc">{{ i18n "apresentacao" }}</p>
     <div class="apresentacao-acoes">
-      <a class="botao botao-acento" href="{{ $assinar }}" target="_blank" rel="noopener">{{ i18n "assinar_newsletter" }}</a>
+      <a class="botao botao-acento" href="https://www.linkedin.com/in/julianamarialopes/" target="_blank" rel="noopener">{{ i18n "contato_linkedin" }}</a>
       {{- with site.GetPage "/about" }}<a class="botao" href="{{ .RelPermalink }}">{{ i18n "sobre_mim" }}</a>{{ end }}
     </div>
     <ul class="numeros">
@@ -54,13 +53,4 @@
 </section>
 {{- end }}
 
-<section class="faixa">
-  <div class="convite">
-    <div>
-      <h2>{{ i18n "convite_titulo" }}</h2>
-      <p>{{ i18n "convite_texto" }}</p>
-    </div>
-    <a class="botao botao-acento" href="{{ $assinar }}" target="_blank" rel="noopener">{{ i18n "assinar_newsletter" }}</a>
-  </div>
-</section>
 {{- end }}
