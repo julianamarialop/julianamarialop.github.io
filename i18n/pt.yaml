@@ -6,11 +6,11 @@
   translation: "Alternar tema claro e escuro"
 
 - id: newsletter_de
-  translation: "Newsletter Ahead of the AI"
+  translation: "Newsletter de arquitetura, dados e IA"
 - id: ola
-  translation: "Olá, eu sou a Juliana."
+  translation: "Ahead of the AI"
 - id: apresentacao
-  translation: "Escrevo sobre arquitetura, dados e IA, e sobre o que o mercado ainda não viu. Cada artigo explica um tema técnico com uma analogia que fica na memória."
+  translation: "Arquitetura, IA e o que o mercado ainda não viu. Por Juliana Maria Lopes, 3x Microsoft MVP e executiva de IA e Dados."
 - id: assinar_newsletter
   translation: "Assinar a newsletter"
 - id: sobre_mim

@@ -6,11 +6,11 @@
   translation: "Toggle light and dark theme"
 
 - id: newsletter_de
-  translation: "Ahead of the AI newsletter"
+  translation: "A newsletter on architecture, data and AI"
 - id: ola
-  translation: "Hi, I'm Juliana."
+  translation: "Ahead of the AI"
 - id: apresentacao
-  translation: "I write about architecture, data and AI, and about what the market has not seen yet. Each article explains a technical topic through an analogy that sticks."
+  translation: "Architecture, AI and what the market has not seen yet. By Juliana Maria Lopes, 3x Microsoft MVP and AI & Data executive."
 - id: assinar_newsletter
   translation: "Subscribe to the newsletter"
 - id: sobre_mim
