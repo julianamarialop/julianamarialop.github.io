@@ -118,10 +118,14 @@ params:
       - https://www.linkedin.com/in/julianamarialopes/
       - https://github.com/julianamarialop
 
-  # Bloco de inscricao no rodape. Fica oculto enquanto `url` estiver vazio.
-  # Substack: https://<nome>.substack.com/subscribe
-  newsletter:
-    url: ""
+  # Estatisticas de visita pelo Umami Cloud (sem cookies, sem dado pessoal).
+  # websiteId: Umami > Settings > Websites > o site > Edit > Tracking code (data-website-id).
+  # Vazio, nenhum script e carregado. So conta no dominio publicado: build local
+  # e `hugo server` nao entram na estatistica.
+  umami:
+    websiteId: ""
+    script: "https://cloud.umami.is/script.js"
+    domain: "julianamarialop.github.io"
 
   fuseOpts:
     isCaseSensitive: false
