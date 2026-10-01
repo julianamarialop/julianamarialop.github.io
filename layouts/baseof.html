@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+{{- /* Copia do baseof do PaperMod com duas mudancas: o <body> ganha a classe do tipo de
+       pagina (pg-home, pg-artigo, pg-lista...) para o CSS editorial controlar a largura,
+       e o <main> deixa de ter a largura fixa de 720px do tema. */ -}}
+{{- $theme := site.Params.defaultTheme | default "auto" }}
+<html lang="{{ site.Language }}" dir="{{ .Language.Direction | default "auto" }}" data-theme="{{ $theme }}">
+
+<head>
+    {{- partial "head.html" . }}
+</head>
+
+{{- $classe := "pg-pagina" }}
+{{- if .IsHome }}{{ $classe = "pg-home" }}
+{{- else if and (eq .Kind "page") (eq .Section "articles") }}{{ $classe = "pg-artigo" }}
+{{- else if in (slice "section" "term") .Kind }}{{ $classe = "pg-lista" }}
+{{- else if eq .Kind "taxonomy" }}{{ $classe = "pg-temas" }}
+{{- end }}
+{{- $lista := or (ne .Kind "page") (eq .Layout "archives") (eq .Layout "search") }}
+<body class="{{ if $lista }}list {{ end }}{{ $classe }}" id="top">
+    {{- if eq $classe "pg-artigo" }}<div class="progresso" aria-hidden="true"><span></span></div>{{ end }}
+    {{ partialCached "header.html" . .Page -}}
+    <main class="main">
+        {{- block "main" . }}{{ end }}
+    </main>
+    {{- partial "newsletter_cta.html" . }}
+    {{ partialCached "footer.html" . .Layout .Kind (.Param "hideFooter") (.Param "ShowCodeCopyButtons") -}}
+</body>
+
+</html>

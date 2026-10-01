@@ -6,10 +6,19 @@ defaultContentLanguage: pt
 defaultContentLanguageInSubdir: false
 enableRobotsTXT: true
 enableEmoji: true
+capitalizeListTitles: false   # mantem "Agentes de IA" como escrito, sem "Agentes De IA"
 buildFuture: false
 
 pagination:
-  pagerSize: 10
+  pagerSize: 12   # multiplo de 3, a grade das listas tem 3 colunas
+
+related:
+  includeNewer: true
+  threshold: 60
+  toLower: false
+  indices:
+    - { name: tags, weight: 100 }
+    - { name: date, weight: 10 }
 
 outputs:
   home: [HTML, RSS, JSON]   # JSON alimenta a busca do PaperMod
@@ -19,6 +28,9 @@ taxonomies:
   series: series
 
 markup:
+  tableOfContents:
+    startLevel: 2
+    endLevel: 3
   goldmark:
     renderer:
       unsafe: false

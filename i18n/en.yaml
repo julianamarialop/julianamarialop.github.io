@@ -1,6 +1,61 @@
 - id: newsletter_titulo
   translation: "Subscribe to Ahead of the AI"
 - id: newsletter_texto
-  translation: "Every new article in your inbox, no algorithm in between."
+  translation: "Architecture, AI and what the market has not seen yet. One new article per issue, explained with analogies that stick."
 - id: newsletter_botao
   translation: "Subscribe"
+- id: newsletter_botao_linkedin
+  translation: "Subscribe on LinkedIn"
+
+- id: kicker_home
+  translation: "A newsletter on architecture, data and AI"
+- id: artigos
+  translation: "articles"
+- id: desde
+  translation: "the first one"
+- id: temas
+  translation: "topics"
+- id: mais_recente
+  translation: "Latest article"
+- id: ler_artigo
+  translation: "Read the article"
+- id: ultimos_artigos
+  translation: "Latest articles"
+- id: ver_todos
+  translation: "See all"
+- id: explore_por_tema
+  translation: "Explore by topic"
+- id: todos_os_temas
+  translation: "All topics"
+- id: do_arquivo
+  translation: "From the archive"
+- id: sem_artigos
+  translation: "English articles are on their way. Meanwhile, the full archive is available in Portuguese."
+- id: secao_vazia
+  translation: "Nothing published here yet."
+- id: tema
+  translation: "Topic"
+- id: paginacao
+  translation: "Pagination"
+
+- id: quem_escreve
+  translation: "Who writes"
+- id: sobre_a_autora
+  translation: "About the author"
+- id: credenciais
+  translation: "3x Microsoft MVP · AI & Data Executive · Microsoft MCT"
+- id: bio_curta
+  translation: "More than 20 years building data and AI platforms at large companies. I write for people who make architecture decisions and want to understand what comes before it becomes a trend."
+- id: conheca
+  translation: "Meet the author"
+
+- id: min_de_leitura
+  translation: "min read"
+- id: neste_artigo
+  translation: "In this article"
+- id: compartilhar
+  translation: "Share"
+- id: original_linkedin
+  translation: "See the original post on LinkedIn"
+- id: continue_lendo
+  translation: "Keep reading"

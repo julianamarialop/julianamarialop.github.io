@@ -1,0 +1,69 @@
+{{- define "main" }}
+{{- $artigos := (where site.RegularPages "Section" "articles").ByDate.Reverse }}
+{{- $temas := site.Taxonomies.tags.ByCount }}
+{{- $secao := site.GetPage "/articles" }}
+
+<header class="capa-revista">
+  <p class="rotulo">{{ i18n "kicker_home" }}</p>
+  <h1 class="marca">Ahead <em>of the</em> AI</h1>
+  <p class="capa-tagline">{{ site.Params.description }}</p>
+  {{- with $artigos }}
+  <p class="capa-numeros">
+    <span><strong>{{ len $artigos }}</strong> {{ i18n "artigos" }}</span>
+    <span><strong>{{ (index (last 1 $artigos) 0).Date.Year }}</strong> {{ i18n "desde" }}</span>
+    <span><strong>{{ len $temas }}</strong> {{ i18n "temas" }}</span>
+  </p>
+  {{- end }}
+</header>
+
+{{- if $artigos }}
+<section class="destaque">
+  {{ partial "card.html" (dict "p" (index $artigos 0) "tam" "g") }}
+</section>
+
+<section class="bloco">
+  <div class="bloco-cabecalho">
+    <h2 class="bloco-titulo">{{ i18n "ultimos_artigos" }}</h2>
+    {{- with $secao }}<a class="link-seta" href="{{ .RelPermalink }}">{{ i18n "ver_todos" }} <span aria-hidden="true">→</span></a>{{ end }}
+  </div>
+  <div class="grade">
+    {{- range first 6 (after 1 $artigos) }}
+    {{ partial "card.html" (dict "p" . "tam" "m") }}
+    {{- end }}
+  </div>
+</section>
+{{- else }}
+<section class="bloco vazio"><p>{{ i18n "sem_artigos" }}</p></section>
+{{- end }}
+
+{{ partial "autora.html" (dict "ctx" . "modo" "home") }}
+
+{{- with $temas }}
+<section class="bloco">
+  <div class="bloco-cabecalho">
+    <h2 class="bloco-titulo">{{ i18n "explore_por_tema" }}</h2>
+    {{- with site.GetPage "/tags" }}<a class="link-seta" href="{{ .RelPermalink }}">{{ i18n "todos_os_temas" }} <span aria-hidden="true">→</span></a>{{ end }}
+  </div>
+  <ul class="temas">
+    {{- range first 14 . }}
+    <li><a href="{{ .Page.RelPermalink }}">{{ .Page.LinkTitle }} <span>{{ .Count }}</span></a></li>
+    {{- end }}
+  </ul>
+</section>
+{{- end }}
+
+{{- $resto := after 7 $artigos }}
+{{- with $resto }}
+<section class="bloco">
+  <div class="bloco-cabecalho">
+    <h2 class="bloco-titulo">{{ i18n "do_arquivo" }}</h2>
+    {{- with $secao }}<a class="link-seta" href="{{ .RelPermalink }}">{{ i18n "ver_todos" }} <span aria-hidden="true">→</span></a>{{ end }}
+  </div>
+  <div class="lista-compacta">
+    {{- range first 8 . }}
+    {{ partial "card.html" (dict "p" . "tam" "p") }}
+    {{- end }}
+  </div>
+</section>
+{{- end }}
+{{- end }}

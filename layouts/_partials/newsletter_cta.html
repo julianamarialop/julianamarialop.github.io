@@ -1,0 +1,17 @@
+{{- /* Faixa de inscricao antes do rodape, na home e nos artigos.
+       Com params.newsletter.url preenchido, aponta para o servico de e-mail; vazio,
+       aponta para o LinkedIn, onde a newsletter vive hoje. */ -}}
+{{- if or .IsHome (and (eq .Kind "page") (eq .Section "articles")) }}
+{{- $url := site.Params.newsletter.url | default "https://www.linkedin.com/in/julianamarialopes/" }}
+<section class="faixa-newsletter" aria-label="{{ i18n "newsletter_titulo" }}">
+  <div class="faixa-miolo">
+    <p class="rotulo">Ahead of the AI</p>
+    <p class="faixa-titulo">{{ i18n "newsletter_titulo" }}</p>
+    <p class="faixa-texto">{{ i18n "newsletter_texto" }}</p>
+    <a class="botao botao-cheio" href="{{ $url }}" target="_blank" rel="noopener">
+      {{ cond (ne site.Params.newsletter.url "") (i18n "newsletter_botao") (i18n "newsletter_botao_linkedin") }}
+      <span aria-hidden="true">→</span>
+    </a>
+  </div>
+</section>
+{{- end }}
