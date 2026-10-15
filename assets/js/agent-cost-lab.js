@@ -66,13 +66,18 @@
       e3NaoVale: "Com {r} das solicitações resolvidas no primeiro nível, o custo mensal é de <strong>{c}</strong>, contra <strong>{d}</strong> somente com o modelo de maior custo: <strong>aumento de {s}</strong>. Abaixo de {b}, o primeiro nível eleva o custo.",
       e3Condicao: "Condição obrigatória: a resposta do primeiro nível deve ser validada por código (formato esperado, regras de negócio ou declaração explícita de que não foi possível responder). A validação por outro modelo reintroduz o custo que o arranjo pretende evitar.",
 
-      e4Titulo: "A métrica que importa",
+      e4Titulo: "Conclusão: o custo do assistente",
       e4Texto: [
-        "O indicador adequado para decidir sobre um agente não é o custo por token, e sim o <strong>custo por solicitação resolvida</strong>, comparado ao custo do mesmo atendimento realizado por uma pessoa. Os valores abaixo refletem as escolhas das etapas anteriores e são atualizados quando elas mudam."
+        "A tabela reúne os resultados das etapas anteriores e é atualizada quando eles mudam."
       ],
-      e4Class: "classificação, por mensagem",
-      e4Unico: "agente de resolução, somente com o modelo de maior custo",
-      e4Cascata: "agente de resolução, com {r} resolvidas no primeiro nível",
+      e4ColItem: "", e4ColVol: "Solicitações por mês", e4ColMensal: "Custo mensal", e4ColUnit: "Custo por solicitação",
+      e4Class: "Classificação (etapa 1)",
+      e4Agente: "Agente de resolução (etapa 2)",
+      e4Total: "Custo total do assistente",
+      e4Simples: "Estimativa simples, uma chamada por solicitação",
+      e4Cascata: "Com primeiro nível, {r} resolvidas (etapa 3)",
+      e4Conclusao: "A estimativa simples indicaria <strong>{simples}</strong> por mês. O custo calculado a partir da arquitetura é de <strong>{total}</strong>, {vezes} vezes maior, e a diferença decorre das iterações do agente, e não do volume. Com o primeiro nível resolvendo {r} das solicitações, o custo mensal passa a <strong>{cascata}</strong>, e o custo por solicitação resolvida passa de {c2} para {c3}. <strong>Esse é o valor a comparar com o custo do mesmo atendimento realizado por uma pessoa.</strong>",
+      aprofNota: "Inclui os três componentes adicionais, que as etapas 1 a 4 não consideram.",
 
       aprofTitulo: "Para aprofundamento: a arquitetura completa do exemplo",
       aprofTexto: "Além da classificação e do agente de resolução, o assistente completo inclui um leitor de documentos de entrega, um compressor de histórico e uma revisão por amostragem da qualidade das respostas. Os parâmetros de cada componente podem ser alterados. Ao remover o limite de iterações do agente, a calculadora recusa o cálculo, porque um componente estimado com valor zero desapareceria da proposta sem que a omissão fosse percebida.",
@@ -134,13 +139,18 @@
       e3NaoVale: "With {r} of requests resolved by the first tier, the monthly cost is <strong>{c}</strong>, against <strong>{d}</strong> with the higher cost model only: <strong>a {s} increase</strong>. Below {b}, the first tier raises the cost.",
       e3Condicao: "Mandatory condition: the first tier's answer must be validated by code (expected format, business rules or an explicit statement that no answer was possible). Validation by another model reintroduces the cost the arrangement is meant to avoid.",
 
-      e4Titulo: "The metric that matters",
+      e4Titulo: "Conclusion: the cost of the assistant",
       e4Texto: [
-        "The appropriate indicator for deciding on an agent is not the cost per token but the <strong>cost per resolved request</strong>, compared with the cost of the same service performed by a person. The values below reflect the choices made in the previous steps and are updated when they change."
+        "The table brings together the results of the previous steps and is updated when they change."
       ],
-      e4Class: "classification, per message",
-      e4Unico: "resolution agent, higher cost model only",
-      e4Cascata: "resolution agent, with {r} resolved by the first tier",
+      e4ColItem: "", e4ColVol: "Requests per month", e4ColMensal: "Monthly cost", e4ColUnit: "Cost per request",
+      e4Class: "Classification (step 1)",
+      e4Agente: "Resolution agent (step 2)",
+      e4Total: "Total cost of the assistant",
+      e4Simples: "Simple estimate, one call per request",
+      e4Cascata: "With a first tier, {r} resolved (step 3)",
+      e4Conclusao: "The simple estimate would indicate <strong>{simples}</strong> per month. The cost calculated from the architecture is <strong>{total}</strong>, {vezes} times higher, and the difference comes from the agent's iterations, not from volume. With the first tier resolving {r} of requests, the monthly cost becomes <strong>{cascata}</strong>, and the cost per resolved request changes from {c2} to {c3}. <strong>That is the value to compare with the cost of the same service performed by a person.</strong>",
+      aprofNota: "Includes the three additional components, which steps 1 to 4 do not consider.",
 
       aprofTitulo: "Further detail: the complete architecture of the example",
       aprofTexto: "Besides the classification and the resolution agent, the complete assistant includes a shipping document reader, a history compressor and a sampled review of answer quality. Each component's parameters can be changed. When the agent's iteration limit is removed, the calculator declines to calculate, because a component estimated at zero would disappear from a proposal without the omission being noticed.",
@@ -543,18 +553,58 @@
   }
 
   // Etapa 4 ---------------------------------------------------------------
+  // A estimativa simples e literalmente a da abertura da pagina: o preco de UMA
+  // chamada ao modelo multiplicado pelas solicitacoes, sem iteracoes e sem cache.
+  function agenteChamadaUnica() {
+    var c = componente("specialist");
+    c.max_iterations = 1;
+    c.caching = false;
+    return executar("comp", { comp: c, prices: precos }).r;
+  }
   function etapa4() {
     var bloco = cabecalho(4, T.e4Titulo, T.e4Texto);
-    var indicadores = el("div", { class: "lab-indicadores", "aria-live": "polite" });
-    bloco.appendChild(indicadores);
+    var tabela = el("div", { class: "lab-rolagem", "aria-live": "polite" });
+    var conclusao = el("p", { class: "lab-frase lab-conclusao" });
+    bloco.appendChild(tabela);
+    bloco.appendChild(conclusao);
+    function linha(rotulo, vol, mensal, unit, classe) {
+      return el("tr", { class: classe || "" }, [
+        el("td", { html: rotulo }),
+        el("td", { class: "dir lab-num", text: vol == null ? "" : fmtN.format(vol) }),
+        el("td", { class: "dir lab-num", text: mensal == null ? "" : fmtUSD.format(mensal) }),
+        el("td", { class: "dir lab-num", text: unit == null ? "" : usd(unit) })
+      ]);
+    }
     function desenhar() {
       var cls = classificacao();
       var k = custosPorSolicitacao();
+      var ag = agente();
+      var unica = agenteChamadaUnica();
       var casc = executar("casc", { c1: k.c1, c2: k.c2, rate: S.parcela, tasks: k.tarefas }).r;
-      indicadores.innerHTML = "";
-      indicadores.appendChild(indicador(usd(cls.cost_usd / cls.monthly_calls), T.e4Class));
-      indicadores.appendChild(indicador(usd(k.c2), T.e4Unico));
-      indicadores.appendChild(indicador(usd(casc.cascade_cost / k.tarefas), interpolar(T.e4Cascata, { r: fmtPct.format(S.parcela) })));
+      var total = cls.cost_usd + ag.cost_usd;
+      var simples = cls.cost_usd + unica.cost_usd;
+      var comCascata = cls.cost_usd + casc.cascade_cost;
+      var r = fmtPct.format(S.parcela);
+      tabela.innerHTML = "";
+      tabela.appendChild(el("table", { class: "lab-tabela lab-resumo" }, [
+        el("thead", {}, [el("tr", {}, [T.e4ColItem, T.e4ColVol, T.e4ColMensal, T.e4ColUnit].map(function (h, i) {
+          return el("th", { class: i ? "dir" : "", text: h });
+        }))]),
+        el("tbody", {}, [
+          linha(T.e4Class, cls.monthly_calls, cls.cost_usd, cls.cost_usd / cls.monthly_calls),
+          linha(T.e4Agente, ag.monthly_calls, ag.cost_usd, ag.cost_usd / ag.monthly_calls),
+          linha(T.e4Total, null, total, null, "lab-linha-total"),
+          linha(T.e4Simples, null, simples, null, "lab-linha-secundaria"),
+          linha(interpolar(T.e4Cascata, { r: esc(r) }), null, comCascata, casc.cascade_cost / k.tarefas, "lab-linha-total")
+        ])
+      ]));
+      var vezes = simples > 0 ? total / simples : 0;
+      conclusao.innerHTML = interpolar(T.e4Conclusao, {
+        simples: fmtUSD.format(simples), total: fmtUSD.format(total),
+        vezes: new Intl.NumberFormat(LOCALE, { maximumFractionDigits: 1 }).format(vezes),
+        r: r, cascata: fmtUSD.format(comCascata),
+        c2: usd(k.c2), c3: usd(casc.cascade_cost / k.tarefas)
+      });
     }
     ouvintes.push(desenhar);
     desenhar();
@@ -640,7 +690,7 @@
       });
       resultado.appendChild(el("div", { class: "lab-total" }, [
         el("span", { class: "lab-total-valor", text: fmtUSD.format(res.monthly_cost_usd) }),
-        el("span", { class: "lab-total-rotulo", text: T.total })
+        el("span", { class: "lab-total-rotulo", text: T.total + ". " + T.aprofNota })
       ]));
       resultado.appendChild(el("div", { class: "lab-rolagem" }, [el("table", { class: "lab-tabela" }, [
         el("thead", {}, [el("tr", {}, [T.componente, T.modelo, T.chamadas, T.entradaTarefa, T.custo, T.parte].map(function (h, i) {

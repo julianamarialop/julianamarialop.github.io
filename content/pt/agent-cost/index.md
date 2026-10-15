@@ -1,7 +1,6 @@
 ---
 title: "Calculadora de custo de agentes"
 slug: "custo-de-agentes"
-sobretitulo: "Microsoft Ignite 2026 · Table Talk TT1759"
 summary: "Estimativa do custo de um agente de IA a partir da sua arquitetura, e não do volume de requisições, com os preços publicados pelos próprios fornecedores."
 lab: true
 ShowToc: false
@@ -26,10 +25,6 @@ depois: |
   ## Sobre a calculadora
 
   Os cálculos desta página são executados pelo mesmo código Python publicado no repositório, carregado no navegador. Os resultados da página e da linha de comando são, portanto, idênticos. A calculadora não invoca nenhum modelo: realiza apenas cálculos sobre os preços publicados pelos fornecedores, atualizados diariamente.
-
-  ## No Microsoft Ignite 2026
-
-  Esta página acompanha a Table Talk **TT1759, "Agent Cost Is an Architecture Decision, Not a Token Count"** (Agent Platform, nível 300), sessão presencial em San Francisco. O formato Table Talk é uma discussão em grupo, e não uma apresentação: os participantes podem trazer a própria arquitetura para que o custo seja estimado durante a sessão.
 ---
 
 Quanto custa um agente de inteligência artificial? A estimativa mais comum multiplica o número de solicitações pelo preço de uma chamada ao modelo. Esse método subestima o custo, porque um agente não executa uma única chamada: ele executa várias iterações antes de responder, e cada iteração processa mais texto que a anterior.

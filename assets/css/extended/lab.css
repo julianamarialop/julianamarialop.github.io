@@ -96,6 +96,12 @@
 .lab-indicador-valor { font-size: 26px; font-weight: 800; letter-spacing: -.02em; color: var(--texto); }
 .lab-indicador-rotulo { font-size: 14px; color: var(--texto-2); }
 .lab-indicador-detalhe { font-size: 13px; color: var(--texto-3); }
+.lab-resumo td { padding: 10px; font-size: 15px; }
+.lab-resumo .lab-linha-total td { font-weight: 750; background: var(--petroleo-claro); border-bottom-color: var(--card); }
+.lab-resumo .lab-linha-total td:first-child { border-radius: 8px 0 0 8px; }
+.lab-resumo .lab-linha-total td:last-child { border-radius: 0 8px 8px 0; }
+.lab-resumo .lab-linha-secundaria td { color: var(--texto-2); }
+.lab-conclusao { font-size: 16px; line-height: 1.65; margin-top: 18px; padding: 16px 18px; border-radius: 12px; background: var(--fundo); box-shadow: inset 4px 0 0 var(--acento); }
 .lab-aprofundamento > summary { cursor: pointer; font-size: 18px; font-weight: 750; color: var(--texto); list-style-position: outside; }
 .lab-aprofundamento > summary:hover { color: var(--petroleo); }
 .lab-aprofundamento[open] > summary { margin-bottom: 14px; }
