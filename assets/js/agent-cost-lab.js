@@ -32,7 +32,7 @@
       e1Titulo: "Uma pergunta, uma resposta",
       e1Texto: [
         "Os modelos de linguagem cobram por <strong>token</strong>, a unidade em que o texto é dividido para processamento. Em média, uma palavra corresponde a um ou dois tokens. O preço dos tokens de <strong>entrada</strong> (o texto que o modelo lê) é diferente do preço dos tokens de <strong>saída</strong> (o texto que o modelo escreve).",
-        "No exemplo, a primeira etapa do assistente classifica cada mensagem recebida: status do pedido, troca ou pagamento. Cada classificação é uma única chamada ao modelo, que lê cerca de {tin} tokens (as instruções e a mensagem do cliente) e escreve {tout}."
+        "No exemplo, a primeira etapa do assistente classifica cada mensagem recebida: status do pedido, troca ou pagamento. Cada classificação é uma única chamada ao modelo, que lê cerca de {tin} tokens (as instruções e a mensagem do cliente) e escreve {tout}. Das mensagens recebidas, {pct} tratam do status do pedido e seguem para o agente de resolução, apresentado na etapa 2."
       ],
       e1Controle: "Mensagens por mês",
       e1Porchamada: "custo por mensagem",
@@ -75,8 +75,13 @@
       e4Agente: "Agente de resolução (etapa 2)",
       e4Total: "Custo total do assistente",
       e4Simples: "Estimativa simples, uma chamada por solicitação",
-      e4Cascata: "Com primeiro nível, {r} resolvidas (etapa 3)",
-      e4Conclusao: "A estimativa simples indicaria <strong>{simples}</strong> por mês. O custo calculado a partir da arquitetura é de <strong>{total}</strong>, {vezes} vezes maior, e a diferença decorre das iterações do agente, e não do volume. Com o primeiro nível resolvendo {r} das solicitações, o custo mensal passa a <strong>{cascata}</strong>, e o custo por solicitação resolvida passa de {c2} para {c3}. <strong>Esse é o valor a comparar com o custo do mesmo atendimento realizado por uma pessoa.</strong>",
+      e4Cascata: "Agente de resolução com primeiro nível, {r} resolvidas (etapa 3)",
+      e4TotalCasc: "Custo total com primeiro nível",
+      e4Rotulo: "Conclusão",
+      e4C1: "A estimativa simples, de uma chamada por solicitação, indica <strong>{simples}</strong> por mês.",
+      e4C2: "O custo calculado a partir da arquitetura, com as iterações do agente, é de <strong>{total}</strong> por mês: {vezes} vezes a estimativa simples.",
+      e4C3: "Com o primeiro nível resolvendo {r} das solicitações, o custo passa a <strong>{cascata}</strong> por mês, ou <strong>{c3}</strong> por solicitação resolvida.",
+      e4Fecho: "O custo por solicitação resolvida é o valor a comparar com o custo do mesmo atendimento realizado por uma pessoa.",
       aprofNota: "Inclui os três componentes adicionais, que as etapas 1 a 4 não consideram.",
 
       aprofTitulo: "Para aprofundamento: a arquitetura completa do exemplo",
@@ -105,7 +110,7 @@
       e1Titulo: "One question, one answer",
       e1Texto: [
         "Language models charge per <strong>token</strong>, the unit into which text is divided for processing. On average, a word corresponds to one or two tokens. <strong>Input</strong> tokens (the text the model reads) and <strong>output</strong> tokens (the text the model writes) have different prices.",
-        "In the example, the assistant's first step classifies each incoming message: order status, exchange or payment. Each classification is a single model call that reads about {tin} tokens (the instructions and the customer's message) and writes {tout}."
+        "In the example, the assistant's first step classifies each incoming message: order status, exchange or payment. Each classification is a single model call that reads about {tin} tokens (the instructions and the customer's message) and writes {tout}. Of the messages received, {pct} concern order status and are forwarded to the resolution agent, presented in step 2."
       ],
       e1Controle: "Messages per month",
       e1Porchamada: "cost per message",
@@ -148,8 +153,13 @@
       e4Agente: "Resolution agent (step 2)",
       e4Total: "Total cost of the assistant",
       e4Simples: "Simple estimate, one call per request",
-      e4Cascata: "With a first tier, {r} resolved (step 3)",
-      e4Conclusao: "The simple estimate would indicate <strong>{simples}</strong> per month. The cost calculated from the architecture is <strong>{total}</strong>, {vezes} times higher, and the difference comes from the agent's iterations, not from volume. With the first tier resolving {r} of requests, the monthly cost becomes <strong>{cascata}</strong>, and the cost per resolved request changes from {c2} to {c3}. <strong>That is the value to compare with the cost of the same service performed by a person.</strong>",
+      e4Cascata: "Resolution agent with a first tier, {r} resolved (step 3)",
+      e4TotalCasc: "Total cost with a first tier",
+      e4Rotulo: "Conclusion",
+      e4C1: "The simple estimate, one call per request, indicates <strong>{simples}</strong> per month.",
+      e4C2: "The cost calculated from the architecture, including the agent's iterations, is <strong>{total}</strong> per month: {vezes} times the simple estimate.",
+      e4C3: "With the first tier resolving {r} of requests, the cost becomes <strong>{cascata}</strong> per month, or <strong>{c3}</strong> per resolved request.",
+      e4Fecho: "The cost per resolved request is the value to compare with the cost of the same service performed by a person.",
       aprofNota: "Includes the three additional components, which steps 1 to 4 do not consider.",
 
       aprofTitulo: "Further detail: the complete architecture of the example",
@@ -299,8 +309,15 @@
     c.monthly_volume = S.mensagens;
     return executar("comp", { comp: c, prices: precos }).r;
   }
+  // Parcela das mensagens que trata do status do pedido e segue para o agente,
+  // lida do proprio exemplo (9.000 de 40.000). O volume do agente acompanha o
+  // volume de mensagens: sem isso, a regua da etapa 1 mudaria so a classificacao.
+  function fracaoPedidos() {
+    return componente("specialist").monthly_volume / componente("router").monthly_volume;
+  }
   function agente(modelo) {
     var c = componente("specialist");
+    c.monthly_volume = Math.round(S.mensagens * fracaoPedidos());
     c.max_iterations = S.iteracoes;
     if (modelo) c.model = modelo;
     return executar("comp", { comp: c, prices: precos }).r;
@@ -354,7 +371,7 @@
   // Etapa 1 ---------------------------------------------------------------
   function etapa1() {
     var c = componente("router");
-    var bloco = cabecalho(1, T.e1Titulo, T.e1Texto, { tin: fmtN.format(c.input_tokens), tout: fmtN.format(c.output_tokens) });
+    var bloco = cabecalho(1, T.e1Titulo, T.e1Texto, { tin: fmtN.format(c.input_tokens), tout: fmtN.format(c.output_tokens), pct: fmtPct.format(fracaoPedidos()) });
     bloco.appendChild(el("div", { class: "lab-campos" }, [
       deslizador(T.e1Controle, 5000, 100000, 5000, S.mensagens, function (v) { return fmtN.format(v); },
         function (v) { S.mensagens = v; mudou(); })
@@ -557,6 +574,7 @@
   // chamada ao modelo multiplicado pelas solicitacoes, sem iteracoes e sem cache.
   function agenteChamadaUnica() {
     var c = componente("specialist");
+    c.monthly_volume = Math.round(S.mensagens * fracaoPedidos());
     c.max_iterations = 1;
     c.caching = false;
     return executar("comp", { comp: c, prices: precos }).r;
@@ -564,7 +582,7 @@
   function etapa4() {
     var bloco = cabecalho(4, T.e4Titulo, T.e4Texto);
     var tabela = el("div", { class: "lab-rolagem", "aria-live": "polite" });
-    var conclusao = el("p", { class: "lab-frase lab-conclusao" });
+    var conclusao = el("div", { class: "lab-conclusao", "aria-live": "polite" });
     bloco.appendChild(tabela);
     bloco.appendChild(conclusao);
     function linha(rotulo, vol, mensal, unit, classe) {
@@ -594,17 +612,21 @@
           linha(T.e4Class, cls.monthly_calls, cls.cost_usd, cls.cost_usd / cls.monthly_calls),
           linha(T.e4Agente, ag.monthly_calls, ag.cost_usd, ag.cost_usd / ag.monthly_calls),
           linha(T.e4Total, null, total, null, "lab-linha-total"),
-          linha(T.e4Simples, null, simples, null, "lab-linha-secundaria"),
-          linha(interpolar(T.e4Cascata, { r: esc(r) }), null, comCascata, casc.cascade_cost / k.tarefas, "lab-linha-total")
+          linha(interpolar(T.e4Cascata, { r: esc(r) }), k.tarefas, casc.cascade_cost, casc.cascade_cost / k.tarefas),
+          linha(T.e4TotalCasc, null, comCascata, null, "lab-linha-total"),
+          linha(T.e4Simples, null, simples, null, "lab-linha-secundaria")
         ])
       ]));
       var vezes = simples > 0 ? total / simples : 0;
-      conclusao.innerHTML = interpolar(T.e4Conclusao, {
+      var v = {
         simples: fmtUSD.format(simples), total: fmtUSD.format(total),
         vezes: new Intl.NumberFormat(LOCALE, { maximumFractionDigits: 1 }).format(vezes),
-        r: r, cascata: fmtUSD.format(comCascata),
-        c2: usd(k.c2), c3: usd(casc.cascade_cost / k.tarefas)
-      });
+        r: r, cascata: fmtUSD.format(comCascata), c3: usd(casc.cascade_cost / k.tarefas)
+      };
+      conclusao.innerHTML = "";
+      conclusao.appendChild(el("p", { class: "lab-conclusao-rotulo", text: T.e4Rotulo }));
+      conclusao.appendChild(el("ol", {}, [T.e4C1, T.e4C2, T.e4C3].map(function (s) { return el("li", { html: interpolar(s, v) }); })));
+      conclusao.appendChild(el("p", { class: "lab-conclusao-fecho", text: T.e4Fecho }));
     }
     ouvintes.push(desenhar);
     desenhar();
