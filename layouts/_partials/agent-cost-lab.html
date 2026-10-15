@@ -1,0 +1,13 @@
+{{- /* Calculadora de custo de agentes. O motor e os precos vem do repositorio
+       agent-cost-math, copiado para static/agent-cost-math/ no build (ver
+       .github/workflows/hugo.yml). Sem esses arquivos a pagina nao quebra: ela
+       diz que a calculadora nao esta disponivel e mostra como rodar localmente. */ -}}
+{{- $js := resources.Get "js/agent-cost-lab.js" | minify | fingerprint -}}
+<div id="acl" class="lab"
+     data-lang="{{ site.Language.Lang }}"
+     data-base="{{ "agent-cost-math/" | relURL }}"
+     data-pyodide="https://cdn.jsdelivr.net/pyodide/v0.27.2/full/"
+     data-repo="https://github.com/julianamarialop/agent-cost-math">
+  <noscript><p class="lab-estado">{{ if eq site.Language.Lang "pt" }}A calculadora roda Python no navegador e precisa de JavaScript. O mesmo código roda na sua máquina, a partir do repositório.{{ else }}The calculator runs Python in the browser and needs JavaScript. The same code runs on your machine, from the repository.{{ end }}</p></noscript>
+</div>
+<script src="{{ $js.RelPermalink }}" integrity="{{ $js.Data.Integrity }}" defer></script>

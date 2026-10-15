@@ -6,6 +6,10 @@ on:
   push:
     branches: [main]
   workflow_dispatch:
+  # Todo dia: a calculadora de custo de agentes mostra precos lidos das fontes
+  # dos fornecedores, e um preco so vale com a data em que foi lido.
+  schedule:
+    - cron: "17 9 * * *"
 
 permissions:
   contents: read
@@ -38,6 +42,28 @@ jobs:
         with:
           submodules: recursive
           fetch-depth: 0
+      # Motor da calculadora (/agent-cost/): vem do repositorio publico, nunca de
+      # uma copia versionada aqui, para a pagina e o `git clone` rodarem o mesmo
+      # arquivo. Se o repositorio ou as fontes de preco falharem, o site publica
+      # mesmo assim e a pagina diz o que faltou.
+      - name: Fetch the agent cost engine
+        id: engine
+        continue-on-error: true
+        uses: actions/checkout@v7
+        with:
+          repository: julianamarialop/agent-cost-math
+          path: _agent-cost-math
+      - name: Publish the engine and today's prices
+        if: steps.engine.outcome == 'success'
+        run: |
+          mkdir -p static/agent-cost-math
+          cp _agent-cost-math/{agent_cost.py,live_prices.py,architecture.example.json,prices.example.json} static/agent-cost-math/
+          cd static/agent-cost-math
+          python3 live_prices.py --self-test
+          if ! python3 live_prices.py --out prices.live.json; then
+            rm -f prices.live.json
+            echo "::warning::live prices unavailable; the calculator page will say it uses the hand table"
+          fi
       - name: Setup Pages
         id: pages
         uses: actions/configure-pages@v6

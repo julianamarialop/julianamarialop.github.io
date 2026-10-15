@@ -86,6 +86,19 @@
   <div class="artigo-texto md-content">{{ .Content }}</div>
 </article>
 
+{{- else if .Params.lab }}
+<article class="pagina pagina-lab">
+  {{- with .Params.sobretitulo }}<p class="sobretitulo">{{ . }}</p>{{ end }}
+  <h1 class="artigo-titulo">{{ .Title }}</h1>
+  <div class="artigo-texto post-content md-content">{{ .Content }}</div>
+  {{- /* Fora do .post-content de proposito: os estilos de texto do artigo
+         (tabelas, listas, margens de paragrafo) nao podem chegar na calculadora. */}}
+  {{ partial "agent-cost-lab.html" . }}
+  {{- with .Params.depois }}
+  <div class="artigo-texto post-content md-content">{{ . | markdownify }}</div>
+  {{- end }}
+</article>
+
 {{- else }}
 <article class="pagina">
   <h1 class="artigo-titulo">{{ .Title }}</h1>

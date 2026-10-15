@@ -3,6 +3,11 @@ public/
 resources/_gen/
 .hugo_build.lock
 
+# Motor da calculadora de custo de agentes: copiado do repositorio agent-cost-math
+# no build (CI) ou por tools/agent_cost_engine.py (local). Nunca versionar aqui.
+static/agent-cost-math/
+_agent-cost-math/
+
 # Conversor do LinkedIn
 .cache/
 tools/ultima-migracao.md

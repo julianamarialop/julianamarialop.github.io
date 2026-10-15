@@ -1,0 +1,95 @@
+/* Calculadora de custo de agentes (pagina com `lab: true`).
+   Cores so pelos tokens do site, entao o modo escuro vem junto. */
+
+/* Duas classes de proposito: o PaperMod junta os css de extended/ em ordem
+   alfabetica, entao o .pagina do site.css chega depois e venceria um seletor
+   de mesma especificidade. */
+.pagina.pagina-lab { max-width: var(--largura); }
+.pagina-lab > .artigo-titulo, .pagina-lab > .sobretitulo, .pagina-lab > .artigo-texto { max-width: var(--leitura); }
+
+.lab { margin: 8px 0 48px; display: grid; gap: 24px; }
+.lab-estado { display: flex; align-items: center; gap: 10px; padding: 14px 18px; border-radius: 12px; background: var(--card); box-shadow: var(--sombra); font-size: 15px; color: var(--texto-2); }
+.lab-estado[data-tipo="erro"] { box-shadow: inset 4px 0 0 var(--acento), var(--sombra); color: var(--texto); }
+.lab-girando { width: 16px; height: 16px; border-radius: 50%; border: 2px solid var(--linha); border-top-color: var(--petroleo); animation: lab-gira .8s linear infinite; flex: none; }
+@keyframes lab-gira { to { transform: rotate(360deg); } }
+
+.lab-bloco { background: var(--card); border-radius: var(--raio); box-shadow: var(--sombra); padding: 24px 26px 26px; min-width: 0; }
+.lab-bloco h2 { font-size: 22px; font-weight: 750; letter-spacing: -.015em; margin: 0 0 6px; color: var(--texto); }
+.lab-bloco > p.lab-sub { margin: 0 0 18px; font-size: 15px; line-height: 1.55; color: var(--texto-2); max-width: 760px; }
+.lab-num { font-variant-numeric: tabular-nums; }
+
+/* entradas */
+.lab-campos { display: flex; flex-wrap: wrap; gap: 14px 18px; align-items: flex-end; margin: 0 0 18px; }
+.lab-campo { display: grid; gap: 6px; font-size: 13px; font-weight: 600; color: var(--texto-2); }
+.lab-campo input[type="number"], .lab-campo select, .lab-tabela input[type="number"], .lab-tabela select {
+  font: 500 15px/1.2 var(--fonte); color: var(--texto); background: var(--fundo);
+  border: 1px solid var(--linha); border-radius: 8px; padding: 8px 10px; min-width: 0;
+}
+.lab-campo input[type="number"] { width: 120px; }
+.lab-campo input[type="range"] { width: 220px; accent-color: var(--petroleo); }
+.lab input:focus-visible, .lab select:focus-visible, .lab button:focus-visible { outline: 2px solid var(--petroleo); outline-offset: 2px; }
+.lab-botao { font: 600 14px/1.2 var(--fonte); padding: 9px 16px; border-radius: 999px; border: 0; cursor: pointer; color: var(--texto); background: var(--fundo); box-shadow: inset 0 0 0 1px var(--linha); }
+.lab-botao:hover { box-shadow: inset 0 0 0 1px var(--petroleo); color: var(--petroleo); }
+
+/* tabelas */
+.lab-rolagem { overflow-x: auto; margin: 0 -4px; padding: 0 4px; }
+.lab-tabela { width: 100%; border-collapse: collapse; font-size: 14px; }
+.lab-tabela th { text-align: left; font-size: 12px; font-weight: 700; letter-spacing: .04em; text-transform: uppercase; color: var(--texto-3); padding: 8px 10px; border-bottom: 1px solid var(--linha); white-space: nowrap; }
+.lab-tabela td { padding: 8px 10px; border-bottom: 1px solid var(--linha); color: var(--texto); vertical-align: middle; }
+.lab-tabela .dir { text-align: right; }
+.lab-tabela tfoot td { font-weight: 750; border-bottom: 0; }
+.lab-tabela input[type="number"] { width: 110px; text-align: right; }
+.lab-tabela input[type="checkbox"] { width: 18px; height: 18px; accent-color: var(--petroleo); }
+.lab-papel { display: inline-flex; padding: 2px 8px; border-radius: 999px; background: var(--petroleo-claro); color: var(--petroleo); font-size: 12px; font-weight: 600; }
+
+/* barra de participacao: uma serie, um tom */
+.lab-parte { display: flex; align-items: center; gap: 8px; min-width: 160px; }
+.lab-parte-trilho { flex: 1; height: 8px; border-radius: 4px; background: var(--fundo); overflow: hidden; }
+.lab-parte-barra { height: 100%; border-radius: 0 4px 4px 0; background: var(--petroleo); }
+.lab-parte span { width: 48px; text-align: right; color: var(--texto-2); font-variant-numeric: tabular-nums; }
+
+/* resultado */
+.lab-total { display: flex; flex-wrap: wrap; gap: 10px 28px; align-items: baseline; margin: 18px 0 6px; }
+.lab-total-valor { font-size: 34px; font-weight: 800; letter-spacing: -.02em; color: var(--texto); font-variant-numeric: tabular-nums; }
+.lab-total-rotulo { font-size: 14px; color: var(--texto-2); }
+.lab-avisos { list-style: none; padding: 0; margin: 14px 0 0; display: grid; gap: 8px; }
+.lab-avisos li { font-size: 14px; line-height: 1.5; padding: 10px 14px; border-radius: 10px; background: var(--fundo); color: var(--texto); box-shadow: inset 3px 0 0 var(--acento); }
+.lab-avisos li strong { color: var(--texto); }
+.lab-recusa { padding: 14px 16px; border-radius: 10px; background: var(--fundo); box-shadow: inset 4px 0 0 var(--acento); font-size: 15px; line-height: 1.55; color: var(--texto); }
+.lab-recusa strong { display: block; margin-bottom: 4px; }
+.lab-rodape { font-size: 13px; line-height: 1.5; color: var(--texto-3); margin: 14px 0 0; }
+.lab-rodape a { color: var(--petroleo); }
+
+/* graficos */
+.lab-grafico { position: relative; margin-top: 8px; }
+.lab-grafico svg { display: block; width: 100%; height: auto; overflow: visible; }
+.lab-grafico .eixo { stroke: var(--linha); stroke-width: 1; }
+.lab-grafico .grade { stroke: var(--linha); stroke-width: 1; stroke-dasharray: 2 4; }
+.lab-grafico text { font: 500 12px var(--fonte); fill: var(--texto-3); }
+.lab-grafico text.forte { fill: var(--texto); font-weight: 650; }
+.lab-grafico .serie-1 { fill: var(--petroleo); }
+.lab-grafico .linha-1 { stroke: var(--petroleo); stroke-width: 2; fill: none; }
+.lab-grafico .linha-2 { stroke: var(--acento); stroke-width: 2; fill: none; stroke-dasharray: 6 4; }
+.lab-grafico .marco { stroke: var(--texto-3); stroke-width: 1; stroke-dasharray: 3 3; }
+.lab-grafico .ponto { fill: var(--petroleo); stroke: var(--card); stroke-width: 2; }
+.lab-grafico .alvo { fill: transparent; cursor: crosshair; }
+.lab-grafico .serie-1.ativo { opacity: .75; }
+.lab-legenda { display: flex; flex-wrap: wrap; gap: 6px 18px; list-style: none; padding: 0; margin: 10px 0 0; font-size: 13px; color: var(--texto-2); }
+.lab-legenda li { display: inline-flex; align-items: center; gap: 8px; }
+.lab-legenda i { display: inline-block; width: 18px; height: 0; border-top: 2px solid var(--petroleo); }
+.lab-legenda i.barra { height: 10px; border: 0; border-radius: 2px; background: var(--petroleo); width: 12px; }
+.lab-legenda i.tracejada { border-top: 2px dashed var(--acento); }
+.lab-dica { position: absolute; pointer-events: none; padding: 8px 10px; border-radius: 8px; background: var(--texto); color: var(--card); font-size: 13px; line-height: 1.4; white-space: nowrap; transform: translate(-50%, calc(-100% - 10px)); opacity: 0; transition: opacity .1s; z-index: 2; }
+.lab-dica.visivel { opacity: 1; }
+.lab-frase { font-size: 16px; line-height: 1.55; margin: 14px 0 0; color: var(--texto); }
+.lab-frase strong { font-weight: 750; }
+
+.lab-precos-origem { font-size: 14px; color: var(--texto-2); margin: 0 0 12px; }
+.lab-precos-origem strong { color: var(--texto); }
+
+@media (max-width: 760px) {
+  .lab-bloco { padding: 18px 16px 20px; }
+  .lab-campo input[type="range"] { width: 100%; }
+  .lab-campo { flex: 1 1 140px; }
+  .lab-total-valor { font-size: 28px; }
+}
