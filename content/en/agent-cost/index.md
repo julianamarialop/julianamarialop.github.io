@@ -1,16 +1,16 @@
 ---
 title: "Agent Cost Calculator"
 sobretitulo: "Microsoft Ignite 2026 · Table Talk TT1759"
-summary: "Price an agent architecture before you build it: from its structure, not its volume, against the vendors' own prices. The same Python engine as the repository, running in your browser."
+summary: "An estimate of what an AI agent costs, derived from its architecture rather than its request volume, using the prices the vendors themselves publish."
 lab: true
 ShowToc: false
 ShowReadingTime: false
 ShowBreadCrumbs: false
 ShowPostNavLinks: false
 depois: |
-  ## Run it on your machine
+  ## Running it locally
 
-  Python 3.8 or newer and nothing else: no `pip install`, no API key, no cloud account.
+  Requires only Python 3.8 or later. There are no packages to install, no API key and no cloud account.
 
   ```bash
   git clone https://github.com/julianamarialop/agent-cost-math
@@ -20,15 +20,17 @@ depois: |
   python live_prices.py --check
   ```
 
-  `--live` reads the prices at that moment from the Anthropic pricing page and from the Azure Retail Prices API. `live_prices.py --check` compares the hand table in the repository with those sources and exits with an error when they disagree. To price your own system, edit `architecture.example.json`: one entry per component, with its role, monthly volume, model and, for loops, the iteration ceiling.
+  The `--live` option retrieves prices at execution time from the Anthropic pricing page and the Azure Retail Prices API. The `live_prices.py --check` command compares the repository's price table with those sources and exits with an error when they diverge. To estimate a different architecture, edit `architecture.example.json`, with one entry per component: role, monthly volume, model and, for iterative components, the iteration limit.
+
+  ## About the calculator
+
+  The calculations on this page are performed by the same Python code published in the repository, loaded in the browser, so the results on the page and on the command line are identical. The calculator does not invoke any model: it performs calculations only, over the prices published by the vendors and refreshed daily.
 
   ## At Microsoft Ignite 2026
 
-  This page is the companion to the Table Talk **TT1759, "Agent Cost Is an Architecture Decision, Not a Token Count"** (Agent Platform, level 300), in person in San Francisco. A Table Talk is a conversation, not a lecture: bring your own architecture and we price it at the table.
+  This page accompanies the Table Talk **TT1759, "Agent Cost Is an Architecture Decision, Not a Token Count"** (Agent Platform, level 300), an in person session in San Francisco. A Table Talk is a group discussion rather than a presentation: participants may bring their own architecture so that its cost can be estimated during the session.
 ---
 
-Most agent cost estimates multiply requests by a price per request. That number is wrong in a predictable direction, because volume is not what sets the bill. Orchestration is: which components exist, what role each one plays, how many turns its loop takes, which model it runs and how much context it rereads on every turn.
+What does an artificial intelligence agent cost? The most common estimate multiplies the number of requests by the price of one model call. That method underestimates cost, because an agent does not execute a single call: it executes several iterations before it answers, and each iteration processes more text than the previous one.
 
-The example below is a claims triage with five components. The router handles four times more requests than the claim specialist and costs thirty six times less. Change any input and the calculator prices it again, or refuses when the architecture is missing something it needs, because a line that enters an estimate at zero disappears from the proposal and nobody notices.
-
-Nothing on this page is computed in JavaScript. Your browser runs the same Python file that is in the repository, so the numbers here are the numbers on the command line. The calculator calls no model: it is arithmetic over prices read from the vendors' public sources.
+An agent's cost is determined by its architecture: how many iterations it executes, which model each step uses, and how much context is reprocessed on every iteration. This page presents that reasoning in four steps, with a single example: an online store's customer service assistant answering the question "Where is my order?". Each step introduces one concept, and the values can be changed to observe their effect on cost.

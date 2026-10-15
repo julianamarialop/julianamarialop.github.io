@@ -84,6 +84,22 @@
 .lab-frase { font-size: 16px; line-height: 1.55; margin: 14px 0 0; color: var(--texto); }
 .lab-frase strong { font-weight: 750; }
 
+/* etapas didaticas */
+.lab-etapa-num { margin: 0 0 4px; font-size: 12px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; color: var(--acento); }
+.lab-etapa > p.lab-sub { font-size: 16px; line-height: 1.65; color: var(--texto); margin: 0 0 14px; }
+.lab-etapa > p.lab-sub strong { font-weight: 650; }
+.lab-campo-largo { min-width: 280px; }
+.lab-campo-largo input[type="range"] { width: 100%; }
+.lab-deslizador-valor { color: var(--texto); font-weight: 700; }
+.lab-indicadores { display: flex; flex-wrap: wrap; gap: 14px; margin: 18px 0 4px; }
+.lab-indicador { display: grid; gap: 2px; min-width: 200px; flex: 1 1 200px; padding: 14px 16px; border-radius: 12px; background: var(--fundo); }
+.lab-indicador-valor { font-size: 26px; font-weight: 800; letter-spacing: -.02em; color: var(--texto); }
+.lab-indicador-rotulo { font-size: 14px; color: var(--texto-2); }
+.lab-indicador-detalhe { font-size: 13px; color: var(--texto-3); }
+.lab-aprofundamento > summary { cursor: pointer; font-size: 18px; font-weight: 750; color: var(--texto); list-style-position: outside; }
+.lab-aprofundamento > summary:hover { color: var(--petroleo); }
+.lab-aprofundamento[open] > summary { margin-bottom: 14px; }
+
 .lab-precos-origem { font-size: 14px; color: var(--texto-2); margin: 0 0 12px; }
 .lab-precos-origem strong { color: var(--texto); }
 
