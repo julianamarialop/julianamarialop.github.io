@@ -24,6 +24,7 @@ PADRAO = [
     RAIZ / "content" / "en" / "agent-cost" / "index.md",
     RAIZ / "assets" / "js" / "agent-cost-lab.js",
     RAIZ / "static" / "apresentacao" / "custo-de-agentes" / "index.html",
+    RAIZ / "static" / "apresentacao" / "agent-cost" / "index.html",
 ]
 
 # (expressao, substituto sugerido)
