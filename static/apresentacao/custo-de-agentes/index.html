@@ -3,29 +3,32 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<meta name="theme-color" content="#0a1218">
+<meta name="theme-color" content="#06162a">
 <meta name="robots" content="noindex">
 <title>Custo de agentes de IA</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400..800&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap">
 <style>
   /* Apresentacao para acompanhar no celular: uma tela por ideia, em pe.
-     Palco sempre escuro; azul = agente de classificacao, laranja = agente de resolucao. */
+     Identidade da capa do livro "Building Intelligent Agents": azul-marinho,
+     ciano luminoso e branco. Aco = agente de classificacao, ciano = agente de resolucao. */
   :root {
-    --fundo: #0a1218; --painel: #121e27; --linha: #22323e;
-    --texto: #eef4f8; --texto-2: #a9b9c5; --texto-3: #6f8291;
-    --a: #7cc0e0; --b: #f58a55; --neutro: #3a4c5a;
-    --fonte: "Inter", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+    --fundo: #06162a; --painel: #0b2038; --linha: #1b3a5c;
+    --texto: #f4f9fd; --texto-2: #b3c7d9; --texto-3: #6f8aa5;
+    --a: #9db4c8; --b: #35d0f7; --neutro: #2b4664;
+    --fonte: "Poppins", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
   }
   * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
-  html, body { margin: 0; height: 100%; background: var(--fundo); color: var(--texto); font-family: var(--fonte); -webkit-font-smoothing: antialiased; overscroll-behavior: none; }
+  html, body { margin: 0; height: 100%; background: radial-gradient(120% 70% at 70% 45%, #0d2c4d 0%, #06162a 60%, #040f1d 100%) fixed; color: var(--texto); font-family: var(--fonte); -webkit-font-smoothing: antialiased; overscroll-behavior: none; }
   .tela { height: 100vh; height: 100dvh; max-width: 760px; margin: 0 auto; display: flex; flex-direction: column; padding: max(14px, env(safe-area-inset-top)) 18px max(12px, env(safe-area-inset-bottom)); user-select: none; cursor: pointer; }
 
   header { display: flex; gap: 14px; align-items: center; flex: none; }
-  .num { flex: none; width: 46px; height: 46px; border-radius: 14px; display: grid; place-items: center; font-size: 24px; font-weight: 800; color: var(--fundo); background: linear-gradient(135deg, var(--a), var(--b)); }
-  .sobre { margin: 0 0 2px; font-size: 12px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; color: var(--texto-3); }
-  h1 { margin: 0; font-size: clamp(20px, 5.6vw, 30px); line-height: 1.15; font-weight: 800; letter-spacing: -.02em; min-height: 2.3em; display: flex; align-items: center; }
+  .num { flex: none; width: 46px; height: 46px; border-radius: 12px; display: grid; place-items: center; font-size: 22px; font-weight: 700; color: var(--b); border: 1.5px solid var(--b); box-shadow: 0 0 18px rgb(53 208 247 / 35%), inset 0 0 12px rgb(53 208 247 / 18%); }
+  .sobre { margin: 0 0 3px; font-size: 10.5px; font-weight: 600; letter-spacing: .16em; text-transform: uppercase; color: var(--texto-2); display: flex; align-items: center; gap: 8px; }
+  .sobre::before { content: ""; width: 18px; height: 1.5px; background: var(--b); }
+  h1 { margin: 0; font-size: clamp(19px, 5.4vw, 30px); line-height: 1.12; font-weight: 800; letter-spacing: .01em; text-transform: uppercase; min-height: 2.3em; }
+  h1 em { font-style: normal; color: var(--b); text-shadow: 0 0 22px rgb(53 208 247 / 45%); display: block; }
 
   .palco { position: relative; flex: 1 1 auto; min-height: 150px; margin: 6px -18px 0; }
   canvas { position: absolute; inset: 0; width: 100%; height: 100%; display: block; }
@@ -40,7 +43,7 @@
   .vol { margin: 0; font-size: 13px; color: var(--texto-2); font-variant-numeric: tabular-nums; }
   .vol strong { display: block; font-size: clamp(20px, 5.4vw, 26px); font-weight: 750; color: var(--texto); letter-spacing: -.01em; }
   .custo { margin: 8px 0 0; font-size: clamp(26px, 8vw, 40px); line-height: 1; font-weight: 800; letter-spacing: -.03em; font-variant-numeric: tabular-nums; }
-  .a .custo { color: var(--a); } .b .custo { color: var(--b); }
+  .a .custo { color: var(--a); } .b .custo { color: var(--b); text-shadow: 0 0 26px rgb(53 208 247 / 40%); }
   .custo small { font-size: .45em; font-weight: 700; letter-spacing: 0; margin-right: 4px; }
   .un { margin: 4px 0 0; font-size: 12px; color: var(--texto-3); }
 
@@ -48,7 +51,7 @@
   .painel.visivel { max-height: 120px; opacity: 1; margin-top: 12px; }
   .painel p { margin: 0 0 6px; font-size: 12px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; color: var(--texto-3); }
   .barra { display: flex; gap: 2px; height: 34px; border-radius: 10px; overflow: hidden; background: var(--painel); }
-  .barra i { display: grid; place-items: center; height: 100%; width: 0; font-style: normal; font-size: 15px; font-weight: 800; color: var(--fundo); white-space: nowrap; overflow: hidden; transition: width 1.4s cubic-bezier(.2,.8,.2,1) .25s; }
+  .barra i { display: grid; place-items: center; height: 100%; width: 0; font-style: normal; font-size: 15px; font-weight: 800; color: #04101d; white-space: nowrap; overflow: hidden; transition: width 1.4s cubic-bezier(.2,.8,.2,1) .25s; }
   .barra .sa { background: var(--a); } .barra .sb { background: var(--b); } .barra .sn { background: var(--neutro); }
   .chaves { display: flex; flex-wrap: wrap; gap: 4px 14px; margin: 8px 0 0; padding: 0; list-style: none; font-size: 12px; color: var(--texto-2); }
   .chaves li::before { content: ""; display: inline-block; width: 9px; height: 9px; border-radius: 3px; margin-right: 6px; background: var(--cor); }
@@ -70,7 +73,7 @@
   <header>
     <span class="num" aria-label="Tela 2">2</span>
     <div>
-      <p class="sobre">Custo de agentes de IA</p>
+      <p class="sobre">Engenharia de agentes de IA</p>
       <h1 id="titulo"></h1>
     </div>
   </header>
@@ -116,11 +119,11 @@
   "use strict";
   var MOMENTOS = [
     null,
-    { titulo: "Um assistente, dois agentes",
+    { titulo: "Um assistente, <em>dois agentes</em>",
       legenda: "O agente de classificação recebe <strong>40.000 mensagens por mês</strong>. Cada mensagem passa por ele <strong>uma única vez</strong>." },
-    { titulo: "Menos solicitações, mais passos",
+    { titulo: "Menos solicitações, <em>mais passos</em>",
       legenda: "O agente de resolução recebe <strong>9.000 solicitações</strong>. Para responder, consulta pedidos, entrega e política em <strong>8 passos</strong>, e a cada passo lê novamente todo o histórico." },
-    { titulo: "O volume não prevê o custo",
+    { titulo: "O volume não prevê <em>o custo</em>",
       legenda: "O agente com <strong>menos solicitações</strong> responde por <strong>85% do custo</strong>. O que define o custo é a orquestração." }
   ];
   var VOL_A = 40000, VOL_B = 9000, CUSTO_A = 40, CUSTO_B = 1440, PASSOS_B = 8;
@@ -148,7 +151,7 @@
 
   function momento(n) {
     m = Math.max(1, Math.min(3, n));
-    $("titulo").textContent = MOMENTOS[m].titulo;
+    $("titulo").innerHTML = MOMENTOS[m].titulo;
     $("legenda").innerHTML = MOMENTOS[m].legenda;
     $("colA").classList.toggle("ativo", m >= 1);
     $("colB").classList.toggle("ativo", m >= 2);
@@ -175,7 +178,7 @@
   // ------------------------------------------------------------- animacao
   var cv = $("cv"), ctx = cv.getContext("2d");
   var W = 0, H = 0, DPR = 1, R = 40;
-  var COR_A = "124,192,224", COR_B = "245,138,85";
+  var COR_A = "157,180,200", COR_B = "53,208,247";
   var particulas = [], faiscas = [];
   var acumA = 0, acumB = 0, ultimo = 0;
 
@@ -218,7 +221,7 @@
   function sistema(s, ativo, pulso) {
     var r = R * 0.5, u = r * 0.5;
     ctx.globalAlpha = ativo ? 1 : 0.22;
-    ctx.fillStyle = "#0f1a22"; ctx.strokeStyle = "rgba(" + COR_B + "," + (0.45 + 0.35 * pulso) + ")"; ctx.lineWidth = 1.5;
+    ctx.fillStyle = "#081c33"; ctx.strokeStyle = "rgba(" + COR_B + "," + (0.45 + 0.35 * pulso) + ")"; ctx.lineWidth = 1.5;
     ctx.beginPath(); ctx.arc(s.x, s.y, r, 0, 6.2832); ctx.fill(); ctx.stroke();
     ctx.strokeStyle = "rgba(238,244,248,.85)"; ctx.lineWidth = 1.4; ctx.lineJoin = "round"; ctx.lineCap = "round";
     ctx.beginPath();
@@ -263,7 +266,7 @@
     retangulo(x - R * 0.16, c.y - R * 0.12, R * 0.16, R * 0.5, R * 0.06); ctx.fill();
     retangulo(x + w, c.y - R * 0.12, R * 0.16, R * 0.5, R * 0.06); ctx.fill();
     // cabeca
-    ctx.fillStyle = "#101c25"; retangulo(x, y, w, h, R * 0.42); ctx.fill(); ctx.stroke();
+    ctx.fillStyle = "#0a2038"; retangulo(x, y, w, h, R * 0.42); ctx.fill(); ctx.stroke();
     // olhos: piscam; no laranja, acompanham o sistema consultado
     var pisca = (t + (b ? 1.3 : 0)) % 3.6 < 0.13 ? 0.12 : 1;
     var dx = 0, dy = 0;
@@ -279,6 +282,23 @@
     else ctx.arc(c.x, c.y + R * 0.38, R * 0.22, 0.15 * Math.PI, 0.85 * Math.PI);
     ctx.stroke();
     ctx.globalAlpha = 1;
+  }
+
+  // Malha de rede ao fundo, como o globo da capa do livro.
+  var nos = [];
+  function malha(dt) {
+    if (!nos.length) for (var n = 0; n < 34; n++) nos.push({ x: Math.random(), y: Math.random(), vx: (Math.random() - 0.5) * 0.012, vy: (Math.random() - 0.5) * 0.012 });
+    var lim = Math.max(70, W * 0.2);
+    ctx.lineWidth = 1;
+    for (var a = 0; a < nos.length; a++) {
+      var p = nos[a]; p.x += p.vx * dt; p.y += p.vy * dt;
+      if (p.x < 0 || p.x > 1) p.vx *= -1; if (p.y < 0 || p.y > 1) p.vy *= -1;
+      for (var b = a + 1; b < nos.length; b++) {
+        var q = nos[b], d = Math.hypot((p.x - q.x) * W, (p.y - q.y) * H);
+        if (d < lim) { ctx.strokeStyle = "rgba(53,208,247," + (0.11 * (1 - d / lim)) + ")"; ctx.beginPath(); ctx.moveTo(p.x * W, p.y * H); ctx.lineTo(q.x * W, q.y * H); ctx.stroke(); }
+      }
+      ctx.fillStyle = "rgba(120,220,250,.28)"; ctx.beginPath(); ctx.arc(p.x * W, p.y * H, 1.4, 0, 6.2832); ctx.fill();
+    }
   }
 
   function ponto(x, y, r, cor, alfa) {
@@ -299,6 +319,7 @@
     if (m >= 2) { acumB += dt * 15 * VOL_B / VOL_A; while (acumB >= 1) { acumB--; nascerB(); } }
 
     var tempo = agora / 1000, sis = sistemas();
+    malha(dt);
     sis.forEach(function (s, n) { sistema(s, m >= 2, 0.5 + 0.5 * Math.sin(tempo * 4 + n * 2.1)); });
     ctx.globalCompositeOperation = "lighter";
     for (var i = particulas.length - 1; i >= 0; i--) {
@@ -316,7 +337,7 @@
           var q = suave(p.t / p.queda);
           ponto(p.x0 + (cb.x - p.x0) * q, -10 + (topo + 10) * q, p.r, COR_B, 0.9);
         } else if (p.t < p.queda + p.trabalho) {
-          // Cada passo e uma ida a um sistema e a volta ao agente. O traco e o
+          // Cada passo e uma consulta a um sistema, com retorno ao agente. O traco e o
           // historico que o agente carrega: mais espesso a cada passo.
           var f = (p.t - p.queda) / p.trabalho * PASSOS_B, passo = Math.floor(f), ida = Math.sin(Math.PI * (f - passo));
           if (passo > p.feitos) { p.feitos = passo; faiscas.push({ x: cb.x, y: cb.y + R * 0.9, t: 0, peso: passo }); }
@@ -336,7 +357,7 @@
     for (var j = faiscas.length - 1; j >= 0; j--) {
       var z = faiscas[j]; z.t += dt / 0.7;
       if (z.t >= 1) { faiscas.splice(j, 1); continue; }
-      ponto(z.x + Math.sin(z.t * 9 + j) * 5, z.y + (H - z.y) * z.t * z.t, 1.3 + z.peso * 0.22, "255,214,170", 1 - z.t);
+      ponto(z.x + Math.sin(z.t * 9 + j) * 5, z.y + (H - z.y) * z.t * z.t, 1.3 + z.peso * 0.22, "235,250,255", 1 - z.t);
     }
     ctx.globalCompositeOperation = "source-over";
     agente("a", m >= 1, tempo); agente("b", m >= 2, tempo);
