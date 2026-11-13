@@ -55,6 +55,8 @@ def main() -> int:
     a5 = custo(age, max_iterations=5, delta_tokens_per_iteration=250)["cost_usd"]
     b5 = custo(age, max_iterations=5, delta_tokens_per_iteration=250, model=barato)["cost_usd"]
     somado = ac.cascade(b5 / vol, a5 / vol, 0.60, vol)
+    # degraus da escada da tela de conclusao, na ordem em que as decisoes aparecem
+    escada = [custo(age, caching=False)["cost_usd"], custo(age)["cost_usd"], a5, somado["cascade_cost"]]
 
     def por_milhao(nome):
         m = precos["models"][nome]
@@ -81,6 +83,7 @@ def main() -> int:
         "cascata": {"curva": casc, "direto": round(c2 * vol, 2), "equilibrio": round(c1 / c2, 4),
                     "c1": c1, "c2": c2},
         "somado": {"custo": somado["cascade_cost"], "por_solicitacao": round(somado["cascade_cost"] / vol, 4)},
+        "escada": escada,
         "modelos": {barato: por_milhao(barato), "Claude Sonnet 5": por_milhao("Claude Sonnet 5"), caro: por_milhao(caro)},
         "piso_cache": {n: precos["models"][n].get("min_cache_tokens") for n in (barato, caro)},
     }

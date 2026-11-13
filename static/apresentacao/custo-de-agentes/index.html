@@ -169,6 +169,31 @@
   .ajustes { display: flex; flex-wrap: wrap; justify-content: center; gap: 6px; margin: 0; padding: 0; list-style: none; }
   .ajustes li { padding: 5px 10px; border-radius: 999px; font-size: 12px; font-weight: 500; color: var(--b); border: 1px solid color-mix(in srgb, var(--b) 45%, transparent); }
 
+  /* tela 8: cem pedidos */
+  .cem { display: grid; grid-template-columns: repeat(20, 1fr); gap: 4px; max-width: 420px; width: 100%; margin: 0 auto; }
+  .cem i { display: block; aspect-ratio: 1; border-radius: 50%; transition: background .25s, box-shadow .25s, transform .25s; }
+  .cem i.r { background: var(--a); }
+  .cem i.s { background: var(--b); box-shadow: 0 0 0 2px #06162a, 0 0 0 3.5px rgb(53 208 247 / 70%), 0 0 10px rgb(53 208 247 / 50%); transform: scale(.8); }
+  .comparar { display: grid; gap: 10px; }
+  #cCasc.fim .valor { color: var(--b); }
+
+  /* tela 9: escada */
+  .escada { display: grid; gap: 12px; }
+  .degrau { opacity: 0; transform: translateY(8px); transition: opacity .5s, transform .5s; }
+  .degrau.visivel { opacity: .5; transform: none; }
+  .degrau.atual { opacity: 1; }
+  .degrau p { margin: 0 0 5px; display: flex; justify-content: space-between; align-items: baseline; gap: 10px; font-size: 13px; color: var(--texto-2); }
+  .degrau p b { color: var(--texto); font-weight: 700; }
+  .degrau p strong { font-size: 18px; font-weight: 800; color: var(--texto); font-variant-numeric: tabular-nums; white-space: nowrap; }
+  .degrau.atual p strong { color: var(--b); text-shadow: 0 0 18px rgb(53 208 247 / 45%); }
+  .degrau i { display: block; height: 22px; width: 0; border-radius: 6px; background: var(--neutro); transition: width 1.1s cubic-bezier(.2,.8,.2,1); }
+  .degrau.atual i { background: var(--b); box-shadow: 0 0 18px rgb(53 208 247 / 55%); }
+  .final { overflow: hidden; max-height: 0; opacity: 0; transition: max-height .8s ease, opacity .8s ease; text-align: center; }
+  .final.visivel { max-height: 220px; opacity: 1; }
+  .final p { margin: 6px 0 0; font-size: 14px; color: var(--texto-2); }
+  .final .grande { margin: 12px 0 0; font-size: clamp(19px, 5.4vw, 26px); line-height: 1.25; font-weight: 700; color: var(--texto); }
+  .final .grande b { color: var(--b); text-shadow: 0 0 20px rgb(53 208 247 / 45%); }
+
   /* tela 9 */
   .livros { display: flex; justify-content: center; gap: 14px; flex: 0 1 auto; min-height: 0; }
   .livros img { display: block; height: min(34vh, 300px); width: auto; border-radius: 6px; box-shadow: 0 10px 34px rgb(0 0 0 / 55%), 0 0 30px rgb(53 208 247 / 25%); }
@@ -214,7 +239,7 @@
   "use strict";
   // Numeros gerados por tools/apresentacao_dados.py a partir do codigo publico
   // agent-cost-math. Nenhum valor desta apresentacao e digitado manualmente.
-  var DADOS = {"precos_em":"2026-10-14","classificacao":{"volume":40000,"custo":40.0,"custo_modelo_maior":137.0,"modelo":"Claude Haiku 4.5"},"agente":{"volume":9000,"custo":1440.0,"passos":8,"tokens":62000,"tokens_simples":48000,"custo_modelo_menor":288.0,"modelo":"Claude Opus 5","sem_cache":3330.0,"prefixo":6000},"participacao":{"classificacao":2.4,"agente":85.4},"total_arquitetura":1685.88,"compressor":106.2,"inflacao":{"por_passo":[2000,2500,3000,3500,4000,4500,5000,5500,6000,6500],"total":42500,"simples":20000,"pct":112.5},"passos":{"normal":[101.25,225.0,371.25,540.0,731.25,945.0,1181.25,1440.0,1721.25,2025.0,2351.25,2700.0,3071.25,3465.0,3881.25,4320.0],"resumido":[101.25,213.75,337.5,472.5,618.75,776.25,945.0,1125.0,1316.25,1518.75,1732.5,1957.5,2193.75,2441.25,2700.0,2970.0]},"cascata":{"curva":[1728.0,1713.6,1699.2,1684.8,1670.4,1656.0,1641.6,1627.2,1612.8,1598.4,1584.0,1569.6,1555.2,1540.8,1526.4,1512.0,1497.6,1483.2,1468.8,1454.4,1440.0,1425.6,1411.2,1396.8,1382.4,1368.0,1353.6,1339.2,1324.8,1310.4,1296.0,1281.6,1267.2,1252.8,1238.4,1224.0,1209.6,1195.2,1180.8,1166.4,1152.0,1137.6,1123.2,1108.8,1094.4,1080.0,1065.6,1051.2,1036.8,1022.4,1008.0,993.6,979.2,964.8,950.4,936.0,921.6,907.2,892.8,878.4,864.0,849.6,835.2,820.8,806.4,792.0,777.6,763.2,748.8,734.4,720.0,705.6,691.2,676.8,662.4,648.0,633.6,619.2,604.8,590.4,576.0,561.6,547.2,532.8,518.4,504.0,489.6,475.2,460.8,446.4,432.0,417.6,403.2,388.8,374.4,360.0,345.6,331.2,316.8,302.4,288.0],"direto":1440.0,"equilibrio":0.2,"c1":0.032,"c2":0.16},"somado":{"custo":371.25,"por_solicitacao":0.0413},"modelos":{"Claude Haiku 4.5":[1.0,5.0],"Claude Sonnet 5":[2.0,10.0],"Claude Opus 5":[5.0,25.0]},"piso_cache":{"Claude Haiku 4.5":4096,"Claude Opus 5":512}};
+  var DADOS = {"precos_em":"2026-10-14","classificacao":{"volume":40000,"custo":40.0,"custo_modelo_maior":137.0,"modelo":"Claude Haiku 4.5"},"agente":{"volume":9000,"custo":1440.0,"passos":8,"tokens":62000,"tokens_simples":48000,"custo_modelo_menor":288.0,"modelo":"Claude Opus 5","sem_cache":3330.0,"prefixo":6000},"participacao":{"classificacao":2.4,"agente":85.4},"total_arquitetura":1685.88,"compressor":106.2,"inflacao":{"por_passo":[2000,2500,3000,3500,4000,4500,5000,5500,6000,6500],"total":42500,"simples":20000,"pct":112.5},"passos":{"normal":[101.25,225.0,371.25,540.0,731.25,945.0,1181.25,1440.0,1721.25,2025.0,2351.25,2700.0,3071.25,3465.0,3881.25,4320.0],"resumido":[101.25,213.75,337.5,472.5,618.75,776.25,945.0,1125.0,1316.25,1518.75,1732.5,1957.5,2193.75,2441.25,2700.0,2970.0]},"cascata":{"curva":[1728.0,1713.6,1699.2,1684.8,1670.4,1656.0,1641.6,1627.2,1612.8,1598.4,1584.0,1569.6,1555.2,1540.8,1526.4,1512.0,1497.6,1483.2,1468.8,1454.4,1440.0,1425.6,1411.2,1396.8,1382.4,1368.0,1353.6,1339.2,1324.8,1310.4,1296.0,1281.6,1267.2,1252.8,1238.4,1224.0,1209.6,1195.2,1180.8,1166.4,1152.0,1137.6,1123.2,1108.8,1094.4,1080.0,1065.6,1051.2,1036.8,1022.4,1008.0,993.6,979.2,964.8,950.4,936.0,921.6,907.2,892.8,878.4,864.0,849.6,835.2,820.8,806.4,792.0,777.6,763.2,748.8,734.4,720.0,705.6,691.2,676.8,662.4,648.0,633.6,619.2,604.8,590.4,576.0,561.6,547.2,532.8,518.4,504.0,489.6,475.2,460.8,446.4,432.0,417.6,403.2,388.8,374.4,360.0,345.6,331.2,316.8,302.4,288.0],"direto":1440.0,"equilibrio":0.2,"c1":0.032,"c2":0.16},"somado":{"custo":371.25,"por_solicitacao":0.0413},"escada":[3330.0,1440.0,618.75,371.25],"modelos":{"Claude Haiku 4.5":[1.0,5.0],"Claude Sonnet 5":[2.0,10.0],"Claude Opus 5":[5.0,25.0]},"piso_cache":{"Claude Haiku 4.5":4096,"Claude Opus 5":512}};
   var ENDERECO = "https://julianamarialop.github.io/apresentacao/custo-de-agentes/";
   var D = DADOS, AG = D.agente, CL = D.classificacao;
 
@@ -608,42 +633,44 @@
     momento: function (m) { $("chResumo").classList.toggle("apagado", m < 2); }
   });
 
-  // 7. Cascata -----------------------------------------------------------------
+  // 7. Cascata: 100 pedidos desenhados como 100 pontos ---------------------------
+  // Custos por pedido do agente de resolucao: c1 no modelo mais barato, c2 no mais caro.
+  // Por 100 pedidos: sem primeiro nivel = 100 x c2; com primeiro nivel = 100 x c1 + (100 - p) x c2.
+  function dois(v) { return "US$ " + new Intl.NumberFormat("pt-BR", { minimumFractionDigits: 2, maximumFractionDigits: 2 }).format(v); }
+  function custo100(p) { return 100 * D.cascata.c1 + (100 - p) * D.cascata.c2; }
   telas.push({
     momentos: [
-      { t: "Quarta decisão: o modelo de <em>menor custo primeiro</em>",
-        l: "Toda solicitação passa primeiro pelo modelo de menor custo. Apenas as que ele <strong>não resolve</strong> seguem para o modelo de maior capacidade. Altere a parcela resolvida." },
-      { t: "Abaixo de " + pct(D.cascata.equilibrio) + " de resolução, <em>a economia se inverte</em>",
-        l: "As solicitações não resolvidas pagam <strong>os dois modelos</strong>. Abaixo de <strong>" + pct(D.cascata.equilibrio) + "</strong> de resolução, o primeiro nível aumenta o custo. A resposta dele deve ser <strong>validada por código</strong>." }
+      { t: "Quarta decisão: o modelo <em>mais barato primeiro</em>",
+        l: "Todo pedido passa primeiro pelo modelo mais barato. Só os que ele <strong>não resolve</strong> seguem para o modelo mais caro. Mova a régua." },
+      { t: "Abaixo de " + Math.round(D.cascata.equilibrio * 100) + " em cada 100, <em>a economia se inverte</em>",
+        l: "Os pedidos não resolvidos <strong>pagam duas vezes</strong>. Se o modelo mais barato resolve menos de " + Math.round(D.cascata.equilibrio * 100) + " em cada 100, o custo sobe. A resposta dele precisa ser <strong>validada por código</strong>." }
     ],
-    html: '<div class="cartao" id="cCasc" style="text-align:center"><p class="rot">Custo mensal com primeiro nível</p>' +
+    html: '<div class="cartao" id="cCasc" style="text-align:center"><p class="rot">Custo de 100 pedidos</p>' +
       '<p class="valor"><small>US$</small><span id="vCasc">0</span></p><p class="sub" id="sCasc"></p></div>' +
-      '<div class="grafico" id="gCasc"></div>' +
-      '<label class="controle sem-toque">Parcela resolvida pelo modelo de menor custo: <b id="nCasc"></b><input type="range" id="rCasc" min="0" max="100" step="1" value="' + E.parcela + '"></label>',
+      '<div class="cem" id="cem" aria-hidden="true">' + Array(101).join("<i></i>") + "</div>" +
+      '<ul class="chaves"><li style="--cor: var(--a)">resolvidos pelo mais barato: pagam uma vez</li><li style="--cor: var(--b)">seguem para o mais caro: pagam duas vezes</li></ul>' +
+      '<div class="comparar">' +
+      '<div class="lh"><p><span>Sem primeiro nível</span><b>' + dois(100 * D.cascata.c2) + '</b></p><i id="bDireto"></i></div>' +
+      '<div class="lh fim"><p><span>Com primeiro nível</span><b id="tCasc"></b></p><i id="bCasc"></i></div></div>' +
+      '<label class="controle sem-toque"><span>O modelo mais barato resolve <b id="nCasc"></b> de cada 100 pedidos</span><input type="range" id="rCasc" min="0" max="100" step="1" value="' + E.parcela + '"></label>',
     entrar: function () {
-      var W = 320, H = 150, e = 34, d = 312, topo = 12, pe = 122, C = D.cascata, max = C.curva[0] * 1.04;
-      function x(p) { return e + (d - e) * p; }
-      function y(v) { return pe - (pe - topo) * v / max; }
-      var svg = '<svg viewBox="0 0 ' + W + " " + H + '" role="img" aria-label="Custo mensal conforme a parcela resolvida pelo modelo de menor custo">' +
-        '<line class="eixox" x1="' + e + '" x2="' + d + '" y1="' + pe + '" y2="' + pe + '"/>' +
-        '<line class="direto" x1="' + e + '" x2="' + d + '" y1="' + y(C.direto) + '" y2="' + y(C.direto) + '"/>' +
-        '<text class="td" x="' + d + '" y="' + (y(C.direto) - 5) + '" text-anchor="end">somente o modelo de maior capacidade</text>' +
-        '<line class="marco" x1="' + x(C.equilibrio) + '" x2="' + x(C.equilibrio) + '" y1="' + topo + '" y2="' + pe + '"/>' +
-        '<text class="tm" x="' + (x(C.equilibrio) + 5) + '" y="' + (pe - 6) + '">equilíbrio ' + pct(C.equilibrio) + "</text>" +
-        '<path class="curva" d="M' + x(0) + "," + y(C.curva[0]) + "L" + x(1) + "," + y(C.curva[100]) + '"/>' +
-        '<circle id="pCasc" r="6" cx="0" cy="0"/>' +
-        [0, 0.5, 1].map(function (p) { return '<text x="' + x(p) + '" y="' + (pe + 14) + '" text-anchor="middle">' + pct(p) + "</text>"; }).join("") +
-        '<text x="' + (e - 5) + '" y="' + (y(C.curva[0]) + 3) + '" text-anchor="end">' + semMoeda(C.curva[0]) + "</text>" +
-        '<text x="' + (e - 5) + '" y="' + (pe + 3) + '" text-anchor="end">0</text></svg>';
-      $("gCasc").innerHTML = svg;
+      var direto = 100 * D.cascata.c2, maximo = custo100(0);
+      var pontos = document.querySelectorAll("#cem i");
+      $("bDireto").style.width = (direto / maximo * 100) + "%";
       function aplicar() {
-        var p = E.parcela, v = C.curva[p], dif = (C.direto - v) / C.direto;
+        var p = E.parcela, v = custo100(p), eq = Math.round(D.cascata.equilibrio * 100);
         if (Number($("rCasc").value) !== p) $("rCasc").value = p;
-        $("nCasc").textContent = p + "%";
-        animar($("vCasc"), v, 400, num);
-        $("cCasc").classList.toggle("perda", dif < 0);
-        $("sCasc").textContent = dif >= 0 ? "redução de " + pct(dif) + " em relação a " + usd(C.direto) : "aumento de " + pct(-dif) + " em relação a " + usd(C.direto);
-        $("pCasc").setAttribute("cx", x(p / 100)); $("pCasc").setAttribute("cy", y(v));
+        $("nCasc").textContent = p;
+        animar($("vCasc"), v, 400, function (x) { return new Intl.NumberFormat("pt-BR", { minimumFractionDigits: 2, maximumFractionDigits: 2 }).format(x); });
+        $("tCasc").textContent = dois(v);
+        $("bCasc").style.width = (v / maximo * 100) + "%";
+        $("cCasc").classList.toggle("perda", p < eq);
+        $("cCasc").classList.toggle("fim", p > eq);
+        var dif = (direto - v) / direto;
+        $("sCasc").textContent = p > eq ? "Economia de " + pct(dif) + " em relação a enviar todos ao modelo mais caro"
+          : p === eq ? "Empate: o primeiro nível não compensa"
+          : "Mais caro do que sem o primeiro nível";
+        [].forEach.call(pontos, function (pt, i) { pt.className = i < p ? "r" : "s"; });
       }
       $("rCasc").addEventListener("input", function () { E.parcela = Number($("rCasc").value); aplicar(); controleAlterado(); });
       this.sincronizar = aplicar;
@@ -651,22 +678,38 @@
     }
   });
 
-  // 8. O efeito somado ---------------------------------------------------------
+  // 8. A escada: um degrau por decisao -------------------------------------------
+  var ESC = D.escada, ESC_ROT = [
+    ["Ponto de partida", "sem nenhum ajuste"],
+    ["Segunda decisão", "cache das instruções"],
+    ["Terceira decisão", "5 passos e histórico resumido"],
+    ["Quarta decisão", "primeiro nível, 60 de cada 100"]
+  ];
+  function centavos(v) { return Math.round(v / AG.volume * 100); }
   telas.push({
     momentos: [
-      { t: "Somadas, as decisões reduzem o custo a <em>um nono</em>",
-        l: "O mesmo agente e as mesmas <strong>" + num(AG.volume) + " solicitações</strong>. O <strong>custo por solicitação resolvida</strong> é o valor a comparar com o custo do mesmo atendimento realizado por uma pessoa." }
+      { t: "Ponto de partida: <em>" + usd(ESC[0]) + " por mês</em>",
+        l: "O agente de resolução <strong>sem nenhum ajuste</strong>: " + num(AG.volume) + " pedidos por mês, " + AG.passos + " passos e todas as instruções lidas a preço integral." },
+      { t: "Com o cache, <em>" + usd(ESC[1]) + "</em>",
+        l: "As instruções fixas passam a ser <strong>lidas do cache</strong>, em todos os passos." },
+      { t: "Com 5 passos e histórico resumido, <em>" + usd(ESC[2]) + "</em>",
+        l: "O agente passa a ter <strong>limite de 5 passos</strong>, e o histórico é <strong>resumido</strong> entre um passo e outro." },
+      { t: "Somadas, as decisões reduzem o custo <em>a um nono</em>",
+        l: "Com o modelo mais barato resolvendo <strong>60 de cada 100 pedidos</strong>. O limite de passos e essa parcela dependem da tarefa e devem ser medidos em um piloto." }
     ],
-    html: '<div class="linhas" id="lin8">' +
-      '<div class="lh" data-w="100"><p><span>Sem cache</span><b>' + usd(AG.sem_cache) + '</b></p><i></i><small>' + usd(AG.sem_cache / AG.volume) + ' por solicitação resolvida</small></div>' +
-      '<div class="lh" data-w="' + (AG.custo / AG.sem_cache * 100) + '"><p><span>Com cache</span><b>' + usd(AG.custo) + '</b></p><i></i><small>' + usd(AG.custo / AG.volume) + ' por solicitação resolvida</small></div>' +
-      '<div class="lh fim" data-w="' + (D.somado.custo / AG.sem_cache * 100) + '"><p><span>Com todos os ajustes</span><b>' + usd(D.somado.custo) + '</b></p><i></i><small>' + usd(D.somado.por_solicitacao) + ' por solicitação resolvida</small></div></div>' +
-      '<ul class="ajustes"><li>Cache das instruções</li><li>Limite de 5 passos</li><li>Histórico resumido</li><li>Primeiro nível com 60%</li></ul>' +
-      '<p class="nota">Valores mensais do agente de resolução. O limite de passos e a parcela resolvida pelo primeiro nível dependem da tarefa e devem ser medidos em um piloto.</p>',
-    entrar: function () {
-      setTimeout(function () {
-        [].forEach.call(document.querySelectorAll("#lin8 .lh"), function (l, i) { l.querySelector("i").style.transitionDelay = (i * 0.45) + "s"; l.querySelector("i").style.width = l.dataset.w + "%"; });
-      }, 80);
+    html: '<div class="escada" id="escada">' + ESC.map(function (v, i) {
+        return '<div class="degrau" data-i="' + i + '"><p><span><b>' + ESC_ROT[i][0] + "</b> · " + ESC_ROT[i][1] + "</span><strong>" + usd(v) + "</strong></p><i data-w=\"" + (v / ESC[0] * 100) + "\"></i></div>";
+      }).join("") + "</div>" +
+      '<div class="final" id="final"><p class="grande">De <b>' + centavos(ESC[0]) + " centavos</b> para <b>" + centavos(ESC[3]) + " centavos</b> por pedido resolvido.</p>" +
+      "<p>E quanto custa esse mesmo atendimento feito por uma pessoa?</p></div>",
+    momento: function (m) {
+      [].forEach.call(document.querySelectorAll("#escada .degrau"), function (d, i) {
+        var visivel = i < m;
+        d.classList.toggle("visivel", visivel);
+        d.classList.toggle("atual", i === m - 1);
+        d.querySelector("i").style.width = visivel ? d.querySelector("i").dataset.w + "%" : "0";
+      });
+      $("final").classList.toggle("visivel", m >= ESC.length);
     }
   });
 
