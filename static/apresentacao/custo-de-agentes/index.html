@@ -247,6 +247,23 @@
   // ====================================================================== telas
   var telas = [];
 
+  // Estado de todos os controles interativos. E unico e transmitido junto com a
+  // tela, para que chaves e reguas da apresentadora aparecam no celular do publico.
+  var E = { cache: false, passos: AG.passos, resumo: false, parcela: 60 };
+  function normalizarEstado(e) {
+    if (!e || typeof e !== "object") return null;
+    var n = function (v, a, b, p) { v = Math.round(Number(v)); return isFinite(v) ? Math.max(a, Math.min(b, v)) : p; };
+    return { cache: e.cache === true, resumo: e.resumo === true, passos: n(e.passos, 1, 16, AG.passos), parcela: n(e.parcela, 0, 100, 60) };
+  }
+  // Chamado quando a propria pessoa altera um controle: a apresentadora transmite;
+  // um participante que acompanha passa a navegar por conta propria.
+  var adiamento = null;
+  function controleAlterado() {
+    if (!sinc) return;
+    if (sinc.apresentadora()) { clearTimeout(adiamento); adiamento = setTimeout(function () { sinc.publicar(atual, mom); }, 120); }
+    else sinc.manual();
+  }
+
   // 1. Abertura ------------------------------------------------------------
   telas.push({
     momentos: [{ t: "Quanto custa um <em>agente de IA?</em>",
@@ -540,15 +557,16 @@
       '<div class="duas" id="pisos"><div class="cartao"><p class="rot">Modelo de menor custo</p><p class="valor aco" style="font-size:26px">' + num(D.piso_cache["Claude Haiku 4.5"]) + '</p><p class="sub">tokens no mínimo</p></div>' +
       '<div class="cartao"><p class="rot">Modelo de maior capacidade</p><p class="valor aco" style="font-size:26px">' + num(D.piso_cache["Claude Opus 5"]) + '</p><p class="sub">tokens no mínimo</p></div></div>',
     entrar: function () {
-      var ligado = false;
       function aplicar() {
+        var ligado = E.cache;
         $("chCache").setAttribute("aria-pressed", String(ligado));
         $("prompt").classList.toggle("cache", ligado);
         $("fixa").textContent = ligado ? "Instruções fixas · lidas do cache" : "Instruções fixas · " + num(AG.prefixo) + " tokens";
         animar($("vCache"), ligado ? AG.custo : AG.sem_cache, 900, num);
         $("sCache").textContent = ligado ? "com cache: menos da metade" : "sem cache: preço integral em todos os passos";
       }
-      $("chCache").addEventListener("click", function () { ligado = !ligado; aplicar(); });
+      $("chCache").addEventListener("click", function () { E.cache = !E.cache; aplicar(); controleAlterado(); });
+      this.sincronizar = aplicar;
       aplicar();
     },
     momento: function (m) { $("pisos").classList.toggle("apagado", m < 2); }
@@ -569,9 +587,10 @@
       '<label class="controle sem-toque">Limite de passos: <b id="nPassos"></b><input type="range" id="rPassos" min="1" max="16" step="1" value="' + AG.passos + '"></label>' +
       '<button type="button" class="chave sem-toque" id="chResumo" aria-pressed="false"><span>Histórico resumido entre os passos</span><i></i></button>',
     entrar: function () {
-      var resumo = false, max = D.passos.normal[15];
+      var max = D.passos.normal[15];
       function aplicar() {
-        var n = Number($("rPassos").value), serie = resumo ? D.passos.resumido : D.passos.normal;
+        var n = E.passos, resumo = E.resumo, serie = resumo ? D.passos.resumido : D.passos.normal;
+        if (Number($("rPassos").value) !== n) $("rPassos").value = n;
         $("nPassos").textContent = n;
         $("chResumo").setAttribute("aria-pressed", String(resumo));
         animar($("vPassos"), serie[n - 1], 500, num);
@@ -581,9 +600,9 @@
           c.firstChild.style.height = (serie[i] / max * 100) + "%";
         });
       }
-      $("rPassos").addEventListener("input", aplicar);
-      $("chResumo").addEventListener("click", function () { resumo = !resumo; aplicar(); });
-      this._resumo = function (v) { resumo = v; aplicar(); };
+      $("rPassos").addEventListener("input", function () { E.passos = Number($("rPassos").value); aplicar(); controleAlterado(); });
+      $("chResumo").addEventListener("click", function () { E.resumo = !E.resumo; aplicar(); controleAlterado(); });
+      this.sincronizar = aplicar;
       setTimeout(aplicar, 60);
     },
     momento: function (m) { $("chResumo").classList.toggle("apagado", m < 2); }
@@ -600,7 +619,7 @@
     html: '<div class="cartao" id="cCasc" style="text-align:center"><p class="rot">Custo mensal com primeiro nível</p>' +
       '<p class="valor"><small>US$</small><span id="vCasc">0</span></p><p class="sub" id="sCasc"></p></div>' +
       '<div class="grafico" id="gCasc"></div>' +
-      '<label class="controle sem-toque">Parcela resolvida pelo modelo de menor custo: <b id="nCasc"></b><input type="range" id="rCasc" min="0" max="100" step="1" value="60"></label>',
+      '<label class="controle sem-toque">Parcela resolvida pelo modelo de menor custo: <b id="nCasc"></b><input type="range" id="rCasc" min="0" max="100" step="1" value="' + E.parcela + '"></label>',
     entrar: function () {
       var W = 320, H = 150, e = 34, d = 312, topo = 12, pe = 122, C = D.cascata, max = C.curva[0] * 1.04;
       function x(p) { return e + (d - e) * p; }
@@ -618,14 +637,16 @@
         '<text x="' + (e - 5) + '" y="' + (pe + 3) + '" text-anchor="end">0</text></svg>';
       $("gCasc").innerHTML = svg;
       function aplicar() {
-        var p = Number($("rCasc").value), v = C.curva[p], dif = (C.direto - v) / C.direto;
+        var p = E.parcela, v = C.curva[p], dif = (C.direto - v) / C.direto;
+        if (Number($("rCasc").value) !== p) $("rCasc").value = p;
         $("nCasc").textContent = p + "%";
         animar($("vCasc"), v, 400, num);
         $("cCasc").classList.toggle("perda", dif < 0);
         $("sCasc").textContent = dif >= 0 ? "redução de " + pct(dif) + " em relação a " + usd(C.direto) : "aumento de " + pct(-dif) + " em relação a " + usd(C.direto);
         $("pCasc").setAttribute("cx", x(p / 100)); $("pCasc").setAttribute("cy", y(v));
       }
-      $("rCasc").addEventListener("input", aplicar);
+      $("rCasc").addEventListener("input", function () { E.parcela = Number($("rCasc").value); aplicar(); controleAlterado(); });
+      this.sincronizar = aplicar;
       aplicar();
     }
   });
@@ -743,12 +764,12 @@
     var BIBLIOTECA = "https://cdnjs.cloudflare.com/ajax/libs/mqtt/5.10.1/mqtt.min.js";
     var VALIDADE = 90 * 60 * 1000;   // aviso mais antigo que isso e de outra sessao
     var el = $("sinc"), clientes = [], chavePub = null, chavePriv = null;
-    var ultimoN = 0, ultimo = null, seguindo = true, remoto = false, pendente = null;
+    var ultimoN = 0, ultimo = null, seguindo = true, remoto = false, pendente = null, enviadoN = 0;
     var cod = new TextEncoder();
 
     function para64(buf) { return btoa(String.fromCharCode.apply(null, new Uint8Array(buf))); }
     function de64(s) { var b = atob(s), u = new Uint8Array(b.length); for (var i = 0; i < b.length; i++) u[i] = b.charCodeAt(i); return u; }
-    function corpo(o) { return cod.encode(o.t + "|" + o.m + "|" + o.n); }
+    function corpo(o) { return cod.encode(o.t + "|" + o.m + "|" + o.n + "|" + JSON.stringify(o.e || null)); }
     function ligados() { return clientes.filter(function (c) { return c.connected; }).length; }
     function aoVivo() { return !chavePriv && !!ultimo && Date.now() - ultimo.n < VALIDADE; }
 
@@ -763,7 +784,16 @@
         if (b) b.addEventListener("click", function (e) { e.stopPropagation(); seguindo = true; aplicar(); mostrar(); });
       } else { el.hidden = true; }
     }
-    function aplicar() { if (!ultimo) return; remoto = true; ir(ultimo.t, ultimo.m); remoto = false; }
+    function aplicar() {
+      if (!ultimo) return;
+      remoto = true;
+      var est = normalizarEstado(ultimo.e);
+      if (est) { E.cache = est.cache; E.resumo = est.resumo; E.passos = est.passos; E.parcela = est.parcela; }
+      var antes = atual;
+      ir(ultimo.t, ultimo.m);
+      if (antes === atual && telas[atual] && telas[atual].sincronizar) telas[atual].sincronizar();
+      remoto = false;
+    }
 
     function receber(texto) {
       var o; try { o = JSON.parse(texto); } catch (e) { return; }
@@ -777,13 +807,15 @@
       }).catch(function () {});
     }
     function enviar(o) {
+      if (o.n < enviadoN) return;   // assinaturas concluidas fora de ordem: vale a mais recente
+      enviadoN = o.n;
       var texto = JSON.stringify(o), enviado = false;
       clientes.forEach(function (c) { if (c.connected) { c.publish(TOPICO, texto, { retain: true, qos: 1 }); enviado = true; } });
       pendente = enviado ? null : o;
     }
     function publicar(t, m) {
       if (!chavePriv || remoto) return;
-      var o = { t: t, m: m, n: Date.now() };
+      var o = { t: t, m: m, n: Math.max(Date.now(), ultimoN + 1), e: { cache: E.cache, passos: E.passos, resumo: E.resumo, parcela: E.parcela } };
       ultimoN = o.n;
       crypto.subtle.sign({ name: "ECDSA", hash: "SHA-256" }, chavePriv, corpo(o)).then(function (s) { o.s = para64(s); enviar(o); }).catch(function () {});
     }
@@ -827,7 +859,7 @@
       }).catch(function () {});
     }
     iniciar();
-    return { publicar: publicar, manual: manual, aoVivo: aoVivo };
+    return { publicar: publicar, manual: manual, aoVivo: aoVivo, apresentadora: function () { return !!chavePriv; } };
   }
 
   // ================================================== malha de rede ao fundo
