@@ -169,14 +169,6 @@
   .ajustes { display: flex; flex-wrap: wrap; justify-content: center; gap: 6px; margin: 0; padding: 0; list-style: none; }
   .ajustes li { padding: 5px 10px; border-radius: 999px; font-size: 12px; font-weight: 500; color: var(--b); border: 1px solid color-mix(in srgb, var(--b) 45%, transparent); }
 
-  /* tela 8: cem pedidos */
-  .cem { display: grid; grid-template-columns: repeat(20, 1fr); gap: 4px; max-width: 420px; width: 100%; margin: 0 auto; }
-  .cem i { display: block; aspect-ratio: 1; border-radius: 50%; transition: background .25s, box-shadow .25s, transform .25s; }
-  .cem i.r { background: var(--a); }
-  .cem i.s { background: var(--b); box-shadow: 0 0 0 2px #06162a, 0 0 0 3.5px rgb(53 208 247 / 70%), 0 0 10px rgb(53 208 247 / 50%); transform: scale(.8); }
-  .comparar { display: grid; gap: 10px; }
-  #cCasc.fim .valor { color: var(--b); }
-
   /* tela 9: escada */
   .escada { display: grid; gap: 12px; }
   .degrau { opacity: 0; transform: translateY(8px); transition: opacity .5s, transform .5s; }
@@ -633,11 +625,7 @@
     momento: function (m) { $("chResumo").classList.toggle("apagado", m < 2); }
   });
 
-  // 7. Cascata: 100 pedidos desenhados como 100 pontos ---------------------------
-  // Custos por pedido do agente de resolucao: c1 no modelo mais barato, c2 no mais caro.
-  // Por 100 pedidos: sem primeiro nivel = 100 x c2; com primeiro nivel = 100 x c1 + (100 - p) x c2.
-  function dois(v) { return "US$ " + new Intl.NumberFormat("pt-BR", { minimumFractionDigits: 2, maximumFractionDigits: 2 }).format(v); }
-  function custo100(p) { return 100 * D.cascata.c1 + (100 - p) * D.cascata.c2; }
+  // 7. Cascata: o grafico de custo conforme os pedidos resolvidos -----------------------------------------------------------------
   telas.push({
     momentos: [
       { t: "Quarta decisão: o modelo <em>mais barato primeiro</em>",
@@ -645,32 +633,34 @@
       { t: "Abaixo de " + Math.round(D.cascata.equilibrio * 100) + " em cada 100, <em>a economia se inverte</em>",
         l: "Os pedidos não resolvidos <strong>pagam duas vezes</strong>. Se o modelo mais barato resolve menos de " + Math.round(D.cascata.equilibrio * 100) + " em cada 100, o custo sobe. A resposta dele precisa ser <strong>validada por código</strong>." }
     ],
-    html: '<div class="cartao" id="cCasc" style="text-align:center"><p class="rot">Custo de 100 pedidos</p>' +
+    html: '<div class="cartao" id="cCasc" style="text-align:center"><p class="rot">Custo mensal com o primeiro nível</p>' +
       '<p class="valor"><small>US$</small><span id="vCasc">0</span></p><p class="sub" id="sCasc"></p></div>' +
-      '<div class="cem" id="cem" aria-hidden="true">' + Array(101).join("<i></i>") + "</div>" +
-      '<ul class="chaves"><li style="--cor: var(--a)">resolvidos pelo mais barato: pagam uma vez</li><li style="--cor: var(--b)">seguem para o mais caro: pagam duas vezes</li></ul>' +
-      '<div class="comparar">' +
-      '<div class="lh"><p><span>Sem primeiro nível</span><b>' + dois(100 * D.cascata.c2) + '</b></p><i id="bDireto"></i></div>' +
-      '<div class="lh fim"><p><span>Com primeiro nível</span><b id="tCasc"></b></p><i id="bCasc"></i></div></div>' +
+      '<div class="grafico" id="gCasc"></div>' +
       '<label class="controle sem-toque"><span>O modelo mais barato resolve <b id="nCasc"></b> de cada 100 pedidos</span><input type="range" id="rCasc" min="0" max="100" step="1" value="' + E.parcela + '"></label>',
     entrar: function () {
-      var direto = 100 * D.cascata.c2, maximo = custo100(0);
-      var pontos = document.querySelectorAll("#cem i");
-      $("bDireto").style.width = (direto / maximo * 100) + "%";
+      var W = 320, H = 150, e = 34, d = 312, topo = 12, pe = 122, C = D.cascata, max = C.curva[0] * 1.04;
+      function x(p) { return e + (d - e) * p; }
+      function y(v) { return pe - (pe - topo) * v / max; }
+      var svg = '<svg viewBox="0 0 ' + W + " " + H + '" role="img" aria-label="Custo mensal conforme a quantidade de pedidos resolvidos pelo modelo mais barato">' +
+        '<line class="eixox" x1="' + e + '" x2="' + d + '" y1="' + pe + '" y2="' + pe + '"/>' +
+        '<line class="direto" x1="' + e + '" x2="' + d + '" y1="' + y(C.direto) + '" y2="' + y(C.direto) + '"/>' +
+        '<text class="td" x="' + d + '" y="' + (y(C.direto) - 5) + '" text-anchor="end">todos os pedidos no modelo mais caro</text>' +
+        '<line class="marco" x1="' + x(C.equilibrio) + '" x2="' + x(C.equilibrio) + '" y1="' + topo + '" y2="' + pe + '"/>' +
+        '<text class="tm" x="' + (x(C.equilibrio) + 5) + '" y="' + (pe - 6) + '">equilíbrio ' + pct(C.equilibrio) + "</text>" +
+        '<path class="curva" d="M' + x(0) + "," + y(C.curva[0]) + "L" + x(1) + "," + y(C.curva[100]) + '"/>' +
+        '<circle id="pCasc" r="6" cx="0" cy="0"/>' +
+        [0, 0.5, 1].map(function (p) { return '<text x="' + x(p) + '" y="' + (pe + 14) + '" text-anchor="middle">' + pct(p) + "</text>"; }).join("") +
+        '<text x="' + (e - 5) + '" y="' + (y(C.curva[0]) + 3) + '" text-anchor="end">' + semMoeda(C.curva[0]) + "</text>" +
+        '<text x="' + (e - 5) + '" y="' + (pe + 3) + '" text-anchor="end">0</text></svg>';
+      $("gCasc").innerHTML = svg;
       function aplicar() {
-        var p = E.parcela, v = custo100(p), eq = Math.round(D.cascata.equilibrio * 100);
+        var p = E.parcela, v = C.curva[p], dif = (C.direto - v) / C.direto;
         if (Number($("rCasc").value) !== p) $("rCasc").value = p;
         $("nCasc").textContent = p;
-        animar($("vCasc"), v, 400, function (x) { return new Intl.NumberFormat("pt-BR", { minimumFractionDigits: 2, maximumFractionDigits: 2 }).format(x); });
-        $("tCasc").textContent = dois(v);
-        $("bCasc").style.width = (v / maximo * 100) + "%";
-        $("cCasc").classList.toggle("perda", p < eq);
-        $("cCasc").classList.toggle("fim", p > eq);
-        var dif = (direto - v) / direto;
-        $("sCasc").textContent = p > eq ? "Economia de " + pct(dif) + " em relação a enviar todos ao modelo mais caro"
-          : p === eq ? "Empate: o primeiro nível não compensa"
-          : "Mais caro do que sem o primeiro nível";
-        [].forEach.call(pontos, function (pt, i) { pt.className = i < p ? "r" : "s"; });
+        animar($("vCasc"), v, 400, num);
+        $("cCasc").classList.toggle("perda", dif < 0);
+        $("sCasc").textContent = dif >= 0 ? "economia de " + pct(dif) + " em relação a " + usd(C.direto) + ", com todos os pedidos no modelo mais caro" : "aumento de " + pct(-dif) + " em relação a " + usd(C.direto) + ": mais caro do que sem o primeiro nível";
+        $("pCasc").setAttribute("cx", x(p / 100)); $("pCasc").setAttribute("cy", y(v));
       }
       $("rCasc").addEventListener("input", function () { E.parcela = Number($("rCasc").value); aplicar(); controleAlterado(); });
       this.sincronizar = aplicar;
