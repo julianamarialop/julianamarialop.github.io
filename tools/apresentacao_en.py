@@ -85,7 +85,6 @@ TRAD = [
 
     # tela 6: cache
     (">O que o agente lê em cada passo</p>", ">What the agent reads on each step</p>"),
-    ('<span class="hist">Histórico</span>', '<span class="hist">History</span>'),
     ('<p class="rot">Custo mensal do agente de resolução</p>', '<p class="rot">Monthly cost of the resolution agent</p>'),
 
     # tela 7: passos
@@ -218,10 +217,6 @@ TRAD = [
      '{ t: "With the cache, the cost drops <em>to less than half</em>",'),
     ('l: "A parte que se repete passa a ser lida por <strong>um décimo do preço</strong>." }',
      'l: "The repeated part is read at <strong>one tenth of the price</strong>." }'),
-    ('id="fixa">Instruções</span>',
-     'id="fixa">Instructions</span>'),
-    ('? "Instruções lidas do cache" : "Instruções"',
-     '? "Instructions from the cache" : "Instructions"'),
     ('"sem cache", AG.custo, "com cache"',
      '"without cache", AG.custo, "with cache"'),
     ('{ t: "Decisão 3: <em>menos passos</em>",',
@@ -240,8 +235,6 @@ TRAD = [
      'l: "The small model tries first. Only what it <strong>cannot solve</strong> goes to the big model." }'),
     ('<span>Modelo pequeno<small>resolve 60 de cada 100 pedidos</small></span>',
      '<span>Small model<small>solves 60 of every 100 requests</small></span>'),
-    ('>↓ seguem 40 de cada 100</p>',
-     '>↓ 40 of every 100 move up</p>'),
     ('<span>Modelo grande<small>resolve o restante</small></span>',
      '<span>Big model<small>solves the rest</small></span>'),
     ('"tudo no modelo grande", D.cascata.curva[60], "o pequeno primeiro"',
@@ -254,8 +247,24 @@ TRAD = [
      '{ t: "The limit of the <em>cheaper model first</em>",'),
     ('{ t: "E os seus <em>agentes?</em>",',
      '{ t: "And your <em>agents?</em>",'),
-    ('l: "Quantos passos eles executam? O cache está ativo? Quanto custa cada pedido resolvido?" }',
-     'l: "How many steps do they take? Is the cache on? What does each resolved request cost?" }'),
+
+    # telas preenchidas: contexto, cache na pilha, pergunta da mesa
+    ('contexto("Nem toda tarefa precisa do modelo mais caro.")',
+     'contexto("Not every task needs the most expensive model.")'),
+    ('contexto("Uma parte do que o agente lê é sempre igual: as instruções.")',
+     'contexto("Part of what the agent reads never changes: the instructions.")'),
+    ('contexto("Quanto mais passos, maior o histórico que o agente relê.")',
+     'contexto("More steps means a longer history to read again.")'),
+    ('contexto("Muitos pedidos são simples e se resolvem no primeiro nível.")',
+     'contexto("Many requests are simple and get solved at the first level.")'),
+    ('id="chC" style="--cor: repeating-linear-gradient(135deg, #17395a 0 3px, #4f86b3 3px 6px)">Lidas do cache</li>',
+     'id="chC" style="--cor: repeating-linear-gradient(135deg, #17395a 0 3px, #4f86b3 3px 6px)">From the cache</li>'),
+    ('seguem 40 de cada 100</div>',
+     '40 of every 100 move up</div>'),
+    ('l: "Esta é a conversa da mesa. <strong>Compartilhe a sua experiência.</strong>" }',
+     'l: "This is the table conversation. <strong>Please share your experience.</strong>" }'),
+    ('<li>Quantos passos os seus agentes executam?</li><li>O cache está ativo?</li><li>Quanto custa cada pedido resolvido?</li>',
+     '<li>How many steps do your agents take?</li><li>Is the cache on?</li><li>What does each resolved request cost?</li>'),
 ]
 
 # Sinais de portugues que nao podem sobrar no texto visivel do resultado.

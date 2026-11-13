@@ -198,6 +198,37 @@
   .pg { display: block; height: clamp(14px, 3.6vh, 30px); border-radius: 4px; background: var(--b); animation: cai .4s ease backwards; box-shadow: inset 0 -3px 0 rgb(4 16 29 / 25%); }
   .pg.ins { background: var(--a); }
   .pg.res { background: var(--alerta); }
+  .contexto { margin: 0; text-align: center; font-size: clamp(15px, 4.2vw, 19px); line-height: 1.35; font-weight: 600; color: var(--texto); text-wrap: balance; }
+  .robo { animation: flutua 3.2s ease-in-out infinite; filter: drop-shadow(0 0 10px rgb(53 208 247 / 45%)); }
+  .robo .olho { transform-box: fill-box; transform-origin: center; animation: pisca 4.2s infinite; }
+  @keyframes flutua { 50% { transform: translateY(-4px); } }
+  @keyframes pisca { 0%, 92%, 100% { transform: scaleY(1); } 95% { transform: scaleY(.1); } }
+  .par .caixa { min-height: 112px; }
+  .fio { align-self: center; position: relative; width: 34px; height: 8px; }
+  .fio i { position: absolute; top: 1px; left: 0; width: 6px; height: 6px; border-radius: 50%; background: var(--b); box-shadow: 0 0 8px var(--b); animation: anda 1.5s linear infinite; }
+  .fio i:nth-child(2) { animation-delay: .5s; } .fio i:nth-child(3) { animation-delay: 1s; }
+  @keyframes anda { from { transform: translateX(0); opacity: 0; } 20%, 80% { opacity: 1; } to { transform: translateX(28px); opacity: 0; } }
+  .ad-b { grid-column: 1 / -1; display: grid; gap: 4px; margin-top: 8px; }
+  .ad-b i { display: block; height: 10px; border-radius: 5px; transition: width 1.2s cubic-bezier(.2,.8,.2,1); }
+  .ad-b .ba { background: var(--texto-3); opacity: .45; }
+  .ad-b .bd { background: var(--b); box-shadow: 0 0 12px rgb(53 208 247 / 55%); }
+  .ad:has(.novo.apagado) .bd { width: 0 !important; }
+  .pilhas.baixa { min-height: 110px; max-height: 230px; }
+  .pilhas.baixa .pg { height: clamp(10px, 2.6vh, 22px); }
+  .pilhas .pg.ins { transition: background .6s, box-shadow .6s; }
+  .pilhas.cache .pg.ins { background: repeating-linear-gradient(135deg, #17395a 0 6px, #2f6492 6px 12px); box-shadow: inset 0 0 0 1px var(--a); }
+  .chaves li { transition: opacity .5s; }
+  .fluxo .caixa { min-height: 88px; }
+  .oks { margin-left: auto; display: flex; flex-wrap: wrap; justify-content: flex-end; gap: 2px 6px; max-width: 84px; }
+  .oks b { font-size: 17px; color: var(--b); text-shadow: 0 0 10px rgb(53 208 247 / 60%); animation: cai .4s ease backwards; }
+  .desce { display: flex; align-items: center; justify-content: center; gap: 10px; margin: 0; font-size: 13px; font-weight: 600; color: var(--alerta); }
+  .queda { position: relative; width: 8px; height: 34px; }
+  .queda i { position: absolute; left: 1px; top: 0; width: 6px; height: 6px; border-radius: 50%; background: var(--alerta); box-shadow: 0 0 8px var(--alerta); animation: desce 1.6s linear infinite; }
+  .queda i:nth-child(2) { animation-delay: .4s; } .queda i:nth-child(3) { animation-delay: .8s; } .queda i:nth-child(4) { animation-delay: 1.2s; }
+  @keyframes desce { from { transform: translateY(0); opacity: 0; } 20%, 80% { opacity: 1; } to { transform: translateY(28px); opacity: 0; } }
+  .perguntas { list-style: none; margin: 0; padding: 0; display: grid; gap: 14px; }
+  .perguntas li { padding: 20px 16px; border-radius: 18px; text-align: center; font-size: clamp(19px, 5.4vw, 26px); line-height: 1.25; font-weight: 700; text-wrap: balance; background: color-mix(in srgb, var(--painel) 86%, transparent); border: 1px solid color-mix(in srgb, var(--b) 50%, transparent); box-shadow: 0 0 26px rgb(53 208 247 / 14%); animation: cai .5s ease backwards; }
+  .perguntas li:nth-child(2) { animation-delay: .25s; } .perguntas li:nth-child(3) { animation-delay: .5s; }
   @keyframes cai { from { opacity: 0; transform: translateY(-10px); } to { opacity: 1; transform: none; } }
 
   /* tela 9: escada */
@@ -221,7 +252,7 @@
   .livros { display: flex; justify-content: center; gap: 14px; flex: 0 1 auto; min-height: 0; }
   .livros img { display: block; height: min(34vh, 300px); width: auto; border-radius: 6px; box-shadow: 0 10px 34px rgb(0 0 0 / 55%), 0 0 30px rgb(53 208 247 / 25%); }
   .livro1 { display: flex; gap: 14px; align-items: center; }
-  .livro1 img { flex: none; display: block; width: min(34vw, 170px); height: auto; border-radius: 6px; box-shadow: 0 10px 34px rgb(0 0 0 / 55%), 0 0 30px rgb(53 208 247 / 25%); }
+  .livro1 img { flex: none; display: block; width: min(42vw, 220px); height: auto; border-radius: 6px; box-shadow: 0 10px 34px rgb(0 0 0 / 55%), 0 0 30px rgb(53 208 247 / 25%); }
   .compras { flex: 1; min-width: 0; display: grid; gap: 6px; }
   .compras .rot { margin: 4px 0 0; }
   .links3 { display: grid; grid-template-columns: 1fr; gap: 6px; }
@@ -543,7 +574,7 @@
     return '<svg class="robo" viewBox="0 0 40 40" width="' + s + '" height="' + s + '" aria-hidden="true">' +
       '<line x1="20" y1="4" x2="20" y2="10" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"/><circle cx="20" cy="4" r="2.6" fill="currentColor"/>' +
       '<rect x="6" y="10" width="28" height="24" rx="9" fill="#0a2038" stroke="currentColor" stroke-width="2.4"/>' +
-      '<circle cx="15" cy="21" r="3" fill="currentColor"/><circle cx="25" cy="21" r="3" fill="currentColor"/></svg>';
+      '<circle class="olho" cx="15" cy="21" r="3" fill="currentColor"/><circle class="olho" cx="25" cy="21" r="3" fill="currentColor"/></svg>';
   }
   // Uma coluna por passo; cada bloco e uma parte do que o agente le naquele passo.
   function pilhas(n, resumido) {
@@ -563,7 +594,14 @@
     return '<div class="ad"><p class="rot ad-r">Cost per month</p>' +
       '<div class="lado"><p class="rot">' + ra + '</p><p class="v velho">' + usd(a) + "</p></div>" +
       '<span class="seta" aria-hidden="true">→</span>' +
-      '<div class="lado novo' + (oculto ? " apagado" : "") + '" id="adNovo"><p class="rot">' + rb + '</p><p class="v">' + usd(b) + "</p></div></div>";
+      '<div class="lado novo' + (oculto ? " apagado" : "") + '" id="adNovo"><p class="rot">' + rb + '</p><p class="v">' + usd(b) + "</p></div>" +
+      '<div class="ad-b" aria-hidden="true"><i class="ba" style="width:100%"></i><i class="bd" style="width:' + (b / a * 100).toFixed(1) + '%"></i></div></div>';
+  }
+  function fio() { return '<span class="fio" aria-hidden="true"><i></i><i></i><i></i></span>'; }
+  function contexto(s) { return '<p class="contexto">' + s + "</p>"; }
+  function oks(n) {
+    for (var h = "", i = 0; i < n; i++) h += '<b style="animation-delay:' + (0.3 + i * 0.12).toFixed(2) + 's">✓</b>';
+    return '<span class="oks" aria-hidden="true">' + h + "</span>";
   }
 
   telas.push({ parte: PARTES[1],
@@ -583,13 +621,14 @@
       { t: "Hard task, <em>big model</em>",
         l: "Solving the request takes decisions over many steps, and <strong>one mistake breaks the next steps</strong>. Here, the big model is the right one." }
     ],
-    html: '<div class="par"><span class="caixa">Simple task<small>sort the message</small></span><span class="seta" aria-hidden="true">→</span><span class="caixa mod">' + robo(28) + 'Small model</span></div>' +
-      '<div class="par apagado" id="par2"><span class="caixa">Hard task<small>solve the request</small></span><span class="seta" aria-hidden="true">→</span><span class="caixa mod">' + robo(46) + 'Big model</span></div>' +
+    html: contexto("Not every task needs the most expensive model.") +
+      '<div class="par"><span class="caixa">Simple task<small>sort the message</small></span>' + fio() + '<span class="caixa mod">' + robo(48) + 'Small model</span></div>' +
+      '<div class="par apagado" id="par2"><span class="caixa">Hard task<small>solve the request</small></span>' + fio() + '<span class="caixa mod">' + robo(80) + 'Big model</span></div>' +
       antesDepois(CL.custo_modelo_maior, "on the big model", CL.custo, "on the small model"),
     momento: function (m) { $("par2").classList.toggle("apagado", m < 2); }
   });
 
-  // 6. Decisao 2: o cache ---------------------------------------------------------
+  // 6. Decisao 2: o cache, na mesma pilha da tela 4 ----------------------------------
   telas.push({ parte: PARTES[2],
     momentos: [
       { t: "Decision 2: what repeats <em>comes from the cache</em>",
@@ -597,12 +636,15 @@
       { t: "With the cache, the cost drops <em>to less than half</em>",
         l: "The repeated part is read at <strong>one tenth of the price</strong>." }
     ],
-    html: '<p class="rot" style="text-align:center;margin:0">What the agent reads on each step</p>' +
-      '<div class="prompt" id="prompt"><span class="fixa" id="fixa">Instructions</span><span class="hist">History</span></div>' +
+    html: contexto("Part of what the agent reads never changes: the instructions.") +
+      '<div class="pilhas baixa" id="pil"></div>' +
+      '<ul class="chaves"><li style="--cor: var(--a)">Instructions</li><li style="--cor: var(--b)">History</li>' +
+      '<li class="apagado" id="chC" style="--cor: repeating-linear-gradient(135deg, #17395a 0 3px, #4f86b3 3px 6px)">From the cache</li></ul>' +
       antesDepois(AG.sem_cache, "without cache", AG.custo, "with cache", true),
+    entrar: function () { $("pil").innerHTML = pilhas(AG.passos, false); },
     momento: function (m) {
-      $("prompt").classList.toggle("cache", m >= 2);
-      $("fixa").textContent = m >= 2 ? "Instructions from the cache" : "Instructions";
+      $("pil").classList.toggle("cache", m >= 2);
+      $("chC").classList.toggle("apagado", m < 2);
       $("adNovo").classList.toggle("apagado", m < 2);
     }
   });
@@ -615,7 +657,8 @@
       { t: "And a <em>shorter history</em>",
         l: "Between steps, the history is <strong>summarized</strong>. With 5 steps, each step reads much less." }
     ],
-    html: '<div class="pilhas" id="pil"></div>' +
+    html: contexto("More steps means a longer history to read again.") +
+      '<div class="pilhas baixa" id="pil"></div>' +
       '<ul class="chaves"><li style="--cor: var(--a)">Instructions</li><li style="--cor: var(--b)">History</li><li style="--cor: var(--alerta)">Summary</li></ul>' +
       antesDepois(D.escada[1], "8 steps", D.escada[2], "5 steps and summary", true),
     momento: function (m) {
@@ -628,9 +671,10 @@
   telas.push({ parte: PARTES[2],
     momentos: [{ t: "Decision 4: the <em>cheaper model first</em>",
       l: "The small model tries first. Only what it <strong>cannot solve</strong> goes to the big model." }],
-    html: '<div class="fluxo"><div class="caixa mod">' + robo(28) + '<span>Small model<small>solves 60 of every 100 requests</small></span></div>' +
-      '<p class="desce">↓ 40 of every 100 move up</p>' +
-      '<div class="caixa mod">' + robo(46) + '<span>Big model<small>solves the rest</small></span></div></div>' +
+    html: contexto("Many requests are simple and get solved at the first level.") +
+      '<div class="fluxo"><div class="caixa mod">' + robo(48) + '<span>Small model<small>solves 60 of every 100 requests</small></span>' + oks(6) + "</div>" +
+      '<div class="desce"><span class="queda" aria-hidden="true"><i></i><i></i><i></i><i></i></span>40 of every 100 move up</div>' +
+      '<div class="caixa mod">' + robo(72) + '<span>Big model<small>solves the rest</small></span>' + oks(4) + "</div></div>" +
       antesDepois(D.cascata.direto, "all on the big model", D.cascata.curva[60], "small model first")
   });
 
@@ -796,9 +840,7 @@
   telas.push({ parte: PARTES[4],
     momentos: [
       { t: "The math is here. <em>The method is in the book.</em>",
-        l: "<strong>Building Intelligent Agents</strong>: Skills, Automation, and Token Economics. This presentation shows the math; the book presents the method." },
-      { t: "And your <em>agents?</em>",
-        l: "How many steps do they take? Is the cache on? What does each resolved request cost?" }
+        l: "<strong>Building Intelligent Agents</strong>: Skills, Automation, and Token Economics. This presentation shows the math; the book presents the method." }
     ],
     html: '<div class="livro1"><img src="capa-en.jpg" alt="Cover of the book Building Intelligent Agents" width="560" height="838">' +
       '<div class="compras">' +
@@ -814,6 +856,13 @@
       '<a class="sem-toque" href="/en/agent-cost/">Calculator</a>' +
       '<a class="sem-toque" href="https://github.com/julianamarialop/agent-cost-math" target="_blank" rel="noopener">Open source code</a>' +
       '<a class="larga sem-toque" href="https://www.linkedin.com/in/julianamarialopes/" target="_blank" rel="noopener">Juliana Maria Lopes on LinkedIn</a></div>'
+  });
+
+  // 10. A conversa da mesa ---------------------------------------------------------
+  telas.push({ parte: PARTES[4],
+    momentos: [{ t: "And your <em>agents?</em>",
+      l: "This is the table conversation. <strong>Please share your experience.</strong>" }],
+    html: '<ul class="perguntas"><li>How many steps do your agents take?</li><li>Is the cache on?</li><li>What does each resolved request cost?</li></ul>'
   });
 
   // ================================================================== navegacao
