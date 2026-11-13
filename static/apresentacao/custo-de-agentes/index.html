@@ -795,6 +795,9 @@
     if (Math.abs(dx) > 60 && Math.abs(dx) > Math.abs(dy) * 1.5) { e.preventDefault(); sinc.manual(); if (dx < 0) avancar(); else anterior(); }
   });
   window.addEventListener("hashchange", function () {
+    // Link de apresentadora colado numa aba que ja estava aberta: o navegador nao
+    // recarrega a pagina sozinho, e sem recarregar a chave nao e lida.
+    if (location.hash.indexOf("#k=") === 0) { location.reload(); return; }
     var n = parseInt(location.hash.slice(1), 10);
     if (n && n - 1 !== atual) ir(n - 1, 1);
   });
