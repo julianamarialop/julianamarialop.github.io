@@ -154,6 +154,12 @@
   .grafico .direto { stroke: var(--a); stroke-width: 1.5; stroke-dasharray: 5 4; }
   .grafico .marco { stroke: var(--alerta); stroke-width: 1.2; stroke-dasharray: 3 3; }
   .grafico .eixox { stroke: var(--linha); }
+  .grafico .zona { transition: opacity .7s ease; }
+  .grafico .oculto { opacity: 0; }
+  .grafico .zeco { fill: rgb(53 208 247 / 16%); }
+  .grafico .zperda { fill: rgb(255 196 107 / 26%); }
+  .grafico .teco { fill: var(--b); font-weight: 600; }
+  .grafico .tperda { fill: var(--alerta); font-weight: 600; }
   .grafico circle { fill: var(--texto); stroke: var(--b); stroke-width: 3; }
   .grafico .tm { fill: var(--alerta); font-weight: 600; } .grafico .td { fill: var(--a); }
   .perda .valor { color: var(--alerta); text-shadow: none; }
@@ -645,10 +651,15 @@
         '<line class="eixox" x1="' + e + '" x2="' + d + '" y1="' + pe + '" y2="' + pe + '"/>' +
         '<line class="direto" x1="' + e + '" x2="' + d + '" y1="' + y(C.direto) + '" y2="' + y(C.direto) + '"/>' +
         '<text class="td" x="' + d + '" y="' + (y(C.direto) - 5) + '" text-anchor="end">todos os pedidos no modelo mais caro</text>' +
-        '<line class="marco" x1="' + x(C.equilibrio) + '" x2="' + x(C.equilibrio) + '" y1="' + topo + '" y2="' + pe + '"/>' +
-        '<text class="tm" x="' + (x(C.equilibrio) + 5) + '" y="' + (pe - 6) + '">equilíbrio ' + pct(C.equilibrio) + "</text>" +
+        // Zonas entre a curva e a linha tracejada: economia (ciano) e custo maior (amarelo).
+        '<polygon id="zEco" class="zona zeco" points="' + x(C.equilibrio) + "," + y(C.direto) + " " + x(1) + "," + y(C.direto) + " " + x(1) + "," + y(C.curva[100]) + '"/>' +
+        '<polygon id="zPerda" class="zona zperda oculto" points="' + x(0) + "," + y(C.curva[0]) + " " + x(C.equilibrio) + "," + y(C.direto) + " " + x(0) + "," + y(C.direto) + '"/>' +
+        '<text id="tEco" class="zona teco" x="' + x(0.78) + '" y="' + (y(C.direto) + 22) + '" text-anchor="middle">economia</text>' +
+        '<text id="tPerda" class="zona tperda oculto" x="' + (x(C.equilibrio) - 6) + '" y="' + (y(C.direto) + 16) + '" text-anchor="end">mais caro</text>' +
+        '<line id="lMarco" class="marco zona oculto" x1="' + x(C.equilibrio) + '" x2="' + x(C.equilibrio) + '" y1="' + topo + '" y2="' + pe + '"/>' +
+        '<text id="tMarco" class="tm zona oculto" x="' + (x(C.equilibrio) + 5) + '" y="' + (pe - 6) + '">equilíbrio: ' + Math.round(C.equilibrio * 100) + " de cada 100</text>" +
         '<path class="curva" d="M' + x(0) + "," + y(C.curva[0]) + "L" + x(1) + "," + y(C.curva[100]) + '"/>' +
-        '<circle id="pCasc" r="6" cx="0" cy="0"/>' +
+        '<circle id="pCasc" r="6" cx="0" cy="0" style="transition: cx .7s ease, cy .7s ease"/>' +
         [0, 0.5, 1].map(function (p) { return '<text x="' + x(p) + '" y="' + (pe + 14) + '" text-anchor="middle">' + pct(p) + "</text>"; }).join("") +
         '<text x="' + (e - 5) + '" y="' + (y(C.curva[0]) + 3) + '" text-anchor="end">' + semMoeda(C.curva[0]) + "</text>" +
         '<text x="' + (e - 5) + '" y="' + (pe + 3) + '" text-anchor="end">0</text></svg>';
@@ -665,6 +676,13 @@
       $("rCasc").addEventListener("input", function () { E.parcela = Number($("rCasc").value); aplicar(); controleAlterado(); });
       this.sincronizar = aplicar;
       aplicar();
+    },
+    // Momento 1: so a area de economia, com o ponto em 60. Momento 2: aparece a area
+    // em que o primeiro nivel sai mais caro e o ponto desce para 10, abaixo do equilibrio.
+    momento: function (m) {
+      ["zPerda", "tPerda", "lMarco", "tMarco"].forEach(function (id) { $(id).classList.toggle("oculto", m < 2); });
+      E.parcela = m < 2 ? 60 : 10;
+      if (this.sincronizar) this.sincronizar();
     }
   });
 
