@@ -79,7 +79,7 @@
 
   /* tela 1 */
   .capa { align-items: center; text-align: center; }
-  .qr { width: min(56vw, 240px); aspect-ratio: 1; padding: 12px; border-radius: 18px; background: #fff; box-shadow: 0 0 40px rgb(53 208 247 / 35%); }
+  .qr { width: min(72vw, 320px); aspect-ratio: 1; padding: 12px; border-radius: 18px; background: #fff; box-shadow: 0 0 40px rgb(53 208 247 / 35%); }
   .qr svg { width: 100%; height: 100%; display: block; }
   .endereco { margin: 0; font-size: 12.5px; color: var(--texto-2); word-break: break-all; }
   .autora { margin: 6px 0 0; font-size: 16px; font-weight: 700; }
@@ -172,6 +172,14 @@
   /* tela 9 */
   .livros { display: flex; justify-content: center; gap: 14px; flex: 0 1 auto; min-height: 0; }
   .livros img { display: block; height: min(34vh, 300px); width: auto; border-radius: 6px; box-shadow: 0 10px 34px rgb(0 0 0 / 55%), 0 0 30px rgb(53 208 247 / 25%); }
+  .livro1 { display: flex; gap: 14px; align-items: center; }
+  .livro1 img { flex: none; display: block; width: min(34vw, 170px); height: auto; border-radius: 6px; box-shadow: 0 10px 34px rgb(0 0 0 / 55%), 0 0 30px rgb(53 208 247 / 25%); }
+  .compras { flex: 1; min-width: 0; display: grid; gap: 6px; }
+  .compras .rot { margin: 4px 0 0; }
+  .links3 { display: grid; grid-template-columns: 1fr; gap: 6px; }
+  .links3 a { display: grid; place-items: center; min-height: 38px; padding: 6px 8px; border-radius: 10px; font-size: 13px; font-weight: 600; text-decoration: none; color: var(--texto); border: 1px solid var(--linha); background: var(--painel); }
+  .links3 a.dest { color: #04101d; background: var(--b); border-color: var(--b); }
+  @media (min-width: 420px) { .links3 { grid-template-columns: repeat(3, 1fr); } }
   .links { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
   .links a { display: grid; place-items: center; min-height: 44px; padding: 8px 10px; border-radius: 12px; font-size: 13.5px; font-weight: 600; text-align: center; text-decoration: none; color: var(--texto); border: 1px solid var(--linha); background: var(--painel); }
   .links a.dest { color: #04101d; background: var(--b); border-color: var(--b); }
@@ -245,9 +253,7 @@
       l: "O custo de um agente é uma <strong>decisão de arquitetura</strong>, não uma contagem de tokens." }],
     html: '<div class="capa corpo" style="padding:0;animation:none">' +
       '<div class="qr" id="qr" role="img" aria-label="QR code desta apresentação"></div>' +
-      '<p class="rot" style="margin:6px 0 0">Acompanhe no seu celular</p>' +
-      '<p class="endereco">julianamarialop.github.io/apresentacao/custo-de-agentes</p>' +
-      '<p class="autora">Juliana Maria Lopes<span>Microsoft MVP · autora de Construindo Agentes Inteligentes</span></p></div>',
+      '</div>',
     entrar: function () {
       function desenhar() {
         var q = window.qrcode(0, "M"); q.addData(ENDERECO); q.make();
@@ -649,11 +655,17 @@
       { t: "O cálculo está aqui. <em>O método está no livro.</em>",
         l: "<strong>Construindo Agentes Inteligentes</strong>: Skills, Automação e Economia de Tokens. Esta apresentação mostra o cálculo; o livro apresenta o método." }
     ],
-    html: '<div class="livros"><img src="capa-pt.jpg" alt="Capa do livro Construindo Agentes Inteligentes, edição em português" width="560" height="831">' +
-      '<img src="capa-en.jpg" alt="Capa do livro Building Intelligent Agents, edição em inglês" width="560" height="838"></div>' +
+    html: '<div class="livro1"><img src="capa-pt.jpg" alt="Capa do livro Construindo Agentes Inteligentes" width="560" height="831">' +
+      '<div class="compras">' +
+      '<p class="rot">Edição em português</p><div class="links3">' +
+      '<a class="dest sem-toque" href="https://loja.uiclap.com/titulo/ua177496" target="_blank" rel="noopener">Impresso</a>' +
+      '<a class="dest sem-toque" href="https://www.amazon.com.br/dp/B0H1BPJ1L6" target="_blank" rel="noopener">Kindle</a>' +
+      '<a class="dest sem-toque" href="https://a.co/d/0c4r76Nb" target="_blank" rel="noopener">Amazon</a></div>' +
+      '<p class="rot">English edition</p><div class="links3">' +
+      '<a class="sem-toque" href="https://loja.uiclap.com/titulo/ua205923" target="_blank" rel="noopener">Print</a>' +
+      '<a class="sem-toque" href="https://www.amazon.com.br/dp/B0HLFMLG8C" target="_blank" rel="noopener">Kindle</a>' +
+      '<a class="sem-toque" href="https://a.co/d/0eeBrlXg" target="_blank" rel="noopener">Amazon</a></div></div></div>' +
       '<div class="links">' +
-      '<a class="dest sem-toque" href="https://a.co/d/0c4r76Nb" target="_blank" rel="noopener">Edição em português</a>' +
-      '<a class="dest sem-toque" href="https://a.co/d/0eeBrlXg" target="_blank" rel="noopener">English edition</a>' +
       '<a class="sem-toque" href="/custo-de-agentes/">Calculadora</a>' +
       '<a class="sem-toque" href="https://github.com/julianamarialop/agent-cost-math" target="_blank" rel="noopener">Código aberto</a>' +
       '<a class="larga sem-toque" href="https://www.linkedin.com/in/julianamarialopes/" target="_blank" rel="noopener">Juliana Maria Lopes no LinkedIn</a></div>'
