@@ -284,7 +284,6 @@
   function controleAlterado() {
     if (!sinc) return;
     if (sinc.apresentadora()) { clearTimeout(adiamento); adiamento = setTimeout(function () { sinc.publicar(atual, mom); }, 120); }
-    else sinc.manual();
   }
 
   // 1. Abertura ------------------------------------------------------------
@@ -763,17 +762,22 @@
     $("legenda").innerHTML = tela.momentos[m - 1].l;
     if (tela.momento) tela.momento(m);
     if (sinc) sinc.publicar(i, m);
-    $("ant").disabled = i === 0 && m === 1;
-    var fim = i === telas.length - 1 && m === tela.momentos.length;
-    $("prox").disabled = fim;
+    atualizarBotoes();
     $("onde").textContent = (i + 1) + " de " + telas.length;
     $("pontos").innerHTML = tela.momentos.length > 1 ? tela.momentos.map(function (_, k) { return '<i class="' + (k === m - 1 ? "on" : "") + '"></i>'; }).join("") : "";
+  }
+  // Durante a transmissao, quem acompanha nao navega: a apresentadora conduz.
+  function atualizarBotoes() {
+    if (atual < 0) return;
+    var vivo = !!(sinc && sinc.aoVivo());
+    $("ant").disabled = vivo || (atual === 0 && mom === 1);
+    $("prox").disabled = vivo || (atual === telas.length - 1 && mom === telas[atual].momentos.length);
   }
   function avancar() { if (mom < telas[atual].momentos.length) ir(atual, mom + 1); else if (atual < telas.length - 1) ir(atual + 1, 1); }
   function anterior() { if (mom > 1) ir(atual, mom - 1); else if (atual > 0) ir(atual - 1, telas[atual - 1].momentos.length); }
 
-  $("prox").addEventListener("click", function (e) { e.stopPropagation(); sinc.manual(); avancar(); });
-  $("ant").addEventListener("click", function (e) { e.stopPropagation(); sinc.manual(); anterior(); });
+  $("prox").addEventListener("click", function (e) { e.stopPropagation(); if (sinc.aoVivo()) return; avancar(); });
+  $("ant").addEventListener("click", function (e) { e.stopPropagation(); if (sinc.aoVivo()) return; anterior(); });
   $("tela").addEventListener("click", function (e) {
     if (e.target.closest(".sem-toque, a, button, input, label")) return;
     if (sinc.aoVivo()) return;   // com a apresentacao ao vivo, o toque na tela nao desloca o participante
@@ -781,8 +785,8 @@
   });
   document.addEventListener("keydown", function (e) {
     if (e.target && e.target.tagName === "INPUT") return;
-    if (e.key === "ArrowRight" || e.key === " " || e.key === "PageDown") { e.preventDefault(); sinc.manual(); avancar(); }
-    if (e.key === "ArrowLeft" || e.key === "PageUp") { e.preventDefault(); sinc.manual(); anterior(); }
+    if (e.key === "ArrowRight" || e.key === " " || e.key === "PageDown") { e.preventDefault(); if (sinc.aoVivo()) return; avancar(); }
+    if (e.key === "ArrowLeft" || e.key === "PageUp") { e.preventDefault(); if (sinc.aoVivo()) return; anterior(); }
   });
   var x0 = null, y0 = null;
   $("tela").addEventListener("touchstart", function (e) {
@@ -792,7 +796,7 @@
   $("tela").addEventListener("touchend", function (e) {
     if (x0 === null) return;
     var dx = e.changedTouches[0].clientX - x0, dy = e.changedTouches[0].clientY - y0; x0 = null;
-    if (Math.abs(dx) > 60 && Math.abs(dx) > Math.abs(dy) * 1.5) { e.preventDefault(); sinc.manual(); if (dx < 0) avancar(); else anterior(); }
+    if (Math.abs(dx) > 60 && Math.abs(dx) > Math.abs(dy) * 1.5) { e.preventDefault(); if (sinc.aoVivo()) return; if (dx < 0) avancar(); else anterior(); }
   });
   window.addEventListener("hashchange", function () {
     // Link de apresentadora colado numa aba que ja estava aberta: o navegador nao
@@ -837,6 +841,7 @@
         var b = $("seguir");
         if (b) b.addEventListener("click", function (e) { e.stopPropagation(); seguindo = true; aplicar(); mostrar(); });
       } else { el.hidden = true; }
+      atualizarBotoes();
     }
     function aplicar() {
       if (!ultimo) return;
@@ -913,6 +918,7 @@
       }).catch(function () {});
     }
     iniciar();
+    setInterval(mostrar, 30000);
     return { publicar: publicar, manual: manual, aoVivo: aoVivo, apresentadora: function () { return !!chavePriv; } };
   }
 
