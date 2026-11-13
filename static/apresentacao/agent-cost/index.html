@@ -781,7 +781,8 @@
   $("tela").addEventListener("click", function (e) {
     if (e.target.closest(".sem-toque, a, button, input, label")) return;
     if (sinc.aoVivo()) return;   // com a apresentacao ao vivo, o toque na tela nao desloca o participante
-    avancar();
+    // Toque na metade esquerda volta; na metade direita avanca.
+    if (e.clientX < window.innerWidth / 2) anterior(); else avancar();
   });
   document.addEventListener("keydown", function (e) {
     if (e.target && e.target.tagName === "INPUT") return;
