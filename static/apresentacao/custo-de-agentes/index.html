@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="theme-color" content="#06162a">
 <meta name="robots" content="noindex">
-<title>Custo de agentes de IA</title>
+<title>Quanto custa um agente de IA?</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap">
@@ -16,358 +16,712 @@
   :root {
     --fundo: #06162a; --painel: #0b2038; --linha: #1b3a5c;
     --texto: #f4f9fd; --texto-2: #b3c7d9; --texto-3: #6f8aa5;
-    --a: #9db4c8; --b: #35d0f7; --neutro: #2b4664;
+    --a: #9db4c8; --b: #35d0f7; --neutro: #2b4664; --alerta: #ffc46b;
     --fonte: "Poppins", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
   }
   * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
   html, body { margin: 0; height: 100%; background: radial-gradient(120% 70% at 70% 45%, #0d2c4d 0%, #06162a 60%, #040f1d 100%) fixed; color: var(--texto); font-family: var(--fonte); -webkit-font-smoothing: antialiased; overscroll-behavior: none; }
-  .tela { height: 100vh; height: 100dvh; max-width: 760px; margin: 0 auto; display: flex; flex-direction: column; padding: max(14px, env(safe-area-inset-top)) 18px max(12px, env(safe-area-inset-bottom)); user-select: none; cursor: pointer; }
+  #malha { position: fixed; inset: 0; width: 100%; height: 100%; pointer-events: none; }
+  .tela { position: relative; height: 100vh; height: 100dvh; max-width: 760px; margin: 0 auto; display: flex; flex-direction: column; padding: max(14px, env(safe-area-inset-top)) 18px max(10px, env(safe-area-inset-bottom)); user-select: none; cursor: pointer; }
 
   header { display: flex; gap: 14px; align-items: center; flex: none; }
   .num { flex: none; width: 46px; height: 46px; border-radius: 12px; display: grid; place-items: center; font-size: 22px; font-weight: 700; color: var(--b); border: 1.5px solid var(--b); box-shadow: 0 0 18px rgb(53 208 247 / 35%), inset 0 0 12px rgb(53 208 247 / 18%); }
   .sobre { margin: 0 0 3px; font-size: 10.5px; font-weight: 600; letter-spacing: .16em; text-transform: uppercase; color: var(--texto-2); display: flex; align-items: center; gap: 8px; }
   .sobre::before { content: ""; width: 18px; height: 1.5px; background: var(--b); }
-  h1 { margin: 0; font-size: clamp(19px, 5.4vw, 30px); line-height: 1.12; font-weight: 800; letter-spacing: .01em; text-transform: uppercase; min-height: 2.3em; }
+  h1 { margin: 0; font-size: clamp(18px, 5.2vw, 30px); line-height: 1.12; font-weight: 800; letter-spacing: .01em; text-transform: uppercase; min-height: 2.3em; }
   h1 em { font-style: normal; color: var(--b); text-shadow: 0 0 22px rgb(53 208 247 / 45%); display: block; }
 
-  .palco { position: relative; flex: 1 1 auto; min-height: 150px; margin: 6px -18px 0; }
-  canvas { position: absolute; inset: 0; width: 100%; height: 100%; display: block; }
+  .corpo { flex: 1 1 auto; min-height: 0; display: flex; flex-direction: column; justify-content: center; gap: 12px; padding: 10px 0 0; animation: entra .45s ease both; }
+  @keyframes entra { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: none; } }
+  .legenda { flex: none; margin: 10px 0 0; min-height: 4.3em; font-size: clamp(14px, 3.9vw, 18px); line-height: 1.45; color: var(--texto-2); text-align: center; text-wrap: balance; }
+  .legenda strong { color: var(--texto); font-weight: 600; }
 
-  .stats { flex: none; display: grid; grid-template-columns: 1fr 1fr; gap: 12px; text-align: center; }
-  .col { padding: 10px 6px 12px; border-radius: 16px; background: var(--painel); border: 1px solid var(--linha); opacity: .28; transition: opacity .6s, border-color .6s, transform .6s; }
-  .col.ativo { opacity: 1; }
-  .col.a.ativo { border-color: color-mix(in srgb, var(--a) 55%, transparent); }
-  .col.b.ativo { border-color: color-mix(in srgb, var(--b) 55%, transparent); }
-  .nome { margin: 0 0 6px; font-size: 13px; font-weight: 700; letter-spacing: .02em; }
-  .a .nome { color: var(--a); } .b .nome { color: var(--b); }
-  .vol { margin: 0; font-size: 13px; color: var(--texto-2); font-variant-numeric: tabular-nums; }
-  .vol strong { display: block; font-size: clamp(20px, 5.4vw, 26px); font-weight: 750; color: var(--texto); letter-spacing: -.01em; }
-  .custo { margin: 8px 0 0; font-size: clamp(26px, 8vw, 40px); line-height: 1; font-weight: 800; letter-spacing: -.03em; font-variant-numeric: tabular-nums; }
-  .a .custo { color: var(--a); } .b .custo { color: var(--b); text-shadow: 0 0 26px rgb(53 208 247 / 40%); }
-  .custo small { font-size: .45em; font-weight: 700; letter-spacing: 0; margin-right: 4px; }
-  .un { margin: 4px 0 0; font-size: 12px; color: var(--texto-3); }
+  footer { flex: none; display: flex; align-items: center; justify-content: space-between; gap: 10px; margin-top: 8px; font-size: 13px; color: var(--texto-3); }
+  .nav { font: 600 13px var(--fonte); color: var(--texto-2); background: transparent; border: 1px solid var(--linha); border-radius: 999px; padding: 9px 14px; cursor: pointer; min-width: 96px; }
+  .nav.principal { color: #04101d; background: var(--b); border-color: var(--b); }
+  .nav:disabled { opacity: .3; }
+  .nav:focus-visible, a:focus-visible, input:focus-visible { outline: 2px solid var(--b); outline-offset: 2px; }
+  .onde { display: grid; justify-items: center; gap: 5px; font-variant-numeric: tabular-nums; }
+  .pontos { display: flex; gap: 5px; min-height: 7px; }
+  .pontos i { width: 7px; height: 7px; border-radius: 50%; background: var(--linha); }
+  .pontos i.on { background: var(--b); }
 
-  .painel { flex: none; overflow: hidden; max-height: 0; opacity: 0; transition: max-height .7s ease, opacity .7s ease, margin .7s ease; margin-top: 0; }
-  .painel.visivel { max-height: 120px; opacity: 1; margin-top: 12px; }
-  .painel p { margin: 0 0 6px; font-size: 12px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; color: var(--texto-3); }
-  .barra { display: flex; gap: 2px; height: 34px; border-radius: 10px; overflow: hidden; background: var(--painel); }
-  .barra i { display: grid; place-items: center; height: 100%; width: 0; font-style: normal; font-size: 15px; font-weight: 800; color: #04101d; white-space: nowrap; overflow: hidden; transition: width 1.4s cubic-bezier(.2,.8,.2,1) .25s; }
-  .barra .sa { background: var(--a); } .barra .sb { background: var(--b); } .barra .sn { background: var(--neutro); }
-  .chaves { display: flex; flex-wrap: wrap; gap: 4px 14px; margin: 8px 0 0; padding: 0; list-style: none; font-size: 12px; color: var(--texto-2); }
+  /* componentes */
+  .cartao { padding: 12px 12px 14px; border-radius: 16px; background: color-mix(in srgb, var(--painel) 86%, transparent); border: 1px solid var(--linha); transition: opacity .6s, border-color .6s; }
+  .apagado { opacity: .25; }
+  .rot { margin: 0 0 6px; font-size: 11px; font-weight: 600; letter-spacing: .12em; text-transform: uppercase; color: var(--texto-3); }
+  .valor { margin: 0; font-size: clamp(30px, 9vw, 46px); line-height: 1; font-weight: 800; letter-spacing: -.02em; font-variant-numeric: tabular-nums; color: var(--b); text-shadow: 0 0 26px rgb(53 208 247 / 40%); }
+  .valor small { font-size: .42em; font-weight: 700; margin-right: 5px; letter-spacing: 0; }
+  .valor.aco { color: var(--a); text-shadow: none; }
+  .sub { margin: 4px 0 0; font-size: 13px; color: var(--texto-2); }
+  .nota { margin: 0; font-size: 12.5px; line-height: 1.45; color: var(--texto-3); text-align: center; }
+  .duas { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; text-align: center; }
+  .chaves { display: flex; flex-wrap: wrap; justify-content: center; gap: 4px 14px; margin: 0; padding: 0; list-style: none; font-size: 12px; color: var(--texto-2); }
   .chaves li::before { content: ""; display: inline-block; width: 9px; height: 9px; border-radius: 3px; margin-right: 6px; background: var(--cor); }
 
-  .legenda { flex: none; margin: 12px 0 0; min-height: 3.1em; font-size: clamp(15px, 4.1vw, 18px); line-height: 1.45; color: var(--texto-2); text-align: center; text-wrap: balance; transition: opacity .35s; }
-  .legenda strong { color: var(--texto); font-weight: 700; }
+  input[type="range"] { -webkit-appearance: none; appearance: none; width: 100%; height: 34px; background: transparent; cursor: pointer; margin: 0; }
+  input[type="range"]::-webkit-slider-runnable-track { height: 6px; border-radius: 3px; background: var(--linha); }
+  input[type="range"]::-moz-range-track { height: 6px; border-radius: 3px; background: var(--linha); }
+  input[type="range"]::-webkit-slider-thumb { -webkit-appearance: none; width: 28px; height: 28px; margin-top: -11px; border-radius: 50%; background: var(--b); border: 3px solid #04101d; box-shadow: 0 0 16px rgb(53 208 247 / 60%); }
+  input[type="range"]::-moz-range-thumb { width: 24px; height: 24px; border-radius: 50%; background: var(--b); border: 3px solid #04101d; }
+  .controle { display: grid; gap: 2px; font-size: 13px; font-weight: 500; color: var(--texto-2); }
+  .controle b { color: var(--texto); font-weight: 700; font-variant-numeric: tabular-nums; }
+  .chave { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 10px 14px; border-radius: 14px; border: 1px solid var(--linha); background: var(--painel); font: 600 14px var(--fonte); color: var(--texto); cursor: pointer; width: 100%; text-align: left; }
+  .chave i { flex: none; position: relative; width: 52px; height: 30px; border-radius: 999px; background: var(--neutro); transition: background .25s; }
+  .chave i::after { content: ""; position: absolute; top: 3px; left: 3px; width: 24px; height: 24px; border-radius: 50%; background: var(--texto); transition: transform .25s; }
+  .chave[aria-pressed="true"] i { background: var(--b); box-shadow: 0 0 16px rgb(53 208 247 / 50%); }
+  .chave[aria-pressed="true"] i::after { transform: translateX(22px); background: #04101d; }
 
-  footer { flex: none; display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-top: 8px; font-size: 13px; color: var(--texto-3); }
-  button { font: 600 13px var(--fonte); color: var(--texto-2); background: transparent; border: 1px solid var(--linha); border-radius: 999px; padding: 8px 14px; cursor: pointer; }
-  button:focus-visible { outline: 2px solid var(--a); outline-offset: 2px; }
-  .passos { display: flex; gap: 6px; }
-  .passos i { width: 8px; height: 8px; border-radius: 50%; background: var(--linha); transition: background .3s, transform .3s; }
-  .passos i.on { background: var(--texto); transform: scale(1.15); }
-  @media (max-height: 620px) { .legenda { min-height: 0; margin-top: 8px; } .un { display: none; } }
+  /* tela 1 */
+  .capa { align-items: center; text-align: center; }
+  .qr { width: min(56vw, 240px); aspect-ratio: 1; padding: 12px; border-radius: 18px; background: #fff; box-shadow: 0 0 40px rgb(53 208 247 / 35%); }
+  .qr svg { width: 100%; height: 100%; display: block; }
+  .endereco { margin: 0; font-size: 12.5px; color: var(--texto-2); word-break: break-all; }
+  .autora { margin: 6px 0 0; font-size: 16px; font-weight: 700; }
+  .autora span { display: block; font-size: 12.5px; font-weight: 500; color: var(--texto-3); }
+
+  /* tela 2 */
+  .palco { position: relative; flex: 1 1 auto; min-height: 130px; margin: 0 -18px; }
+  .palco canvas { position: absolute; inset: 0; width: 100%; height: 100%; display: block; }
+  .ag .nome { margin: 0 0 4px; font-size: 13px; font-weight: 600; }
+  .ag.a .nome { color: var(--a); } .ag.b .nome { color: var(--b); }
+  .ag .vol { margin: 0; font-size: 12.5px; color: var(--texto-2); }
+  .ag .vol strong { display: block; font-size: clamp(19px, 5.2vw, 25px); font-weight: 700; color: var(--texto); font-variant-numeric: tabular-nums; }
+  .ag .valor { margin-top: 6px; font-size: clamp(26px, 8vw, 40px); }
+  .ag.a.ativo { border-color: color-mix(in srgb, var(--a) 55%, transparent); }
+  .ag.b.ativo { border-color: color-mix(in srgb, var(--b) 60%, transparent); }
+  .faixa { overflow: hidden; max-height: 0; opacity: 0; transition: max-height .7s ease, opacity .7s ease; }
+  .faixa.visivel { max-height: 110px; opacity: 1; }
+  .barra { display: flex; gap: 2px; height: 32px; border-radius: 10px; overflow: hidden; background: var(--painel); margin-bottom: 8px; }
+  .barra i { display: grid; place-items: center; height: 100%; width: 0; font-style: normal; font-size: 15px; font-weight: 800; color: #04101d; white-space: nowrap; overflow: hidden; transition: width 1.4s cubic-bezier(.2,.8,.2,1) .25s; }
+  .barra .sa { background: var(--a); } .barra .sb { background: var(--b); } .barra .sn { background: var(--neutro); }
+
+  /* tela 3 e 6: colunas */
+  .colunas { position: relative; display: flex; align-items: flex-end; gap: 4px; flex: 1 1 auto; min-height: 110px; max-height: 300px; padding-top: 6px; }
+  .colunas .c { flex: 1; display: flex; flex-direction: column; justify-content: flex-end; height: 100%; min-width: 0; }
+  .colunas .c span { display: block; border-radius: 4px 4px 0 0; height: 0; transition: height .5s cubic-bezier(.2,.8,.2,1); }
+  .colunas .c .h { background: var(--b); box-shadow: 0 0 14px rgb(53 208 247 / 30%); }
+  .colunas .c .f { background: var(--a); border-radius: 0; margin-top: 2px; }
+  .colunas .c.simples .h { background: var(--neutro); box-shadow: none; }
+  .colunas .c.sel .h { background: var(--texto); }
+  .colunas .lin { position: absolute; left: 0; right: 0; border-top: 2px dashed var(--alerta); pointer-events: none; }
+  .colunas .lin b { position: absolute; left: 2px; bottom: 4px; font-size: 11px; font-weight: 600; color: var(--alerta); }
+  .eixo { display: flex; gap: 4px; font-size: 10.5px; color: var(--texto-3); text-align: center; }
+  .eixo span { flex: 1; min-width: 0; }
+
+  /* tela 4 */
+  .niveis { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; text-align: center; }
+  .nivel { padding: 8px 4px; border-radius: 12px; border: 1px solid var(--linha); background: var(--painel); font-size: 11px; color: var(--texto-2); }
+  .nivel b { display: block; font-size: 16px; font-weight: 700; color: var(--texto); font-variant-numeric: tabular-nums; }
+  .nivel.m3 { border-color: color-mix(in srgb, var(--b) 60%, transparent); }
+  .papel h2 { margin: 0 0 8px; font-size: 15px; font-weight: 700; }
+  .opc { display: flex; align-items: center; justify-content: space-between; gap: 10px; padding: 8px 10px; border-radius: 10px; font-size: 13px; color: var(--texto-2); }
+  .opc b { font-size: 19px; font-weight: 800; font-variant-numeric: tabular-nums; white-space: nowrap; }
+  .opc.certa { background: rgb(53 208 247 / 12%); color: var(--texto); box-shadow: inset 0 0 0 1px rgb(53 208 247 / 55%); }
+  .opc.certa b { color: var(--b); }
+  .opc.errada b { color: var(--texto-3); text-decoration: line-through; }
+  .opc small { display: block; font-size: 11.5px; color: var(--alerta); }
+  .opc.certa small { color: var(--b); }
+
+  /* tela 5 */
+  .prompt { display: flex; gap: 3px; height: 46px; border-radius: 10px; overflow: hidden; font-size: 11.5px; font-weight: 600; color: #04101d; text-align: center; }
+  .prompt span { display: grid; place-items: center; padding: 0 6px; transition: background .4s, color .4s, opacity .4s; }
+  .prompt .fixa { flex: 6; background: var(--a); }
+  .prompt .hist { flex: 3.5; background: var(--b); }
+  .prompt.cache .fixa { background: repeating-linear-gradient(135deg, #17395a 0 8px, #0f2b47 8px 16px); color: var(--texto-2); }
+
+  /* tela 7 */
+  .grafico svg { display: block; width: 100%; height: auto; overflow: visible; }
+  .grafico text { font: 500 10px var(--fonte); fill: var(--texto-3); }
+  .grafico .curva { stroke: var(--b); stroke-width: 2.5; fill: none; filter: drop-shadow(0 0 6px rgb(53 208 247 / 60%)); }
+  .grafico .direto { stroke: var(--a); stroke-width: 1.5; stroke-dasharray: 5 4; }
+  .grafico .marco { stroke: var(--alerta); stroke-width: 1.2; stroke-dasharray: 3 3; }
+  .grafico .eixox { stroke: var(--linha); }
+  .grafico circle { fill: var(--texto); stroke: var(--b); stroke-width: 3; }
+  .grafico .tm { fill: var(--alerta); font-weight: 600; } .grafico .td { fill: var(--a); }
+  .perda .valor { color: var(--alerta); text-shadow: none; }
+
+  /* tela 8 */
+  .linhas { display: grid; gap: 14px; }
+  .lh p { margin: 0 0 5px; display: flex; justify-content: space-between; gap: 10px; font-size: 13.5px; color: var(--texto-2); }
+  .lh p b { color: var(--texto); font-weight: 700; font-variant-numeric: tabular-nums; white-space: nowrap; }
+  .lh i { display: block; height: 20px; width: 0; border-radius: 6px; background: var(--neutro); transition: width 1.2s cubic-bezier(.2,.8,.2,1); }
+  .lh.fim i { background: var(--b); box-shadow: 0 0 18px rgb(53 208 247 / 55%); }
+  .lh.fim p b { color: var(--b); }
+  .lh small { display: block; margin-top: 4px; font-size: 12px; color: var(--texto-3); }
+  .ajustes { display: flex; flex-wrap: wrap; justify-content: center; gap: 6px; margin: 0; padding: 0; list-style: none; }
+  .ajustes li { padding: 5px 10px; border-radius: 999px; font-size: 12px; font-weight: 500; color: var(--b); border: 1px solid color-mix(in srgb, var(--b) 45%, transparent); }
+
+  /* tela 9 */
+  .livros { display: flex; justify-content: center; gap: 14px; flex: 0 1 auto; min-height: 0; }
+  .livros img { display: block; height: min(34vh, 300px); width: auto; border-radius: 6px; box-shadow: 0 10px 34px rgb(0 0 0 / 55%), 0 0 30px rgb(53 208 247 / 25%); }
+  .links { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+  .links a { display: grid; place-items: center; min-height: 44px; padding: 8px 10px; border-radius: 12px; font-size: 13.5px; font-weight: 600; text-align: center; text-decoration: none; color: var(--texto); border: 1px solid var(--linha); background: var(--painel); }
+  .links a.dest { color: #04101d; background: var(--b); border-color: var(--b); }
+  .links a.larga { grid-column: 1 / -1; }
+
+  @media (max-height: 640px) { .legenda { min-height: 0; } .livros img { height: 26vh; } }
+  @media (prefers-reduced-motion: reduce) { * { animation: none !important; transition: none !important; } }
 </style>
 </head>
 <body>
-<main class="tela" id="tela" aria-live="polite">
+<canvas id="malha" aria-hidden="true"></canvas>
+<main class="tela" id="tela">
   <header>
-    <span class="num" aria-label="Tela 2">2</span>
+    <span class="num" id="num">1</span>
     <div>
       <p class="sobre">Engenharia de agentes de IA</p>
       <h1 id="titulo"></h1>
     </div>
   </header>
-
-  <div class="palco"><canvas id="cv" role="img" aria-label="Animação: muitas mensagens atravessam o agente de classificação uma única vez; poucas solicitações entram no agente de resolução e percorrem vários passos dentro dele."></canvas></div>
-
-  <div class="stats">
-    <div class="col a" id="colA">
-      <p class="nome">Agente de classificação</p>
-      <p class="vol"><strong id="volA">0</strong>solicitações por mês</p>
-      <p class="custo"><small>US$</small><span id="custoA">0</span></p>
-      <p class="un">por mês</p>
-    </div>
-    <div class="col b" id="colB">
-      <p class="nome">Agente de resolução</p>
-      <p class="vol"><strong id="volB">0</strong>solicitações por mês</p>
-      <p class="custo"><small>US$</small><span id="custoB">0</span></p>
-      <p class="un">por mês</p>
-    </div>
-  </div>
-
-  <div class="painel" id="painel">
-    <p>Participação no custo mensal do assistente</p>
-    <div class="barra"><i class="sa" data-w="2.4"></i><i class="sb" data-w="85.4">85%</i><i class="sn" data-w="12.2"></i></div>
-    <ul class="chaves">
-      <li style="--cor: var(--a)">Classificação 2,4%</li>
-      <li style="--cor: var(--b)">Resolução 85,4%</li>
-      <li style="--cor: var(--neutro)">Demais componentes 12,2%</li>
-    </ul>
-  </div>
-
-  <p class="legenda" id="legenda"></p>
-
+  <div class="corpo" id="corpo"></div>
+  <p class="legenda" id="legenda" aria-live="polite"></p>
   <footer>
-    <button type="button" id="repetir">Repetir</button>
-    <span id="dica">Toque para avançar</span>
-    <span class="passos" aria-hidden="true"><i></i><i></i><i></i></span>
+    <button type="button" class="nav" id="ant">Anterior</button>
+    <span class="onde"><span class="pontos" id="pontos" aria-hidden="true"></span><span id="onde"></span></span>
+    <button type="button" class="nav principal" id="prox">Avançar</button>
   </footer>
 </main>
 
 <script>
 (function () {
   "use strict";
-  var MOMENTOS = [
-    null,
-    { titulo: "Um assistente, <em>dois agentes</em>",
-      legenda: "O agente de classificação recebe <strong>40.000 mensagens por mês</strong>. Cada mensagem passa por ele <strong>uma única vez</strong>." },
-    { titulo: "Menos solicitações, <em>mais passos</em>",
-      legenda: "O agente de resolução recebe <strong>9.000 solicitações</strong>. Para responder, consulta pedidos, entrega e política em <strong>8 passos</strong>, e a cada passo lê novamente todo o histórico." },
-    { titulo: "O volume não prevê <em>o custo</em>",
-      legenda: "O agente com <strong>menos solicitações</strong> responde por <strong>85% do custo</strong>. O que define o custo é a orquestração." }
-  ];
-  var VOL_A = 40000, VOL_B = 9000, CUSTO_A = 40, CUSTO_B = 1440, PASSOS_B = 8;
+  // Numeros gerados por tools/apresentacao_dados.py a partir do codigo publico
+  // agent-cost-math. Nenhum valor desta apresentacao e digitado manualmente.
+  var DADOS = {"precos_em":"2026-10-14","classificacao":{"volume":40000,"custo":40.0,"custo_modelo_maior":137.0,"modelo":"Claude Haiku 4.5"},"agente":{"volume":9000,"custo":1440.0,"passos":8,"tokens":62000,"tokens_simples":48000,"custo_modelo_menor":288.0,"modelo":"Claude Opus 5","sem_cache":3330.0,"prefixo":6000},"participacao":{"classificacao":2.4,"agente":85.4},"total_arquitetura":1685.88,"compressor":106.2,"inflacao":{"por_passo":[2000,2500,3000,3500,4000,4500,5000,5500,6000,6500],"total":42500,"simples":20000,"pct":112.5},"passos":{"normal":[101.25,225.0,371.25,540.0,731.25,945.0,1181.25,1440.0,1721.25,2025.0,2351.25,2700.0,3071.25,3465.0,3881.25,4320.0],"resumido":[101.25,213.75,337.5,472.5,618.75,776.25,945.0,1125.0,1316.25,1518.75,1732.5,1957.5,2193.75,2441.25,2700.0,2970.0]},"cascata":{"curva":[1728.0,1713.6,1699.2,1684.8,1670.4,1656.0,1641.6,1627.2,1612.8,1598.4,1584.0,1569.6,1555.2,1540.8,1526.4,1512.0,1497.6,1483.2,1468.8,1454.4,1440.0,1425.6,1411.2,1396.8,1382.4,1368.0,1353.6,1339.2,1324.8,1310.4,1296.0,1281.6,1267.2,1252.8,1238.4,1224.0,1209.6,1195.2,1180.8,1166.4,1152.0,1137.6,1123.2,1108.8,1094.4,1080.0,1065.6,1051.2,1036.8,1022.4,1008.0,993.6,979.2,964.8,950.4,936.0,921.6,907.2,892.8,878.4,864.0,849.6,835.2,820.8,806.4,792.0,777.6,763.2,748.8,734.4,720.0,705.6,691.2,676.8,662.4,648.0,633.6,619.2,604.8,590.4,576.0,561.6,547.2,532.8,518.4,504.0,489.6,475.2,460.8,446.4,432.0,417.6,403.2,388.8,374.4,360.0,345.6,331.2,316.8,302.4,288.0],"direto":1440.0,"equilibrio":0.2,"c1":0.032,"c2":0.16},"somado":{"custo":371.25,"por_solicitacao":0.0413},"modelos":{"Claude Haiku 4.5":[1.0,5.0],"Claude Sonnet 5":[2.0,10.0],"Claude Opus 5":[5.0,25.0]},"piso_cache":{"Claude Haiku 4.5":4096,"Claude Opus 5":512}};
+  var ENDERECO = "https://julianamarialop.github.io/apresentacao/custo-de-agentes/";
+  var D = DADOS, AG = D.agente, CL = D.classificacao;
 
   var $ = function (id) { return document.getElementById(id); };
-  var fmt = new Intl.NumberFormat("pt-BR");
+  var n0 = new Intl.NumberFormat("pt-BR", { maximumFractionDigits: 0 });
+  var n1 = new Intl.NumberFormat("pt-BR", { maximumFractionDigits: 1 });
+  function num(v) { return n0.format(v); }
+  function usd(v) {
+    var casas = v >= 10 ? 0 : v >= 0.1 ? 2 : 3;
+    return "US$ " + new Intl.NumberFormat("pt-BR", { minimumFractionDigits: casas, maximumFractionDigits: casas }).format(v);
+  }
+  function valor(v, classe) { return '<p class="valor ' + (classe || "") + '"><small>US$</small><span>' + usd(v).slice(4) + "</span></p>"; }
+  function pct(v) { return n1.format(v * 100) + "%"; }
   var reduzido = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-  var m = 0, contados = {};
 
-  function contar(id, alvo, ms) {
-    if (contados[id]) return;
-    contados[id] = true;
-    var el = $(id), t0 = performance.now();
-    if (reduzido) { el.textContent = fmt.format(alvo); return; }
-    (function passo(t) {
+  // Anima um numero ate o alvo; guarda o valor atual no proprio elemento.
+  function animar(el, alvo, ms, formato) {
+    var de = Number(el.dataset.v || 0); el.dataset.v = alvo;
+    if (reduzido || de === alvo) { el.textContent = formato(alvo); return; }
+    var t0 = performance.now(), id = (el._anim = (el._anim || 0) + 1);
+    (function quadro(t) {
+      if (el._anim !== id) return;
       var k = Math.min(1, (t - t0) / ms), e = 1 - Math.pow(1 - k, 3);
-      el.textContent = fmt.format(Math.round(alvo * e));
-      if (k < 1) requestAnimationFrame(passo);
+      el.textContent = formato(de + (alvo - de) * e);
+      if (k < 1) requestAnimationFrame(quadro);
     })(t0);
   }
-  function zerar() {
-    contados = {};
-    ["volA", "volB", "custoA", "custoB"].forEach(function (id) { $(id).textContent = "0"; });
-  }
+  function semMoeda(v) { return usd(v).slice(4); }
 
-  function momento(n) {
-    m = Math.max(1, Math.min(3, n));
-    $("titulo").innerHTML = MOMENTOS[m].titulo;
-    $("legenda").innerHTML = MOMENTOS[m].legenda;
-    $("colA").classList.toggle("ativo", m >= 1);
-    $("colB").classList.toggle("ativo", m >= 2);
-    if (m >= 1) { contar("volA", VOL_A, 1800); contar("custoA", CUSTO_A, 2600); }
-    if (m >= 2) { contar("volB", VOL_B, 1800); contar("custoB", CUSTO_B, 4200); }
-    var painel = $("painel");
-    painel.classList.toggle("visivel", m >= 3);
-    [].forEach.call(painel.querySelectorAll(".barra i"), function (s) { s.style.width = m >= 3 ? s.dataset.w + "%" : "0"; });
-    [].forEach.call(document.querySelectorAll(".passos i"), function (p, i) { p.classList.toggle("on", i === m - 1); });
-    $("dica").textContent = m < 3 ? "Toque para avançar" : "";
-    requestAnimationFrame(medir);
-  }
+  // ====================================================================== telas
+  var telas = [];
 
-  $("tela").addEventListener("click", function (e) {
-    if (e.target.closest("button")) return;
-    if (m < 3) momento(m + 1);
-  });
-  $("repetir").addEventListener("click", function () { zerar(); particulas.length = 0; faiscas.length = 0; momento(1); });
-  document.addEventListener("keydown", function (e) {
-    if (e.key === "ArrowRight" || e.key === " " || e.key === "Enter") { if (m < 3) momento(m + 1); }
-    if (e.key === "ArrowLeft") { if (m > 1) momento(m - 1); }
-  });
-
-  // ------------------------------------------------------------- animacao
-  var cv = $("cv"), ctx = cv.getContext("2d");
-  var W = 0, H = 0, DPR = 1, R = 40;
-  var COR_A = "157,180,200", COR_B = "53,208,247";
-  var particulas = [], faiscas = [];
-  var acumA = 0, acumB = 0, ultimo = 0;
-
-  function medir() {
-    var r = cv.getBoundingClientRect();
-    DPR = Math.min(2, window.devicePixelRatio || 1);
-    W = r.width; H = r.height;
-    cv.width = Math.round(W * DPR); cv.height = Math.round(H * DPR);
-    R = Math.max(22, Math.min(W * 0.1, H * 0.15, 58));
-  }
-  window.addEventListener("resize", medir);
-
-  function centro(lado) { return { x: W * (lado === "a" ? 0.25 : 0.75), y: H * 0.5 }; }
-  function suave(t) { t = Math.max(0, Math.min(1, t)); return t * t * (3 - 2 * t); }
-
-  function nascerA() {
-    var c = centro("a");
-    particulas.push({ lado: "a", t: 0, dur: 1.5 + Math.random() * 0.5,
-      x0: c.x + (Math.random() - 0.5) * W * 0.36, x1: c.x + (Math.random() - 0.5) * W * 0.36, r: 1.6 + Math.random() * 1.2 });
-  }
-  function nascerB() {
-    var c = centro("b");
-    particulas.push({ lado: "b", t: 0, queda: 0.8, trabalho: 5.6 + Math.random() * 0.8, saida: 0.8,
-      x0: c.x + (Math.random() - 0.5) * W * 0.26, desvio: (Math.random() - 0.5) * 0.5, feitos: 0, r: 2.2 });
-  }
-
-  // Os tres sistemas que o agente de resolucao consulta: pedidos, entrega e politica.
-  function sistemas() {
-    var c = centro("b"), d = R * 2.15;
-    return [-150, -30, 90].map(function (g, i) {
-      var a = g * Math.PI / 180;
-      return { x: c.x + Math.cos(a) * d, y: c.y + Math.sin(a) * d * (i === 2 ? 0.92 : 1), tipo: i };
-    });
-  }
-  function retangulo(x, y, w, h, r) {
-    ctx.beginPath();
-    ctx.moveTo(x + r, y); ctx.arcTo(x + w, y, x + w, y + h, r); ctx.arcTo(x + w, y + h, x, y + h, r);
-    ctx.arcTo(x, y + h, x, y, r); ctx.arcTo(x, y, x + w, y, r); ctx.closePath();
-  }
-  function sistema(s, ativo, pulso) {
-    var r = R * 0.5, u = r * 0.5;
-    ctx.globalAlpha = ativo ? 1 : 0.22;
-    ctx.fillStyle = "#081c33"; ctx.strokeStyle = "rgba(" + COR_B + "," + (0.45 + 0.35 * pulso) + ")"; ctx.lineWidth = 1.5;
-    ctx.beginPath(); ctx.arc(s.x, s.y, r, 0, 6.2832); ctx.fill(); ctx.stroke();
-    ctx.strokeStyle = "rgba(238,244,248,.85)"; ctx.lineWidth = 1.4; ctx.lineJoin = "round"; ctx.lineCap = "round";
-    ctx.beginPath();
-    if (s.tipo === 0) {            // base de pedidos
-      ctx.ellipse(s.x, s.y - u * 0.7, u, u * 0.38, 0, 0, 6.2832);
-      ctx.moveTo(s.x - u, s.y - u * 0.7); ctx.lineTo(s.x - u, s.y + u * 0.7);
-      ctx.ellipse(s.x, s.y + u * 0.7, u, u * 0.38, 0, Math.PI, 0, true);
-      ctx.lineTo(s.x + u, s.y - u * 0.7);
-      ctx.moveTo(s.x - u, s.y); ctx.ellipse(s.x, s.y, u, u * 0.38, 0, Math.PI, 0, true);
-    } else if (s.tipo === 1) {     // entrega: a caixa
-      ctx.moveTo(s.x, s.y - u); ctx.lineTo(s.x + u, s.y - u * 0.45); ctx.lineTo(s.x + u, s.y + u * 0.5);
-      ctx.lineTo(s.x, s.y + u); ctx.lineTo(s.x - u, s.y + u * 0.5); ctx.lineTo(s.x - u, s.y - u * 0.45); ctx.closePath();
-      ctx.moveTo(s.x - u, s.y - u * 0.45); ctx.lineTo(s.x, s.y + u * 0.1); ctx.lineTo(s.x + u, s.y - u * 0.45);
-      ctx.moveTo(s.x, s.y + u * 0.1); ctx.lineTo(s.x, s.y + u);
-    } else {                       // politica: o documento
-      ctx.moveTo(s.x - u * 0.75, s.y - u); ctx.lineTo(s.x + u * 0.3, s.y - u); ctx.lineTo(s.x + u * 0.75, s.y - u * 0.5);
-      ctx.lineTo(s.x + u * 0.75, s.y + u); ctx.lineTo(s.x - u * 0.75, s.y + u); ctx.closePath();
-      ctx.moveTo(s.x - u * 0.35, s.y - u * 0.15); ctx.lineTo(s.x + u * 0.35, s.y - u * 0.15);
-      ctx.moveTo(s.x - u * 0.35, s.y + u * 0.35); ctx.lineTo(s.x + u * 0.35, s.y + u * 0.35);
-    }
-    ctx.stroke();
-    ctx.globalAlpha = 1;
-  }
-
-  // O agente e um personagem: cabeca, antena e olhos. O azul trabalha tranquilo;
-  // o laranja olha para o sistema que esta consultando e o brilho acompanha a carga.
-  function agente(lado, ativo, t) {
-    var c = centro(lado), cor = lado === "a" ? COR_A : COR_B, b = lado === "b";
-    var carga = b && ativo ? 0.5 + 0.5 * Math.sin(t * 5) : 0;
-    ctx.globalAlpha = ativo ? 1 : 0.28;
-    var g = ctx.createRadialGradient(c.x, c.y, R * 0.2, c.x, c.y, R * (2 + carga * 0.35));
-    g.addColorStop(0, "rgba(" + cor + "," + (0.24 + carga * 0.14) + ")"); g.addColorStop(1, "rgba(" + cor + ",0)");
-    ctx.fillStyle = g; ctx.beginPath(); ctx.arc(c.x, c.y, R * 2.4, 0, 6.2832); ctx.fill();
-
-    var w = R * 1.9, h = R * 1.55, x = c.x - w / 2, y = c.y - h / 2 + R * 0.1;
-    ctx.strokeStyle = "rgba(" + cor + ",1)"; ctx.lineWidth = 2.2; ctx.lineCap = "round";
-    // antena
-    ctx.beginPath(); ctx.moveTo(c.x, y); ctx.lineTo(c.x, y - R * 0.38); ctx.stroke();
-    ctx.fillStyle = "rgba(" + cor + ",1)";
-    ctx.beginPath(); ctx.arc(c.x, y - R * 0.46, R * (0.1 + (ativo ? 0.03 * Math.sin(t * (b ? 9 : 3)) : 0)), 0, 6.2832); ctx.fill();
-    // orelhas
-    retangulo(x - R * 0.16, c.y - R * 0.12, R * 0.16, R * 0.5, R * 0.06); ctx.fill();
-    retangulo(x + w, c.y - R * 0.12, R * 0.16, R * 0.5, R * 0.06); ctx.fill();
-    // cabeca
-    ctx.fillStyle = "#0a2038"; retangulo(x, y, w, h, R * 0.42); ctx.fill(); ctx.stroke();
-    // olhos: piscam; no laranja, acompanham o sistema consultado
-    var pisca = (t + (b ? 1.3 : 0)) % 3.6 < 0.13 ? 0.12 : 1;
-    var dx = 0, dy = 0;
-    if (b && ativo) { var alvo = sistemas()[Math.floor(t * 1.4) % 3]; var d = Math.hypot(alvo.x - c.x, alvo.y - c.y); dx = (alvo.x - c.x) / d * R * 0.1; dy = (alvo.y - c.y) / d * R * 0.08; }
-    ctx.fillStyle = "rgba(" + cor + ",1)";
-    [-1, 1].forEach(function (s) {
-      ctx.beginPath(); ctx.ellipse(c.x + s * R * 0.42 + dx, c.y + R * 0.02 + dy, R * 0.17, R * 0.2 * pisca, 0, 0, 6.2832); ctx.fill();
-    });
-    // boca: sorriso no azul; no laranja, a boca se abre com a carga
-    ctx.strokeStyle = "rgba(238,244,248,.8)"; ctx.lineWidth = 1.8;
-    ctx.beginPath();
-    if (b && ativo) ctx.ellipse(c.x, c.y + R * 0.52, R * 0.12, R * (0.05 + carga * 0.07), 0, 0, 6.2832);
-    else ctx.arc(c.x, c.y + R * 0.38, R * 0.22, 0.15 * Math.PI, 0.85 * Math.PI);
-    ctx.stroke();
-    ctx.globalAlpha = 1;
-  }
-
-  // Malha de rede ao fundo, como o globo da capa do livro.
-  var nos = [];
-  function malha(dt) {
-    if (!nos.length) for (var n = 0; n < 34; n++) nos.push({ x: Math.random(), y: Math.random(), vx: (Math.random() - 0.5) * 0.012, vy: (Math.random() - 0.5) * 0.012 });
-    var lim = Math.max(70, W * 0.2);
-    ctx.lineWidth = 1;
-    for (var a = 0; a < nos.length; a++) {
-      var p = nos[a]; p.x += p.vx * dt; p.y += p.vy * dt;
-      if (p.x < 0 || p.x > 1) p.vx *= -1; if (p.y < 0 || p.y > 1) p.vy *= -1;
-      for (var b = a + 1; b < nos.length; b++) {
-        var q = nos[b], d = Math.hypot((p.x - q.x) * W, (p.y - q.y) * H);
-        if (d < lim) { ctx.strokeStyle = "rgba(53,208,247," + (0.11 * (1 - d / lim)) + ")"; ctx.beginPath(); ctx.moveTo(p.x * W, p.y * H); ctx.lineTo(q.x * W, q.y * H); ctx.stroke(); }
+  // 1. Abertura ------------------------------------------------------------
+  telas.push({
+    momentos: [{ t: "Quanto custa um <em>agente de IA?</em>",
+      l: "O custo de um agente é uma <strong>decisão de arquitetura</strong>, não uma contagem de tokens." }],
+    html: '<div class="capa corpo" style="padding:0;animation:none">' +
+      '<div class="qr" id="qr" role="img" aria-label="QR code desta apresentação"></div>' +
+      '<p class="rot" style="margin:6px 0 0">Acompanhe no seu celular</p>' +
+      '<p class="endereco">julianamarialop.github.io/apresentacao/custo-de-agentes</p>' +
+      '<p class="autora">Juliana Maria Lopes<span>Microsoft MVP · autora de Construindo Agentes Inteligentes</span></p></div>',
+    entrar: function () {
+      function desenhar() {
+        var q = window.qrcode(0, "M"); q.addData(ENDERECO); q.make();
+        $("qr").innerHTML = q.createSvgTag({ cellSize: 4, margin: 0, scalable: true });
       }
-      ctx.fillStyle = "rgba(120,220,250,.28)"; ctx.beginPath(); ctx.arc(p.x * W, p.y * H, 1.4, 0, 6.2832); ctx.fill();
+      if (window.qrcode) return desenhar();
+      var s = document.createElement("script");
+      s.src = "https://cdnjs.cloudflare.com/ajax/libs/qrcode-generator/1.4.4/qrcode.min.js";
+      s.onload = function () { if ($("qr")) desenhar(); };
+      s.onerror = function () { if ($("qr")) $("qr").style.display = "none"; };
+      document.head.appendChild(s);
     }
-  }
+  });
 
-  function ponto(x, y, r, cor, alfa) {
-    ctx.fillStyle = "rgba(" + cor + "," + (alfa * 0.18) + ")";
-    ctx.beginPath(); ctx.arc(x, y, r * 3.2, 0, 6.2832); ctx.fill();
-    ctx.fillStyle = "rgba(" + cor + "," + alfa + ")";
-    ctx.beginPath(); ctx.arc(x, y, r, 0, 6.2832); ctx.fill();
-  }
-
-  function quadro(agora) {
-    var dt = Math.min(0.05, (agora - ultimo) / 1000 || 0); ultimo = agora;
-    if (!W) medir();
-    ctx.setTransform(DPR, 0, 0, DPR, 0, 0);
-    ctx.clearRect(0, 0, W, H);
-
-    // A proporcao de nascimento e a dos volumes: 40.000 para 9.000.
-    if (m >= 1) { acumA += dt * 15; while (acumA >= 1) { acumA--; nascerA(); } }
-    if (m >= 2) { acumB += dt * 15 * VOL_B / VOL_A; while (acumB >= 1) { acumB--; nascerB(); } }
-
-    var tempo = agora / 1000, sis = sistemas();
-    malha(dt);
-    sis.forEach(function (s, n) { sistema(s, m >= 2, 0.5 + 0.5 * Math.sin(tempo * 4 + n * 2.1)); });
-    ctx.globalCompositeOperation = "lighter";
-    for (var i = particulas.length - 1; i >= 0; i--) {
-      var p = particulas[i]; p.t += dt;
-      if (p.lado === "a") {
-        var k = p.t / p.dur;
-        if (k >= 1) { particulas.splice(i, 1); continue; }
-        var ca = centro("a"), y = -10 + (H + 20) * k, x;
-        var perto = 1 - Math.min(1, Math.abs(y - ca.y) / (H * 0.5));
-        x = (k < 0.5 ? p.x0 : p.x1) + (ca.x - (k < 0.5 ? p.x0 : p.x1)) * suave(perto * 1.25);
-        ponto(x, y, p.r, COR_A, 0.35 + 0.65 * Math.sin(Math.PI * k));
+  // 2. Os dois agentes -----------------------------------------------------
+  var cena = (function () {
+    var cv, ctx, W = 0, H = 0, DPR = 1, R = 40, m = 0;
+    var COR_A = "157,180,200", COR_B = "53,208,247";
+    var particulas = [], faiscas = [], acumA = 0, acumB = 0, PASSOS = AG.passos;
+    function medir() {
+      if (!cv) return;
+      var r = cv.getBoundingClientRect();
+      DPR = Math.min(2, window.devicePixelRatio || 1);
+      W = r.width; H = r.height;
+      cv.width = Math.round(W * DPR); cv.height = Math.round(H * DPR);
+      R = Math.max(22, Math.min(W * 0.1, H * 0.15, 58));
+    }
+    function centro(lado) { return { x: W * (lado === "a" ? 0.25 : 0.75), y: H * 0.5 }; }
+    function suave(v) { v = Math.max(0, Math.min(1, v)); return v * v * (3 - 2 * v); }
+    function nascerA() {
+      var c = centro("a");
+      particulas.push({ lado: "a", t: 0, dur: 1.5 + Math.random() * 0.5,
+        x0: c.x + (Math.random() - 0.5) * W * 0.36, x1: c.x + (Math.random() - 0.5) * W * 0.36, r: 1.6 + Math.random() * 1.2 });
+    }
+    function nascerB() {
+      var c = centro("b");
+      particulas.push({ lado: "b", t: 0, queda: 0.8, trabalho: 5.6 + Math.random() * 0.8, saida: 0.8,
+        x0: c.x + (Math.random() - 0.5) * W * 0.26, desvio: (Math.random() - 0.5) * 0.5, feitos: 0, r: 2.2 });
+    }
+    // Os tres sistemas que o agente de resolucao consulta: pedidos, entrega e politica.
+    function sistemas() {
+      var c = centro("b"), d = R * 2.15;
+      return [-150, -30, 90].map(function (g, i) {
+        var a = g * Math.PI / 180;
+        return { x: c.x + Math.cos(a) * d, y: c.y + Math.sin(a) * d * (i === 2 ? 0.92 : 1), tipo: i };
+      });
+    }
+    function retangulo(x, y, w, h, r) {
+      ctx.beginPath();
+      ctx.moveTo(x + r, y); ctx.arcTo(x + w, y, x + w, y + h, r); ctx.arcTo(x + w, y + h, x, y + h, r);
+      ctx.arcTo(x, y + h, x, y, r); ctx.arcTo(x, y, x + w, y, r); ctx.closePath();
+    }
+    function sistema(s, ativo, pulso) {
+      var r = R * 0.5, u = r * 0.5;
+      ctx.globalAlpha = ativo ? 1 : 0.22;
+      ctx.fillStyle = "#081c33"; ctx.strokeStyle = "rgba(" + COR_B + "," + (0.45 + 0.35 * pulso) + ")"; ctx.lineWidth = 1.5;
+      ctx.beginPath(); ctx.arc(s.x, s.y, r, 0, 6.2832); ctx.fill(); ctx.stroke();
+      ctx.strokeStyle = "rgba(244,249,253,.88)"; ctx.lineWidth = 1.4; ctx.lineJoin = "round"; ctx.lineCap = "round";
+      ctx.beginPath();
+      if (s.tipo === 0) {
+        ctx.ellipse(s.x, s.y - u * 0.7, u, u * 0.38, 0, 0, 6.2832);
+        ctx.moveTo(s.x - u, s.y - u * 0.7); ctx.lineTo(s.x - u, s.y + u * 0.7);
+        ctx.ellipse(s.x, s.y + u * 0.7, u, u * 0.38, 0, Math.PI, 0, true);
+        ctx.lineTo(s.x + u, s.y - u * 0.7);
+        ctx.moveTo(s.x - u, s.y); ctx.ellipse(s.x, s.y, u, u * 0.38, 0, Math.PI, 0, true);
+      } else if (s.tipo === 1) {
+        ctx.moveTo(s.x, s.y - u); ctx.lineTo(s.x + u, s.y - u * 0.45); ctx.lineTo(s.x + u, s.y + u * 0.5);
+        ctx.lineTo(s.x, s.y + u); ctx.lineTo(s.x - u, s.y + u * 0.5); ctx.lineTo(s.x - u, s.y - u * 0.45); ctx.closePath();
+        ctx.moveTo(s.x - u, s.y - u * 0.45); ctx.lineTo(s.x, s.y + u * 0.1); ctx.lineTo(s.x + u, s.y - u * 0.45);
+        ctx.moveTo(s.x, s.y + u * 0.1); ctx.lineTo(s.x, s.y + u);
       } else {
-        var cb = centro("b"), topo = cb.y - R * 0.7;
-        if (p.t < p.queda) {
-          var q = suave(p.t / p.queda);
-          ponto(p.x0 + (cb.x - p.x0) * q, -10 + (topo + 10) * q, p.r, COR_B, 0.9);
-        } else if (p.t < p.queda + p.trabalho) {
-          // Cada passo e uma consulta a um sistema, com retorno ao agente. O traco e o
-          // historico que o agente carrega: mais espesso a cada passo.
-          var f = (p.t - p.queda) / p.trabalho * PASSOS_B, passo = Math.floor(f), ida = Math.sin(Math.PI * (f - passo));
-          if (passo > p.feitos) { p.feitos = passo; faiscas.push({ x: cb.x, y: cb.y + R * 0.9, t: 0, peso: passo }); }
-          var alvoS = sis[passo % 3], px = cb.x + (alvoS.x - cb.x) * ida, py = cb.y + (alvoS.y - cb.y) * ida;
-          px += -(alvoS.y - cb.y) * p.desvio * ida * (1 - ida) * 1.6; py += (alvoS.x - cb.x) * p.desvio * ida * (1 - ida) * 1.6;
-          ctx.strokeStyle = "rgba(" + COR_B + "," + (0.1 + f * 0.03) + ")"; ctx.lineWidth = 1 + f * 0.5; ctx.lineCap = "round";
-          ctx.beginPath(); ctx.moveTo(cb.x, cb.y); ctx.lineTo(px, py); ctx.stroke();
-          ponto(px, py, p.r + f * 0.3, COR_B, 1);
+        ctx.moveTo(s.x - u * 0.75, s.y - u); ctx.lineTo(s.x + u * 0.3, s.y - u); ctx.lineTo(s.x + u * 0.75, s.y - u * 0.5);
+        ctx.lineTo(s.x + u * 0.75, s.y + u); ctx.lineTo(s.x - u * 0.75, s.y + u); ctx.closePath();
+        ctx.moveTo(s.x - u * 0.35, s.y - u * 0.15); ctx.lineTo(s.x + u * 0.35, s.y - u * 0.15);
+        ctx.moveTo(s.x - u * 0.35, s.y + u * 0.35); ctx.lineTo(s.x + u * 0.35, s.y + u * 0.35);
+      }
+      ctx.stroke();
+      ctx.globalAlpha = 1;
+    }
+    // O agente e um personagem: cabeca, antena e olhos. O de classificacao trabalha
+    // tranquilo; o de resolucao olha para o sistema consultado e o brilho acompanha a carga.
+    function agente(lado, ativo, t) {
+      var c = centro(lado), cor = lado === "a" ? COR_A : COR_B, b = lado === "b";
+      var carga = b && ativo ? 0.5 + 0.5 * Math.sin(t * 5) : 0;
+      ctx.globalAlpha = ativo ? 1 : 0.28;
+      var g = ctx.createRadialGradient(c.x, c.y, R * 0.2, c.x, c.y, R * (2 + carga * 0.35));
+      g.addColorStop(0, "rgba(" + cor + "," + (0.24 + carga * 0.14) + ")"); g.addColorStop(1, "rgba(" + cor + ",0)");
+      ctx.fillStyle = g; ctx.beginPath(); ctx.arc(c.x, c.y, R * 2.4, 0, 6.2832); ctx.fill();
+      var w = R * 1.9, h = R * 1.55, x = c.x - w / 2, y = c.y - h / 2 + R * 0.1;
+      ctx.strokeStyle = "rgba(" + cor + ",1)"; ctx.lineWidth = 2.2; ctx.lineCap = "round";
+      ctx.beginPath(); ctx.moveTo(c.x, y); ctx.lineTo(c.x, y - R * 0.38); ctx.stroke();
+      ctx.fillStyle = "rgba(" + cor + ",1)";
+      ctx.beginPath(); ctx.arc(c.x, y - R * 0.46, R * (0.1 + (ativo ? 0.03 * Math.sin(t * (b ? 9 : 3)) : 0)), 0, 6.2832); ctx.fill();
+      retangulo(x - R * 0.16, c.y - R * 0.12, R * 0.16, R * 0.5, R * 0.06); ctx.fill();
+      retangulo(x + w, c.y - R * 0.12, R * 0.16, R * 0.5, R * 0.06); ctx.fill();
+      ctx.fillStyle = "#0a2038"; retangulo(x, y, w, h, R * 0.42); ctx.fill(); ctx.stroke();
+      var pisca = (t + (b ? 1.3 : 0)) % 3.6 < 0.13 ? 0.12 : 1, dx = 0, dy = 0;
+      if (b && ativo) { var alvo = sistemas()[Math.floor(t * 1.4) % 3], d = Math.hypot(alvo.x - c.x, alvo.y - c.y); dx = (alvo.x - c.x) / d * R * 0.1; dy = (alvo.y - c.y) / d * R * 0.08; }
+      ctx.fillStyle = "rgba(" + cor + ",1)";
+      [-1, 1].forEach(function (s) {
+        ctx.beginPath(); ctx.ellipse(c.x + s * R * 0.42 + dx, c.y + R * 0.02 + dy, R * 0.17, R * 0.2 * pisca, 0, 0, 6.2832); ctx.fill();
+      });
+      ctx.strokeStyle = "rgba(244,249,253,.8)"; ctx.lineWidth = 1.8;
+      ctx.beginPath();
+      if (b && ativo) ctx.ellipse(c.x, c.y + R * 0.52, R * 0.12, R * (0.05 + carga * 0.07), 0, 0, 6.2832);
+      else ctx.arc(c.x, c.y + R * 0.38, R * 0.22, 0.15 * Math.PI, 0.85 * Math.PI);
+      ctx.stroke();
+      ctx.globalAlpha = 1;
+    }
+    function ponto(x, y, r, cor, alfa) {
+      ctx.fillStyle = "rgba(" + cor + "," + (alfa * 0.18) + ")";
+      ctx.beginPath(); ctx.arc(x, y, r * 3.2, 0, 6.2832); ctx.fill();
+      ctx.fillStyle = "rgba(" + cor + "," + alfa + ")";
+      ctx.beginPath(); ctx.arc(x, y, r, 0, 6.2832); ctx.fill();
+    }
+    function quadro(tempo, dt) {
+      if (!cv || !cv.isConnected) return;
+      if (!W) medir();
+      ctx.setTransform(DPR, 0, 0, DPR, 0, 0);
+      ctx.clearRect(0, 0, W, H);
+      // A proporcao de nascimento e a dos volumes: 40.000 para 9.000.
+      if (!reduzido && m >= 1) { acumA += dt * 15; while (acumA >= 1) { acumA--; nascerA(); } }
+      if (!reduzido && m >= 2) { acumB += dt * 15 * AG.volume / CL.volume; while (acumB >= 1) { acumB--; nascerB(); } }
+      var sis = sistemas();
+      sis.forEach(function (s, n) { sistema(s, m >= 2, 0.5 + 0.5 * Math.sin(tempo * 4 + n * 2.1)); });
+      ctx.globalCompositeOperation = "lighter";
+      for (var i = particulas.length - 1; i >= 0; i--) {
+        var p = particulas[i]; p.t += dt;
+        if (p.lado === "a") {
+          var k = p.t / p.dur;
+          if (k >= 1) { particulas.splice(i, 1); continue; }
+          var ca = centro("a"), y = -10 + (H + 20) * k, base = k < 0.5 ? p.x0 : p.x1;
+          var perto = 1 - Math.min(1, Math.abs(y - ca.y) / (H * 0.5));
+          ponto(base + (ca.x - base) * suave(perto * 1.25), y, p.r, COR_A, 0.35 + 0.65 * Math.sin(Math.PI * k));
         } else {
-          var s = (p.t - p.queda - p.trabalho) / p.saida;
-          if (s >= 1) { particulas.splice(i, 1); continue; }
-          ponto(cb.x, cb.y + (H + 10 - cb.y) * suave(s), p.r + 2.4, COR_B, 1 - s);
+          var cb = centro("b"), topo = cb.y - R * 0.7;
+          if (p.t < p.queda) {
+            var q = suave(p.t / p.queda);
+            ponto(p.x0 + (cb.x - p.x0) * q, -10 + (topo + 10) * q, p.r, COR_B, 0.9);
+          } else if (p.t < p.queda + p.trabalho) {
+            // Cada passo e uma consulta a um sistema, com retorno ao agente. O traco e o
+            // historico que o agente carrega: mais espesso a cada passo.
+            var f = (p.t - p.queda) / p.trabalho * PASSOS, passo = Math.floor(f), ida = Math.sin(Math.PI * (f - passo));
+            if (passo > p.feitos) { p.feitos = passo; faiscas.push({ x: cb.x, y: cb.y + R * 0.9, t: 0, peso: passo }); }
+            var al = sis[passo % 3], px = cb.x + (al.x - cb.x) * ida, py = cb.y + (al.y - cb.y) * ida;
+            px += -(al.y - cb.y) * p.desvio * ida * (1 - ida) * 1.6; py += (al.x - cb.x) * p.desvio * ida * (1 - ida) * 1.6;
+            ctx.strokeStyle = "rgba(" + COR_B + "," + (0.1 + f * 0.03) + ")"; ctx.lineWidth = 1 + f * 0.5; ctx.lineCap = "round";
+            ctx.beginPath(); ctx.moveTo(cb.x, cb.y); ctx.lineTo(px, py); ctx.stroke();
+            ponto(px, py, p.r + f * 0.3, COR_B, 1);
+          } else {
+            var s = (p.t - p.queda - p.trabalho) / p.saida;
+            if (s >= 1) { particulas.splice(i, 1); continue; }
+            ponto(cb.x, cb.y + (H + 10 - cb.y) * suave(s), p.r + 2.4, COR_B, 1 - s);
+          }
         }
       }
+      // Cada passo concluido gera custo: a faisca desce ate o valor do agente.
+      for (var j = faiscas.length - 1; j >= 0; j--) {
+        var z = faiscas[j]; z.t += dt / 0.7;
+        if (z.t >= 1) { faiscas.splice(j, 1); continue; }
+        ponto(z.x + Math.sin(z.t * 9 + j) * 5, z.y + (H - z.y) * z.t * z.t, 1.3 + z.peso * 0.22, "235,250,255", 1 - z.t);
+      }
+      ctx.globalCompositeOperation = "source-over";
+      agente("a", m >= 1, tempo); agente("b", m >= 2, tempo);
     }
-    // Cada passo concluido gera custo: a faisca desce ate o valor do agente.
-    for (var j = faiscas.length - 1; j >= 0; j--) {
-      var z = faiscas[j]; z.t += dt / 0.7;
-      if (z.t >= 1) { faiscas.splice(j, 1); continue; }
-      ponto(z.x + Math.sin(z.t * 9 + j) * 5, z.y + (H - z.y) * z.t * z.t, 1.3 + z.peso * 0.22, "235,250,255", 1 - z.t);
+    return {
+      iniciar: function (canvas) { cv = canvas; ctx = cv.getContext("2d"); particulas.length = 0; faiscas.length = 0; W = 0; medir(); },
+      momento: function (n) { m = n; requestAnimationFrame(medir); },
+      medir: medir, quadro: quadro
+    };
+  })();
+
+  telas.push({
+    momentos: [
+      { t: "Um assistente, <em>dois agentes</em>",
+        l: "O agente de classificação recebe <strong>" + num(CL.volume) + " mensagens por mês</strong>. Cada mensagem passa por ele <strong>uma única vez</strong>." },
+      { t: "Menos solicitações, <em>mais passos</em>",
+        l: "O agente de resolução recebe <strong>" + num(AG.volume) + " solicitações</strong>. Para responder, consulta pedidos, entrega e política em <strong>" + AG.passos + " passos</strong>, e a cada passo lê novamente todo o histórico." },
+      { t: "O volume não prevê <em>o custo</em>",
+        l: "O agente com <strong>menos solicitações</strong> responde por <strong>" + Math.round(D.participacao.agente) + "% do custo</strong>. O que define o custo é a orquestração." }
+    ],
+    html: '<div class="palco"><canvas id="cv" role="img" aria-label="Animação: muitas mensagens atravessam o agente de classificação uma única vez; poucas solicitações entram no agente de resolução, que consulta três sistemas em vários passos."></canvas></div>' +
+      '<div class="duas">' +
+      '<div class="cartao ag a" id="agA"><p class="nome">Agente de classificação</p><p class="vol"><strong id="volA">0</strong>solicitações por mês</p><p class="valor aco"><small>US$</small><span id="cA">0</span></p></div>' +
+      '<div class="cartao ag b apagado" id="agB"><p class="nome">Agente de resolução</p><p class="vol"><strong id="volB">0</strong>solicitações por mês</p><p class="valor"><small>US$</small><span id="cB">0</span></p></div></div>' +
+      '<div class="faixa" id="faixa"><p class="rot">Participação no custo mensal do assistente</p>' +
+      '<div class="barra"><i class="sa" data-w="' + D.participacao.classificacao + '"></i><i class="sb" data-w="' + D.participacao.agente + '">' + Math.round(D.participacao.agente) + '%</i><i class="sn" data-w="' + (100 - D.participacao.classificacao - D.participacao.agente).toFixed(1) + '"></i></div>' +
+      '<ul class="chaves"><li style="--cor: var(--a)">Classificação ' + n1.format(D.participacao.classificacao) + '%</li><li style="--cor: var(--b)">Resolução ' + n1.format(D.participacao.agente) + '%</li><li style="--cor: var(--neutro)">Demais componentes</li></ul></div>',
+    entrar: function () { cena.iniciar($("cv")); },
+    momento: function (m) {
+      cena.momento(m);
+      $("agA").classList.add("ativo");
+      animar($("volA"), CL.volume, 1600, num); animar($("cA"), CL.custo, 2400, num);
+      $("agB").classList.toggle("apagado", m < 2); $("agB").classList.toggle("ativo", m >= 2);
+      animar($("volB"), m >= 2 ? AG.volume : 0, 1600, num); animar($("cB"), m >= 2 ? AG.custo : 0, 3800, num);
+      $("faixa").classList.toggle("visivel", m >= 3);
+      [].forEach.call(document.querySelectorAll("#faixa .barra i"), function (s) { s.style.width = m >= 3 ? s.dataset.w + "%" : "0"; });
+    },
+    quadro: cena.quadro
+  });
+
+  // 3. Por que: o historico cresce -----------------------------------------
+  telas.push({
+    momentos: [
+      { t: "A cada passo, <em>o histórico cresce</em>",
+        l: "O modelo <strong>não guarda memória</strong> entre um passo e outro. A cada passo, o agente envia novamente as instruções e <strong>todo o histórico acumulado</strong>." },
+      { t: "Dez passos, <em>mais que o dobro</em>",
+        l: "Dez passos somam <strong>" + num(D.inflacao.total) + " tokens</strong> lidos. A estimativa simples, que considera o mesmo volume em todos os passos, prevê <strong>" + num(D.inflacao.simples) + "</strong>." }
+    ],
+    html: (function () {
+      var max = Math.max.apply(null, D.inflacao.por_passo), base = D.inflacao.por_passo[0];
+      var cols = D.inflacao.por_passo.map(function (v, i) {
+        return '<div class="c"><span class="h" data-h="' + ((v - base) / max * 100) + '"></span><span class="f" data-h="' + (base / max * 100) + '"></span></div>';
+      }).join("");
+      return '<div class="colunas" id="cols">' + cols + '<div class="lin" style="bottom:' + (base / max * 100) + '%"><b>estimativa simples</b></div></div>' +
+        '<div class="eixo">' + D.inflacao.por_passo.map(function (_, i) { return "<span>" + (i + 1) + "</span>"; }).join("") + "</div>" +
+        '<ul class="chaves"><li style="--cor: var(--a)">Instruções e pergunta</li><li style="--cor: var(--b)">Histórico acumulado</li></ul>' +
+        '<div class="duas" id="tot"><div class="cartao"><p class="rot">Tokens lidos</p><p class="valor" style="font-size:clamp(26px,8vw,40px)"><span id="tReal">0</span></p><p class="sub">em dez passos</p></div>' +
+        '<div class="cartao"><p class="rot">Estimativa simples</p><p class="valor aco" style="font-size:clamp(26px,8vw,40px)"><span id="tSimples">0</span></p><p class="sub">dez vezes o primeiro passo</p></div></div>';
+    })(),
+    entrar: function () {
+      [].forEach.call(document.querySelectorAll("#cols .c"), function (c, i) {
+        [].forEach.call(c.children, function (s) { s.style.transitionDelay = (i * 0.16) + "s"; });
+      });
+      setTimeout(function () { [].forEach.call(document.querySelectorAll("#cols span"), function (s) { s.style.height = s.dataset.h + "%"; }); }, 60);
+    },
+    momento: function (m) {
+      $("tot").classList.toggle("apagado", m < 2);
+      animar($("tReal"), m >= 2 ? D.inflacao.total : 0, 1600, num);
+      animar($("tSimples"), m >= 2 ? D.inflacao.simples : 0, 1600, num);
     }
-    ctx.globalCompositeOperation = "source-over";
-    agente("a", m >= 1, tempo); agente("b", m >= 2, tempo);
-    if (!reduzido) requestAnimationFrame(quadro);
+  });
+
+  // 4. O modelo adequado -----------------------------------------------------
+  telas.push({
+    momentos: [
+      { t: "Cada papel no <em>modelo adequado</em>",
+        l: "A classificação é uma tarefa simples. No modelo de maior capacidade, custaria <strong>mais de três vezes</strong> o valor, sem ganho na resposta." },
+      { t: "O menor preço nem sempre <em>é o adequado</em>",
+        l: "A resolução decide quais sistemas consultar e o que fazer com cada resultado. No modelo de menor custo o valor cai, mas <strong>um erro em um passo compromete os seguintes</strong>." }
+    ],
+    html: '<p class="rot" style="text-align:center;margin:0">Preço por milhão de tokens: entrada / saída</p>' +
+      '<div class="niveis"><div class="nivel"><b>US$ ' + D.modelos["Claude Haiku 4.5"].join(" / ") + '</b>menor custo</div>' +
+      '<div class="nivel"><b>US$ ' + D.modelos["Claude Sonnet 5"].join(" / ") + '</b>intermediário</div>' +
+      '<div class="nivel m3"><b>US$ ' + D.modelos["Claude Opus 5"].join(" / ") + '</b>maior capacidade</div></div>' +
+      '<div class="cartao papel" id="p1"><h2>Agente de classificação</h2>' +
+      '<div class="opc errada"><span>Modelo de maior capacidade<small>acima do que a tarefa exige</small></span><b>' + usd(CL.custo_modelo_maior) + '</b></div>' +
+      '<div class="opc certa"><span>Modelo de menor custo<small>adequado</small></span><b>' + usd(CL.custo) + '</b></div></div>' +
+      '<div class="cartao papel" id="p2"><h2>Agente de resolução</h2>' +
+      '<div class="opc errada"><span>Modelo de menor custo<small>abaixo do que a tarefa exige</small></span><b>' + usd(AG.custo_modelo_menor) + '</b></div>' +
+      '<div class="opc certa"><span>Modelo de maior capacidade<small>adequado</small></span><b>' + usd(AG.custo) + '</b></div></div>' +
+      '<p class="nota">Valores mensais, com preços de referência de três modelos Claude.</p>',
+    momento: function (m) { $("p2").classList.toggle("apagado", m < 2); }
+  });
+
+  // 5. Cache -----------------------------------------------------------------
+  telas.push({
+    momentos: [
+      { t: "A parte fixa <em>lida do cache</em>",
+        l: "As instruções do agente são <strong>as mesmas em todos os passos</strong>. Com o cache, essa parte fixa é lida por <strong>um décimo do preço</strong>. Ative o cache para comparar." },
+      { t: "O cache tem <em>um tamanho mínimo</em>",
+        l: "Cada modelo exige um tamanho mínimo de prompt para o cache. Abaixo dele, <strong>o cache não é aplicado e a API não informa</strong>: a estimativa indica economia que não ocorre." }
+    ],
+    html: '<p class="rot" style="text-align:center;margin:0">O que o agente lê em cada passo</p>' +
+      '<div class="prompt" id="prompt"><span class="fixa" id="fixa">Instruções fixas · ' + num(AG.prefixo) + ' tokens</span><span class="hist">Histórico</span></div>' +
+      '<button type="button" class="chave sem-toque" id="chCache" aria-pressed="false"><span>Cache das instruções</span><i></i></button>' +
+      '<div class="cartao" style="text-align:center"><p class="rot">Custo mensal do agente de resolução</p>' +
+      '<p class="valor"><small>US$</small><span id="vCache">0</span></p><p class="sub" id="sCache"></p></div>' +
+      '<div class="duas" id="pisos"><div class="cartao"><p class="rot">Modelo de menor custo</p><p class="valor aco" style="font-size:26px">' + num(D.piso_cache["Claude Haiku 4.5"]) + '</p><p class="sub">tokens no mínimo</p></div>' +
+      '<div class="cartao"><p class="rot">Modelo de maior capacidade</p><p class="valor aco" style="font-size:26px">' + num(D.piso_cache["Claude Opus 5"]) + '</p><p class="sub">tokens no mínimo</p></div></div>',
+    entrar: function () {
+      var ligado = false;
+      function aplicar() {
+        $("chCache").setAttribute("aria-pressed", String(ligado));
+        $("prompt").classList.toggle("cache", ligado);
+        $("fixa").textContent = ligado ? "Instruções fixas · lidas do cache" : "Instruções fixas · " + num(AG.prefixo) + " tokens";
+        animar($("vCache"), ligado ? AG.custo : AG.sem_cache, 900, num);
+        $("sCache").textContent = ligado ? "com cache: menos da metade" : "sem cache: preço integral em todos os passos";
+      }
+      $("chCache").addEventListener("click", function () { ligado = !ligado; aplicar(); });
+      aplicar();
+    },
+    momento: function (m) { $("pisos").classList.toggle("apagado", m < 2); }
+  });
+
+  // 6. Menos passos e historico resumido ---------------------------------------
+  telas.push({
+    momentos: [
+      { t: "O limite de passos <em>tem preço</em>",
+        l: "O limite de passos é uma decisão de arquitetura. De 8 para 16 passos, o custo <strong>triplica</strong>, porque o histórico lido também cresce. Altere o limite para comparar." },
+      { t: "Histórico <em>resumido</em>",
+        l: "Resumir o histórico entre os passos reduz o que é lido novamente. O resumo tem custo próprio: no exemplo, <strong>" + usd(D.compressor) + " por mês</strong> em um modelo de menor custo." }
+    ],
+    html: '<div class="cartao" style="text-align:center"><p class="rot">Custo mensal do agente de resolução</p>' +
+      '<p class="valor"><small>US$</small><span id="vPassos">0</span></p><p class="sub" id="sPassos"></p></div>' +
+      '<div class="colunas" id="colsP" style="max-height:170px">' + D.passos.normal.map(function () { return '<div class="c simples"><span class="h"></span></div>'; }).join("") + "</div>" +
+      '<div class="eixo">' + D.passos.normal.map(function (_, i) { return "<span>" + ((i + 1) % 2 === 0 ? i + 1 : "") + "</span>"; }).join("") + "</div>" +
+      '<label class="controle sem-toque">Limite de passos: <b id="nPassos"></b><input type="range" id="rPassos" min="1" max="16" step="1" value="' + AG.passos + '"></label>' +
+      '<button type="button" class="chave sem-toque" id="chResumo" aria-pressed="false"><span>Histórico resumido entre os passos</span><i></i></button>',
+    entrar: function () {
+      var resumo = false, max = D.passos.normal[15];
+      function aplicar() {
+        var n = Number($("rPassos").value), serie = resumo ? D.passos.resumido : D.passos.normal;
+        $("nPassos").textContent = n;
+        $("chResumo").setAttribute("aria-pressed", String(resumo));
+        animar($("vPassos"), serie[n - 1], 500, num);
+        $("sPassos").textContent = n + (n === 1 ? " passo" : " passos") + (resumo ? ", com histórico resumido" : "");
+        [].forEach.call(document.querySelectorAll("#colsP .c"), function (c, i) {
+          c.classList.toggle("sel", i === n - 1);
+          c.firstChild.style.height = (serie[i] / max * 100) + "%";
+        });
+      }
+      $("rPassos").addEventListener("input", aplicar);
+      $("chResumo").addEventListener("click", function () { resumo = !resumo; aplicar(); });
+      this._resumo = function (v) { resumo = v; aplicar(); };
+      setTimeout(aplicar, 60);
+    },
+    momento: function (m) { $("chResumo").classList.toggle("apagado", m < 2); }
+  });
+
+  // 7. Cascata -----------------------------------------------------------------
+  telas.push({
+    momentos: [
+      { t: "O modelo de menor custo <em>primeiro</em>",
+        l: "Toda solicitação passa primeiro pelo modelo de menor custo. Apenas as que ele <strong>não resolve</strong> seguem para o modelo de maior capacidade. Altere a parcela resolvida." },
+      { t: "Economia ou <em>custo adicional</em>",
+        l: "As solicitações não resolvidas pagam <strong>os dois modelos</strong>. Abaixo de <strong>" + pct(D.cascata.equilibrio) + "</strong> de resolução, o primeiro nível aumenta o custo. A resposta dele deve ser <strong>validada por código</strong>." }
+    ],
+    html: '<div class="cartao" id="cCasc" style="text-align:center"><p class="rot">Custo mensal com primeiro nível</p>' +
+      '<p class="valor"><small>US$</small><span id="vCasc">0</span></p><p class="sub" id="sCasc"></p></div>' +
+      '<div class="grafico" id="gCasc"></div>' +
+      '<label class="controle sem-toque">Parcela resolvida pelo modelo de menor custo: <b id="nCasc"></b><input type="range" id="rCasc" min="0" max="100" step="1" value="60"></label>',
+    entrar: function () {
+      var W = 320, H = 150, e = 34, d = 312, topo = 12, pe = 122, C = D.cascata, max = C.curva[0] * 1.04;
+      function x(p) { return e + (d - e) * p; }
+      function y(v) { return pe - (pe - topo) * v / max; }
+      var svg = '<svg viewBox="0 0 ' + W + " " + H + '" role="img" aria-label="Custo mensal conforme a parcela resolvida pelo modelo de menor custo">' +
+        '<line class="eixox" x1="' + e + '" x2="' + d + '" y1="' + pe + '" y2="' + pe + '"/>' +
+        '<line class="direto" x1="' + e + '" x2="' + d + '" y1="' + y(C.direto) + '" y2="' + y(C.direto) + '"/>' +
+        '<text class="td" x="' + d + '" y="' + (y(C.direto) - 5) + '" text-anchor="end">somente o modelo de maior capacidade</text>' +
+        '<line class="marco" x1="' + x(C.equilibrio) + '" x2="' + x(C.equilibrio) + '" y1="' + topo + '" y2="' + pe + '"/>' +
+        '<text class="tm" x="' + (x(C.equilibrio) + 5) + '" y="' + (pe - 6) + '">equilíbrio ' + pct(C.equilibrio) + "</text>" +
+        '<path class="curva" d="M' + x(0) + "," + y(C.curva[0]) + "L" + x(1) + "," + y(C.curva[100]) + '"/>' +
+        '<circle id="pCasc" r="6" cx="0" cy="0"/>' +
+        [0, 0.5, 1].map(function (p) { return '<text x="' + x(p) + '" y="' + (pe + 14) + '" text-anchor="middle">' + pct(p) + "</text>"; }).join("") +
+        '<text x="' + (e - 5) + '" y="' + (y(C.curva[0]) + 3) + '" text-anchor="end">' + semMoeda(C.curva[0]) + "</text>" +
+        '<text x="' + (e - 5) + '" y="' + (pe + 3) + '" text-anchor="end">0</text></svg>';
+      $("gCasc").innerHTML = svg;
+      function aplicar() {
+        var p = Number($("rCasc").value), v = C.curva[p], dif = (C.direto - v) / C.direto;
+        $("nCasc").textContent = p + "%";
+        animar($("vCasc"), v, 400, num);
+        $("cCasc").classList.toggle("perda", dif < 0);
+        $("sCasc").textContent = dif >= 0 ? "redução de " + pct(dif) + " em relação a " + usd(C.direto) : "aumento de " + pct(-dif) + " em relação a " + usd(C.direto);
+        $("pCasc").setAttribute("cx", x(p / 100)); $("pCasc").setAttribute("cy", y(v));
+      }
+      $("rCasc").addEventListener("input", aplicar);
+      aplicar();
+    }
+  });
+
+  // 8. O efeito somado ---------------------------------------------------------
+  telas.push({
+    momentos: [
+      { t: "O efeito <em>dos ajustes somados</em>",
+        l: "O mesmo agente e as mesmas <strong>" + num(AG.volume) + " solicitações</strong>. O <strong>custo por solicitação resolvida</strong> é o valor a comparar com o custo do mesmo atendimento realizado por uma pessoa." }
+    ],
+    html: '<div class="linhas" id="lin8">' +
+      '<div class="lh" data-w="100"><p><span>Sem cache</span><b>' + usd(AG.sem_cache) + '</b></p><i></i><small>' + usd(AG.sem_cache / AG.volume) + ' por solicitação resolvida</small></div>' +
+      '<div class="lh" data-w="' + (AG.custo / AG.sem_cache * 100) + '"><p><span>Com cache</span><b>' + usd(AG.custo) + '</b></p><i></i><small>' + usd(AG.custo / AG.volume) + ' por solicitação resolvida</small></div>' +
+      '<div class="lh fim" data-w="' + (D.somado.custo / AG.sem_cache * 100) + '"><p><span>Com todos os ajustes</span><b>' + usd(D.somado.custo) + '</b></p><i></i><small>' + usd(D.somado.por_solicitacao) + ' por solicitação resolvida</small></div></div>' +
+      '<ul class="ajustes"><li>Cache das instruções</li><li>Limite de 5 passos</li><li>Histórico resumido</li><li>Primeiro nível com 60%</li></ul>' +
+      '<p class="nota">Valores mensais do agente de resolução. O limite de passos e a parcela resolvida pelo primeiro nível dependem da tarefa e devem ser medidos em um piloto.</p>',
+    entrar: function () {
+      setTimeout(function () {
+        [].forEach.call(document.querySelectorAll("#lin8 .lh"), function (l, i) { l.querySelector("i").style.transitionDelay = (i * 0.45) + "s"; l.querySelector("i").style.width = l.dataset.w + "%"; });
+      }, 80);
+    }
+  });
+
+  // 9. O livro e o codigo ---------------------------------------------------------
+  telas.push({
+    momentos: [
+      { t: "Para ir <em>além do cálculo</em>",
+        l: "<strong>Construindo Agentes Inteligentes</strong>: Skills, Automação e Economia de Tokens. Esta apresentação mostra o cálculo; o livro apresenta o método." }
+    ],
+    html: '<div class="livros"><img src="capa-pt.jpg" alt="Capa do livro Construindo Agentes Inteligentes, edição em português" width="560" height="831">' +
+      '<img src="capa-en.jpg" alt="Capa do livro Building Intelligent Agents, edição em inglês" width="560" height="838"></div>' +
+      '<div class="links">' +
+      '<a class="dest sem-toque" href="https://a.co/d/0c4r76Nb" target="_blank" rel="noopener">Edição em português</a>' +
+      '<a class="dest sem-toque" href="https://a.co/d/0eeBrlXg" target="_blank" rel="noopener">English edition</a>' +
+      '<a class="sem-toque" href="/custo-de-agentes/">Calculadora</a>' +
+      '<a class="sem-toque" href="https://github.com/julianamarialop/agent-cost-math" target="_blank" rel="noopener">Código aberto</a>' +
+      '<a class="larga sem-toque" href="https://www.linkedin.com/in/julianamarialopes/" target="_blank" rel="noopener">Juliana Maria Lopes no LinkedIn</a></div>'
+  });
+
+  // ================================================================== navegacao
+  var atual = -1, mom = 1;
+  function ir(i, m) {
+    i = Math.max(0, Math.min(telas.length - 1, i));
+    var tela = telas[i], nova = i !== atual;
+    m = Math.max(1, Math.min(tela.momentos.length, m));
+    if (nova) {
+      atual = i;
+      var corpo = $("corpo");
+      corpo.innerHTML = tela.html;
+      corpo.style.animation = "none"; void corpo.offsetWidth; corpo.style.animation = "";
+      if (tela.entrar) tela.entrar();
+      try { history.replaceState(null, "", "#" + (i + 1)); } catch (e) { location.hash = String(i + 1); }
+    }
+    mom = m;
+    $("num").textContent = i + 1;
+    $("titulo").innerHTML = tela.momentos[m - 1].t;
+    $("legenda").innerHTML = tela.momentos[m - 1].l;
+    if (tela.momento) tela.momento(m);
+    $("ant").disabled = i === 0 && m === 1;
+    var fim = i === telas.length - 1 && m === tela.momentos.length;
+    $("prox").disabled = fim;
+    $("onde").textContent = (i + 1) + " de " + telas.length;
+    $("pontos").innerHTML = tela.momentos.length > 1 ? tela.momentos.map(function (_, k) { return '<i class="' + (k === m - 1 ? "on" : "") + '"></i>'; }).join("") : "";
+  }
+  function avancar() { if (mom < telas[atual].momentos.length) ir(atual, mom + 1); else if (atual < telas.length - 1) ir(atual + 1, 1); }
+  function anterior() { if (mom > 1) ir(atual, mom - 1); else if (atual > 0) ir(atual - 1, telas[atual - 1].momentos.length); }
+
+  $("prox").addEventListener("click", function (e) { e.stopPropagation(); avancar(); });
+  $("ant").addEventListener("click", function (e) { e.stopPropagation(); anterior(); });
+  $("tela").addEventListener("click", function (e) {
+    if (e.target.closest(".sem-toque, a, button, input, label")) return;
+    avancar();
+  });
+  document.addEventListener("keydown", function (e) {
+    if (e.target && e.target.tagName === "INPUT") return;
+    if (e.key === "ArrowRight" || e.key === " " || e.key === "PageDown") { e.preventDefault(); avancar(); }
+    if (e.key === "ArrowLeft" || e.key === "PageUp") { e.preventDefault(); anterior(); }
+  });
+  var x0 = null, y0 = null;
+  $("tela").addEventListener("touchstart", function (e) {
+    if (e.target.closest("input")) { x0 = null; return; }
+    x0 = e.touches[0].clientX; y0 = e.touches[0].clientY;
+  }, { passive: true });
+  $("tela").addEventListener("touchend", function (e) {
+    if (x0 === null) return;
+    var dx = e.changedTouches[0].clientX - x0, dy = e.changedTouches[0].clientY - y0; x0 = null;
+    if (Math.abs(dx) > 60 && Math.abs(dx) > Math.abs(dy) * 1.5) { e.preventDefault(); if (dx < 0) avancar(); else anterior(); }
+  });
+  window.addEventListener("hashchange", function () {
+    var n = parseInt(location.hash.slice(1), 10);
+    if (n && n - 1 !== atual) ir(n - 1, 1);
+  });
+  window.addEventListener("resize", function () { cena.medir(); medirMalha(); });
+
+  // ================================================== malha de rede ao fundo
+  // Como o globo da capa do livro: pontos ligados por linhas, em movimento lento.
+  var mcv = $("malha"), mctx = mcv.getContext("2d"), MW = 0, MH = 0, nos = [];
+  function medirMalha() {
+    var dpr = Math.min(2, window.devicePixelRatio || 1);
+    MW = window.innerWidth; MH = window.innerHeight;
+    mcv.width = Math.round(MW * dpr); mcv.height = Math.round(MH * dpr);
+    mctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+  }
+  function malha(dt) {
+    if (!nos.length) for (var n = 0; n < 40; n++) nos.push({ x: Math.random(), y: Math.random(), vx: (Math.random() - 0.5) * 0.012, vy: (Math.random() - 0.5) * 0.012 });
+    var lim = Math.max(80, MW * 0.2);
+    mctx.clearRect(0, 0, MW, MH); mctx.lineWidth = 1;
+    for (var a = 0; a < nos.length; a++) {
+      var p = nos[a]; p.x += p.vx * dt; p.y += p.vy * dt;
+      if (p.x < 0 || p.x > 1) p.vx *= -1;
+      if (p.y < 0 || p.y > 1) p.vy *= -1;
+      for (var b = a + 1; b < nos.length; b++) {
+        var q = nos[b], d = Math.hypot((p.x - q.x) * MW, (p.y - q.y) * MH);
+        if (d < lim) { mctx.strokeStyle = "rgba(53,208,247," + (0.1 * (1 - d / lim)) + ")"; mctx.beginPath(); mctx.moveTo(p.x * MW, p.y * MH); mctx.lineTo(q.x * MW, q.y * MH); mctx.stroke(); }
+      }
+      mctx.fillStyle = "rgba(120,220,250,.26)"; mctx.beginPath(); mctx.arc(p.x * MW, p.y * MH, 1.4, 0, 6.2832); mctx.fill();
+    }
   }
 
-  var inicio = parseInt(new URLSearchParams(location.search).get("m"), 10) || 1;
-  momento(1); if (inicio > 1) { momento(2); } if (inicio > 2) { momento(3); }
-  medir();
-  if (reduzido) { quadro(0); } else { requestAnimationFrame(function (t) { ultimo = t; quadro(t); }); }
+  var ultimo = 0;
+  function ciclo(agora) {
+    var dt = Math.min(0.05, (agora - ultimo) / 1000 || 0); ultimo = agora;
+    malha(dt);
+    var tela = telas[atual];
+    if (tela && tela.quadro) tela.quadro(agora / 1000, dt);
+    requestAnimationFrame(ciclo);
+  }
+
+  // Inicio: #3 abre a tela 3; ?m=2 abre no segundo momento (usado na verificacao).
+  var hi = parseInt(location.hash.slice(1), 10) || 1;
+  var mi = parseInt(new URLSearchParams(location.search).get("m"), 10) || 1;
+  medirMalha();
+  ir(hi - 1, 1);
+  for (var k = 2; k <= mi; k++) ir(atual, k);
+  requestAnimationFrame(function (t) { ultimo = t; ciclo(t); });
 })();
 </script>
 </body>
