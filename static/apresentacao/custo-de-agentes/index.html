@@ -85,6 +85,18 @@
   .autora { margin: 6px 0 0; font-size: 16px; font-weight: 700; }
   .autora span { display: block; font-size: 12.5px; font-weight: 500; color: var(--texto-3); }
 
+  /* tela de apresentacao da autora */
+  .perfil { display: grid; justify-items: center; gap: 8px; text-align: center; }
+  .foto { width: clamp(96px, 28vw, 140px); height: clamp(96px, 28vw, 140px); flex: none; border-radius: 50%; object-fit: cover; border: 3px solid var(--b); box-shadow: 0 0 0 6px rgb(53 208 247 / 12%), 0 0 40px rgb(53 208 247 / 40%); }
+  .perfil h2 { margin: 2px 0 0; font-size: clamp(20px, 5.6vw, 26px); font-weight: 800; letter-spacing: .01em; }
+  .cargo { margin: 0; font-size: 13.5px; line-height: 1.4; color: var(--texto-2); }
+  .cargo b { color: var(--texto); font-weight: 600; }
+  .selos { display: flex; flex-wrap: wrap; justify-content: center; gap: 6px; margin: 4px 0 0; padding: 0; list-style: none; }
+  .selos li { padding: 6px 11px; border-radius: 999px; font-size: 12px; font-weight: 600; color: var(--texto); background: var(--painel); border: 1px solid var(--linha); }
+  .selos li.mvp { color: #04101d; background: var(--b); border-color: var(--b); box-shadow: 0 0 16px rgb(53 208 247 / 45%); }
+  .livro-ref { margin: 2px 0 0; font-size: 12.5px; color: var(--texto-3); }
+  .livro-ref b { color: var(--b); font-weight: 600; }
+
   /* tela 2 */
   .palco { position: relative; flex: 1 1 auto; min-height: 130px; margin: 0 -18px; }
   .palco canvas { position: absolute; inset: 0; width: 100%; height: 100%; display: block; }
@@ -248,6 +260,21 @@
       s.onerror = function () { if ($("qr")) $("qr").style.display = "none"; };
       document.head.appendChild(s);
     }
+  });
+
+  // 1b. Quem apresenta ---------------------------------------------------------
+  telas.push({
+    momentos: [{ t: "Quem conduz <em>esta conversa</em>",
+      l: "Mais de 25 anos em <strong>Inteligência Artificial, Dados e Analytics</strong>, com atuação em arquitetura de soluções e modernização de plataformas, em especial <strong>Azure, Databricks e IA</strong>." }],
+    html: '<div class="perfil">' +
+      '<img class="foto" src="autora.jpg" alt="Juliana Maria Lopes" width="360" height="360">' +
+      '<h2>Juliana Maria Lopes</h2>' +
+      '<p class="cargo"><b>Distinguished AI &amp; Data Senior Manager</b><br>GFT Technologies</p>' +
+      '<ul class="selos">' +
+      '<li class="mvp">3x Microsoft MVP</li><li>Microsoft Certified Trainer</li><li>10x Microsoft Certified</li>' +
+      '<li>3x Databricks Certified</li><li>4x Oracle Certified</li><li>GitHub Copilot</li>' +
+      '<li>Claude Certified Architect</li><li>Mentora Imagine Cup 2026</li></ul>' +
+      '<p class="livro-ref">Autora de <b>Construindo Agentes Inteligentes</b></p></div>'
   });
 
   // 2. Os dois agentes -----------------------------------------------------
