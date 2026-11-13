@@ -163,6 +163,17 @@
   .grafico circle { fill: var(--texto); stroke: var(--b); stroke-width: 3; }
   .grafico .tm { fill: var(--alerta); font-weight: 600; } .grafico .td { fill: var(--a); }
   .perda .valor { color: var(--alerta); text-shadow: none; }
+  .cas-area { position: relative; display: grid; grid-template-columns: 1fr 1fr; gap: 28px; height: clamp(150px, 28vh, 230px); padding: 0 8%; }
+  .cas-col { display: flex; flex-direction: column; justify-content: flex-end; height: 100%; min-width: 0; }
+  .cas-seg { display: grid; place-items: center; overflow: hidden; text-align: center; font-size: 11.5px; font-weight: 600; line-height: 1.2; color: #04101d; transition: height .6s cubic-bezier(.2,.8,.2,1), box-shadow .6s; }
+  .cas-seg.caro { background: var(--a); border-radius: 8px 8px 0 0; }
+  .cas-seg.barato { background: var(--b); margin-top: 2px; }
+  .cas-res { margin: 0 0 6px; text-align: center; font-size: 14px; font-weight: 700; color: var(--b); }
+  .cas-col.perda .cas-res { color: var(--alerta); }
+  .cas-col.perda .cas-seg.caro { box-shadow: 0 0 0 2px var(--alerta), 0 0 18px rgb(255 196 107 / 55%); }
+  .cas-lim { position: absolute; left: 0; right: 0; border-top: 2px dashed var(--alerta); pointer-events: none; z-index: 1; }
+  .cas-lim b { position: absolute; left: 0; bottom: 3px; font-size: 10.5px; font-weight: 600; color: var(--alerta); }
+  .cas-eixo { display: grid; grid-template-columns: 1fr 1fr; gap: 28px; padding: 0 8%; margin-top: 6px; font-size: 12px; font-weight: 600; line-height: 1.3; color: var(--texto-2); text-align: center; }
 
   /* tela 8 */
   .linhas { display: grid; gap: 14px; }
@@ -640,46 +651,42 @@
     ],
     html: '<div class="cartao" id="cCasc" style="text-align:center"><p class="rot">Monthly cost with the first tier</p>' +
       '<p class="valor"><small>$</small><span id="vCasc">0</span></p><p class="sub" id="sCasc"></p></div>' +
-      '<div class="grafico" id="gCasc"></div>' +
+      '<div class="cas" id="gCasc"></div>' +
       '<label class="controle sem-toque"><span>The cheaper model resolves <b id="nCasc"></b> of every 100 requests</span><input type="range" id="rCasc" min="0" max="100" step="1" value="' + E.parcela + '"></label>',
+    // Duas barras lado a lado. A esquerda: todos os pedidos no modelo caro. A direita, empilhado:
+    // o que se paga ao modelo barato (todos passam por ele) e o que ainda segue para o caro.
+    // A linha tracejada fica na altura da barra da esquerda: passar dela e pagar mais.
     entrar: function () {
-      var W = 320, H = 150, e = 34, d = 312, topo = 12, pe = 122, C = D.cascata, max = C.curva[0] * 1.04;
-      function x(p) { return e + (d - e) * p; }
-      function y(v) { return pe - (pe - topo) * v / max; }
-      var svg = '<svg viewBox="0 0 ' + W + " " + H + '" role="img" aria-label="Monthly cost by the number of requests the cheaper model resolves">' +
-        '<line class="eixox" x1="' + e + '" x2="' + d + '" y1="' + pe + '" y2="' + pe + '"/>' +
-        '<line class="direto" x1="' + e + '" x2="' + d + '" y1="' + y(C.direto) + '" y2="' + y(C.direto) + '"/>' +
-        '<text class="td" x="' + d + '" y="' + (y(C.direto) - 5) + '" text-anchor="end">all requests on the more expensive model</text>' +
-        // Zonas entre a curva e a linha tracejada: economia (ciano) e custo maior (amarelo).
-        '<polygon id="zEco" class="zona zeco" points="' + x(C.equilibrio) + "," + y(C.direto) + " " + x(1) + "," + y(C.direto) + " " + x(1) + "," + y(C.curva[100]) + '"/>' +
-        '<polygon id="zPerda" class="zona zperda oculto" points="' + x(0) + "," + y(C.curva[0]) + " " + x(C.equilibrio) + "," + y(C.direto) + " " + x(0) + "," + y(C.direto) + '"/>' +
-        '<text id="tEco" class="zona teco" x="' + x(0.78) + '" y="' + (y(C.direto) + 22) + '" text-anchor="middle">savings</text>' +
-        '<text id="tPerda" class="zona tperda oculto" x="' + (x(C.equilibrio) - 6) + '" y="' + (y(C.direto) + 16) + '" text-anchor="end">more expensive</text>' +
-        '<line id="lMarco" class="marco zona oculto" x1="' + x(C.equilibrio) + '" x2="' + x(C.equilibrio) + '" y1="' + topo + '" y2="' + pe + '"/>' +
-        '<text id="tMarco" class="tm zona oculto" x="' + (x(C.equilibrio) + 5) + '" y="' + (pe - 6) + '">break even: ' + Math.round(C.equilibrio * 100) + " of every 100</text>" +
-        '<path class="curva" d="M' + x(0) + "," + y(C.curva[0]) + "L" + x(1) + "," + y(C.curva[100]) + '"/>' +
-        '<circle id="pCasc" r="6" cx="0" cy="0" style="transition: cx .7s ease, cy .7s ease"/>' +
-        [0, 0.5, 1].map(function (p) { return '<text x="' + x(p) + '" y="' + (pe + 14) + '" text-anchor="middle">' + pct(p) + "</text>"; }).join("") +
-        '<text x="' + (e - 5) + '" y="' + (y(C.curva[0]) + 3) + '" text-anchor="end">' + semMoeda(C.curva[0]) + "</text>" +
-        '<text x="' + (e - 5) + '" y="' + (pe + 3) + '" text-anchor="end">0</text></svg>';
-      $("gCasc").innerHTML = svg;
+      var C = D.cascata, max = C.curva[0] * 1.2, barato = C.curva[100];
+      function alt(v) { return (100 * v / max).toFixed(2) + "%"; }
+      $("gCasc").innerHTML =
+        '<div class="cas-area">' +
+          '<div class="cas-lim" style="bottom:' + alt(C.direto) + '"><b>without the cheap model</b></div>' +
+          '<div class="cas-col"><div class="cas-seg caro" style="height:' + alt(C.direto) + '"><span>expensive model<br>100 requests</span></div></div>' +
+          '<div class="cas-col" id="colCasc"><p class="cas-res" id="resCasc"></p>' +
+            '<div class="cas-seg caro" id="segCaro"><span id="txtCaro"></span></div>' +
+            '<div class="cas-seg barato" style="height:' + alt(barato) + '"><span>cheap model: 100 requests</span></div></div>' +
+        "</div>" +
+        '<div class="cas-eixo"><span>All on the expensive model</span><span>Cheap model first</span></div>';
       function aplicar() {
-        var p = E.parcela, v = C.curva[p], dif = (C.direto - v) / C.direto;
+        var p = E.parcela, v = C.curva[p], dif = (C.direto - v) / C.direto, caros = 100 - p;
         if (Number($("rCasc").value) !== p) $("rCasc").value = p;
         $("nCasc").textContent = p;
         animar($("vCasc"), v, 400, num);
         $("cCasc").classList.toggle("perda", dif < 0);
         $("sCasc").textContent = dif >= 0 ? "a " + pct(dif) + " saving compared with " + usd(C.direto) + ", with all requests on the more expensive model" : "a " + pct(-dif) + " increase compared with " + usd(C.direto) + ": more expensive than without the first tier";
-        $("pCasc").setAttribute("cx", x(p / 100)); $("pCasc").setAttribute("cy", y(v));
+        $("segCaro").style.height = alt(v - barato);
+        $("txtCaro").innerHTML = caros >= 12 ? "expensive model<br>" + caros + " requests" : "";
+        $("resCasc").textContent = dif >= 0 ? "saves " + pct(dif) : pct(-dif) + " more expensive";
+        $("colCasc").classList.toggle("perda", dif < 0);
       }
       $("rCasc").addEventListener("input", function () { E.parcela = Number($("rCasc").value); aplicar(); controleAlterado(); });
       this.sincronizar = aplicar;
       aplicar();
     },
-    // Momento 1: so a area de economia, com o ponto em 60. Momento 2: aparece a area
-    // em que o primeiro nivel sai mais caro e o ponto desce para 10, abaixo do equilibrio.
+    // Momento 1: o modelo barato resolve 60 de cada 100 e a barra fica abaixo da linha.
+    // Momento 2: a regua desce para 10 e a barra passa da linha.
     momento: function (m) {
-      ["zPerda", "tPerda", "lMarco", "tMarco"].forEach(function (id) { $(id).classList.toggle("oculto", m < 2); });
       E.parcela = m < 2 ? 60 : 10;
       if (this.sincronizar) this.sincronizar();
     }
