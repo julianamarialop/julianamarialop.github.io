@@ -11,11 +11,11 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/mqtt/5.10.1/mqtt.min.js"></script>
 <script>
   var TOPICO = "jml/apresentacao/custo-de-agentes/c3afb6c601ebe883", feitos = 0;
-  ["wss://broker.hivemq.com:8884/mqtt", "wss://broker.emqx.io:8084/mqtt"].forEach(function (url) {
+  ["wss://broker.hivemq.com:8884/mqtt", "wss://broker.emqx.io:8084/mqtt", "wss://test.mosquitto.org:8081/mqtt"].forEach(function (url) {
     var c = mqtt.connect(url, { connectTimeout: 8000, reconnectPeriod: 0 });
     c.on("connect", function () {
       c.publish(TOPICO, "", { retain: true, qos: 1 }, function () {
-        feitos++; document.getElementById("r").textContent = "Transmissão encerrada em " + feitos + " de 2 servidores.";
+        feitos++; document.getElementById("r").textContent = "Transmissão encerrada em " + feitos + " de 3 servidores.";
         document.title = "encerrado " + feitos; c.end();
       });
     });

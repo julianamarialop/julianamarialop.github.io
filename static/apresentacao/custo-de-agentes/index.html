@@ -693,14 +693,14 @@
   // ============================================================ sincronizacao
   // A apresentadora abre o link particular (#k=<chave>) uma vez; o aparelho guarda
   // a chave e passa a transmitir cada mudanca de tela. O publico recebe e muda de
-  // tela sozinho. O site e estatico, entao o aviso passa por dois servidores
+  // tela sozinho. O site e estatico, entao o aviso passa por tres servidores
   // publicos de mensagens (MQTT sobre WebSocket), sem conta. Cada aviso e assinado
   // (ECDSA P-256): somente quem tem a chave particular comanda. Se os servidores
   // ou a rede falharem, a apresentacao segue com navegacao manual.
   function criarSinc() {
     var PUBLICA = { kty: "EC", crv: "P-256", x: "VUufXGzd8xMPcWXQr6DaBludGDkaYjZdhFegJwy_5Ww", y: "51Uwgttjrm3ihGIpLOEyBdXf-7p3iXgrChpxTP5XHQo" };
     var TOPICO = "jml/apresentacao/custo-de-agentes/c3afb6c601ebe883";
-    var SERVIDORES = ["wss://broker.hivemq.com:8884/mqtt", "wss://broker.emqx.io:8084/mqtt"];
+    var SERVIDORES = ["wss://broker.hivemq.com:8884/mqtt", "wss://broker.emqx.io:8084/mqtt", "wss://test.mosquitto.org:8081/mqtt"];
     var BIBLIOTECA = "https://cdnjs.cloudflare.com/ajax/libs/mqtt/5.10.1/mqtt.min.js";
     var VALIDADE = 90 * 60 * 1000;   // aviso mais antigo que isso e de outra sessao
     var el = $("sinc"), clientes = [], chavePub = null, chavePriv = null;
