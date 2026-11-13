@@ -28,8 +28,9 @@
   .num { flex: none; width: 46px; height: 46px; border-radius: 12px; display: grid; place-items: center; font-size: 22px; font-weight: 700; color: var(--b); border: 1.5px solid var(--b); box-shadow: 0 0 18px rgb(53 208 247 / 35%), inset 0 0 12px rgb(53 208 247 / 18%); }
   .sobre { margin: 0 0 3px; font-size: 10.5px; font-weight: 600; letter-spacing: .16em; text-transform: uppercase; color: var(--texto-2); display: flex; align-items: center; gap: 8px; }
   .sobre::before { content: ""; width: 18px; height: 1.5px; background: var(--b); }
-  h1 { margin: 0; font-size: clamp(18px, 5.2vw, 30px); line-height: 1.12; font-weight: 800; letter-spacing: .01em; text-transform: uppercase; min-height: 2.3em; }
-  h1 em { font-style: normal; color: var(--b); text-shadow: 0 0 22px rgb(53 208 247 / 45%); display: block; }
+  h1 { margin: 0; font-size: clamp(15.5px, 4.5vw, 26px); line-height: 1.16; font-weight: 800; letter-spacing: .01em; text-transform: uppercase; min-height: 3.5em; display: flex; align-items: center; }
+  h1 span { display: block; text-wrap: balance; }
+  h1 em { font-style: normal; color: var(--b); text-shadow: 0 0 22px rgb(53 208 247 / 45%); }
 
   .corpo { flex: 1 1 auto; min-height: 0; display: flex; flex-direction: column; justify-content: center; gap: 12px; padding: 10px 0 0; animation: entra .45s ease both; }
   @keyframes entra { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: none; } }
@@ -45,6 +46,10 @@
   .pontos { display: flex; gap: 5px; min-height: 7px; }
   .pontos i { width: 7px; height: 7px; border-radius: 50%; background: var(--linha); }
   .pontos i.on { background: var(--b); }
+  .sinc { flex: none; margin: 6px 0 0; min-height: 0; text-align: center; font-size: 12px; font-weight: 500; color: var(--texto-3); }
+  .sinc b { font-weight: 600; color: var(--b); }
+  .sinc b::before { content: ""; display: inline-block; width: 7px; height: 7px; border-radius: 50%; margin-right: 6px; background: var(--b); box-shadow: 0 0 8px var(--b); vertical-align: 1px; }
+  .sinc button { font: 600 12.5px var(--fonte); color: #04101d; background: var(--alerta); border: 0; border-radius: 999px; padding: 7px 14px; cursor: pointer; }
 
   /* componentes */
   .cartao { padding: 12px 12px 14px; border-radius: 16px; background: color-mix(in srgb, var(--painel) 86%, transparent); border: 1px solid var(--linha); transition: opacity .6s, border-color .6s; }
@@ -176,6 +181,7 @@
   </header>
   <div class="corpo" id="corpo"></div>
   <p class="legenda" id="legenda" aria-live="polite"></p>
+  <p class="sinc" id="sinc" hidden></p>
   <footer>
     <button type="button" class="nav" id="ant">Anterior</button>
     <span class="onde"><span class="pontos" id="pontos" aria-hidden="true"></span><span id="onde"></span></span>
@@ -404,11 +410,11 @@
 
   telas.push({
     momentos: [
-      { t: "Um assistente, <em>dois agentes</em>",
+      { t: "Um agente atende " + num(CL.volume) + " solicitações e custa <em>" + num(CL.custo) + " dólares</em>",
         l: "O agente de classificação recebe <strong>" + num(CL.volume) + " mensagens por mês</strong>. Cada mensagem passa por ele <strong>uma única vez</strong>." },
-      { t: "Menos solicitações, <em>mais passos</em>",
+      { t: "Outro atende " + num(AG.volume) + " e custa <em>" + num(AG.custo) + " dólares</em>",
         l: "O agente de resolução recebe <strong>" + num(AG.volume) + " solicitações</strong>. Para responder, consulta pedidos, entrega e política em <strong>" + AG.passos + " passos</strong>, e a cada passo lê novamente todo o histórico." },
-      { t: "O volume não prevê <em>o custo</em>",
+      { t: "O agente de menor volume responde por <em>" + Math.round(D.participacao.agente) + "% do custo</em>",
         l: "O agente com <strong>menos solicitações</strong> responde por <strong>" + Math.round(D.participacao.agente) + "% do custo</strong>. O que define o custo é a orquestração." }
     ],
     html: '<div class="palco"><canvas id="cv" role="img" aria-label="Animação: muitas mensagens atravessam o agente de classificação uma única vez; poucas solicitações entram no agente de resolução, que consulta três sistemas em vários passos."></canvas></div>' +
@@ -434,9 +440,9 @@
   // 3. Por que: o historico cresce -----------------------------------------
   telas.push({
     momentos: [
-      { t: "A cada passo, <em>o histórico cresce</em>",
+      { t: "O motivo: a cada passo, o agente relê <em>todo o histórico</em>",
         l: "O modelo <strong>não guarda memória</strong> entre um passo e outro. A cada passo, o agente envia novamente as instruções e <strong>todo o histórico acumulado</strong>." },
-      { t: "Dez passos, <em>mais que o dobro</em>",
+      { t: "Em dez passos, ele lê <em>mais que o dobro</em> do previsto",
         l: "Dez passos somam <strong>" + num(D.inflacao.total) + " tokens</strong> lidos. A estimativa simples, que considera o mesmo volume em todos os passos, prevê <strong>" + num(D.inflacao.simples) + "</strong>." }
     ],
     html: (function () {
@@ -466,9 +472,9 @@
   // 4. O modelo adequado -----------------------------------------------------
   telas.push({
     momentos: [
-      { t: "Cada papel no <em>modelo adequado</em>",
+      { t: "Primeira decisão: cada papel no <em>modelo adequado</em>",
         l: "A classificação é uma tarefa simples. No modelo de maior capacidade, custaria <strong>mais de três vezes</strong> o valor, sem ganho na resposta." },
-      { t: "O menor preço nem sempre <em>é o adequado</em>",
+      { t: "O menor preço nem sempre é <em>o modelo adequado</em>",
         l: "A resolução decide quais sistemas consultar e o que fazer com cada resultado. No modelo de menor custo o valor cai, mas <strong>um erro em um passo compromete os seguintes</strong>." }
     ],
     html: '<p class="rot" style="text-align:center;margin:0">Preço por milhão de tokens: entrada / saída</p>' +
@@ -488,9 +494,9 @@
   // 5. Cache -----------------------------------------------------------------
   telas.push({
     momentos: [
-      { t: "A parte fixa <em>lida do cache</em>",
+      { t: "Segunda decisão: ler do cache <em>o que se repete</em>",
         l: "As instruções do agente são <strong>as mesmas em todos os passos</strong>. Com o cache, essa parte fixa é lida por <strong>um décimo do preço</strong>. Ative o cache para comparar." },
-      { t: "O cache tem <em>um tamanho mínimo</em>",
+      { t: "O cache só é aplicado acima de <em>um tamanho mínimo</em>",
         l: "Cada modelo exige um tamanho mínimo de prompt para o cache. Abaixo dele, <strong>o cache não é aplicado e a API não informa</strong>: a estimativa indica economia que não ocorre." }
     ],
     html: '<p class="rot" style="text-align:center;margin:0">O que o agente lê em cada passo</p>' +
@@ -518,9 +524,9 @@
   // 6. Menos passos e historico resumido ---------------------------------------
   telas.push({
     momentos: [
-      { t: "O limite de passos <em>tem preço</em>",
+      { t: "Terceira decisão: <em>o limite de passos</em>",
         l: "O limite de passos é uma decisão de arquitetura. De 8 para 16 passos, o custo <strong>triplica</strong>, porque o histórico lido também cresce. Altere o limite para comparar." },
-      { t: "Histórico <em>resumido</em>",
+      { t: "O histórico também pode ser <em>resumido</em>",
         l: "Resumir o histórico entre os passos reduz o que é lido novamente. O resumo tem custo próprio: no exemplo, <strong>" + usd(D.compressor) + " por mês</strong> em um modelo de menor custo." }
     ],
     html: '<div class="cartao" style="text-align:center"><p class="rot">Custo mensal do agente de resolução</p>' +
@@ -553,9 +559,9 @@
   // 7. Cascata -----------------------------------------------------------------
   telas.push({
     momentos: [
-      { t: "O modelo de menor custo <em>primeiro</em>",
+      { t: "Quarta decisão: o modelo de <em>menor custo primeiro</em>",
         l: "Toda solicitação passa primeiro pelo modelo de menor custo. Apenas as que ele <strong>não resolve</strong> seguem para o modelo de maior capacidade. Altere a parcela resolvida." },
-      { t: "Economia ou <em>custo adicional</em>",
+      { t: "Abaixo de " + pct(D.cascata.equilibrio) + " de resolução, <em>a economia se inverte</em>",
         l: "As solicitações não resolvidas pagam <strong>os dois modelos</strong>. Abaixo de <strong>" + pct(D.cascata.equilibrio) + "</strong> de resolução, o primeiro nível aumenta o custo. A resposta dele deve ser <strong>validada por código</strong>." }
     ],
     html: '<div class="cartao" id="cCasc" style="text-align:center"><p class="rot">Custo mensal com primeiro nível</p>' +
@@ -594,7 +600,7 @@
   // 8. O efeito somado ---------------------------------------------------------
   telas.push({
     momentos: [
-      { t: "O efeito <em>dos ajustes somados</em>",
+      { t: "Somadas, as decisões reduzem o custo a <em>um nono</em>",
         l: "O mesmo agente e as mesmas <strong>" + num(AG.volume) + " solicitações</strong>. O <strong>custo por solicitação resolvida</strong> é o valor a comparar com o custo do mesmo atendimento realizado por uma pessoa." }
     ],
     html: '<div class="linhas" id="lin8">' +
@@ -613,7 +619,7 @@
   // 9. O livro e o codigo ---------------------------------------------------------
   telas.push({
     momentos: [
-      { t: "Para ir <em>além do cálculo</em>",
+      { t: "O cálculo está aqui. <em>O método está no livro.</em>",
         l: "<strong>Construindo Agentes Inteligentes</strong>: Skills, Automação e Economia de Tokens. Esta apresentação mostra o cálculo; o livro apresenta o método." }
     ],
     html: '<div class="livros"><img src="capa-pt.jpg" alt="Capa do livro Construindo Agentes Inteligentes, edição em português" width="560" height="831">' +
@@ -627,7 +633,7 @@
   });
 
   // ================================================================== navegacao
-  var atual = -1, mom = 1;
+  var atual = -1, mom = 1, sinc = null;
   function ir(i, m) {
     i = Math.max(0, Math.min(telas.length - 1, i));
     var tela = telas[i], nova = i !== atual;
@@ -642,9 +648,10 @@
     }
     mom = m;
     $("num").textContent = i + 1;
-    $("titulo").innerHTML = tela.momentos[m - 1].t;
+    $("titulo").innerHTML = "<span>" + tela.momentos[m - 1].t + "</span>";
     $("legenda").innerHTML = tela.momentos[m - 1].l;
     if (tela.momento) tela.momento(m);
+    if (sinc) sinc.publicar(i, m);
     $("ant").disabled = i === 0 && m === 1;
     var fim = i === telas.length - 1 && m === tela.momentos.length;
     $("prox").disabled = fim;
@@ -654,16 +661,17 @@
   function avancar() { if (mom < telas[atual].momentos.length) ir(atual, mom + 1); else if (atual < telas.length - 1) ir(atual + 1, 1); }
   function anterior() { if (mom > 1) ir(atual, mom - 1); else if (atual > 0) ir(atual - 1, telas[atual - 1].momentos.length); }
 
-  $("prox").addEventListener("click", function (e) { e.stopPropagation(); avancar(); });
-  $("ant").addEventListener("click", function (e) { e.stopPropagation(); anterior(); });
+  $("prox").addEventListener("click", function (e) { e.stopPropagation(); sinc.manual(); avancar(); });
+  $("ant").addEventListener("click", function (e) { e.stopPropagation(); sinc.manual(); anterior(); });
   $("tela").addEventListener("click", function (e) {
     if (e.target.closest(".sem-toque, a, button, input, label")) return;
+    if (sinc.aoVivo()) return;   // com a apresentacao ao vivo, o toque na tela nao desloca o participante
     avancar();
   });
   document.addEventListener("keydown", function (e) {
     if (e.target && e.target.tagName === "INPUT") return;
-    if (e.key === "ArrowRight" || e.key === " " || e.key === "PageDown") { e.preventDefault(); avancar(); }
-    if (e.key === "ArrowLeft" || e.key === "PageUp") { e.preventDefault(); anterior(); }
+    if (e.key === "ArrowRight" || e.key === " " || e.key === "PageDown") { e.preventDefault(); sinc.manual(); avancar(); }
+    if (e.key === "ArrowLeft" || e.key === "PageUp") { e.preventDefault(); sinc.manual(); anterior(); }
   });
   var x0 = null, y0 = null;
   $("tela").addEventListener("touchstart", function (e) {
@@ -673,13 +681,115 @@
   $("tela").addEventListener("touchend", function (e) {
     if (x0 === null) return;
     var dx = e.changedTouches[0].clientX - x0, dy = e.changedTouches[0].clientY - y0; x0 = null;
-    if (Math.abs(dx) > 60 && Math.abs(dx) > Math.abs(dy) * 1.5) { e.preventDefault(); if (dx < 0) avancar(); else anterior(); }
+    if (Math.abs(dx) > 60 && Math.abs(dx) > Math.abs(dy) * 1.5) { e.preventDefault(); sinc.manual(); if (dx < 0) avancar(); else anterior(); }
   });
   window.addEventListener("hashchange", function () {
     var n = parseInt(location.hash.slice(1), 10);
     if (n && n - 1 !== atual) ir(n - 1, 1);
   });
   window.addEventListener("resize", function () { cena.medir(); medirMalha(); });
+
+
+  // ============================================================ sincronizacao
+  // A apresentadora abre o link particular (#k=<chave>) uma vez; o aparelho guarda
+  // a chave e passa a transmitir cada mudanca de tela. O publico recebe e muda de
+  // tela sozinho. O site e estatico, entao o aviso passa por dois servidores
+  // publicos de mensagens (MQTT sobre WebSocket), sem conta. Cada aviso e assinado
+  // (ECDSA P-256): somente quem tem a chave particular comanda. Se os servidores
+  // ou a rede falharem, a apresentacao segue com navegacao manual.
+  function criarSinc() {
+    var PUBLICA = { kty: "EC", crv: "P-256", x: "VUufXGzd8xMPcWXQr6DaBludGDkaYjZdhFegJwy_5Ww", y: "51Uwgttjrm3ihGIpLOEyBdXf-7p3iXgrChpxTP5XHQo" };
+    var TOPICO = "jml/apresentacao/custo-de-agentes/c3afb6c601ebe883";
+    var SERVIDORES = ["wss://broker.hivemq.com:8884/mqtt", "wss://broker.emqx.io:8084/mqtt"];
+    var BIBLIOTECA = "https://cdnjs.cloudflare.com/ajax/libs/mqtt/5.10.1/mqtt.min.js";
+    var VALIDADE = 90 * 60 * 1000;   // aviso mais antigo que isso e de outra sessao
+    var el = $("sinc"), clientes = [], chavePub = null, chavePriv = null;
+    var ultimoN = 0, ultimo = null, seguindo = true, remoto = false, pendente = null;
+    var cod = new TextEncoder();
+
+    function para64(buf) { return btoa(String.fromCharCode.apply(null, new Uint8Array(buf))); }
+    function de64(s) { var b = atob(s), u = new Uint8Array(b.length); for (var i = 0; i < b.length; i++) u[i] = b.charCodeAt(i); return u; }
+    function corpo(o) { return cod.encode(o.t + "|" + o.m + "|" + o.n); }
+    function ligados() { return clientes.filter(function (c) { return c.connected; }).length; }
+    function aoVivo() { return !chavePriv && !!ultimo && Date.now() - ultimo.n < VALIDADE; }
+
+    function mostrar() {
+      if (chavePriv) {
+        el.hidden = false;
+        el.innerHTML = ligados() ? "<b>Transmitindo para o público</b>" : "Sem conexão com o público: a navegação segue manual";
+      } else if (aoVivo()) {
+        el.hidden = false;
+        el.innerHTML = seguindo ? "<b>Acompanhando a apresentação</b>" : '<button type="button" class="sem-toque" id="seguir">Acompanhar a apresentação</button>';
+        var b = $("seguir");
+        if (b) b.addEventListener("click", function (e) { e.stopPropagation(); seguindo = true; aplicar(); mostrar(); });
+      } else { el.hidden = true; }
+    }
+    function aplicar() { if (!ultimo) return; remoto = true; ir(ultimo.t, ultimo.m); remoto = false; }
+
+    function receber(texto) {
+      var o; try { o = JSON.parse(texto); } catch (e) { return; }
+      if (!o || typeof o.t !== "number" || typeof o.m !== "number" || typeof o.n !== "number" || typeof o.s !== "string") return;
+      if (!(o.n > ultimoN) || Date.now() - o.n > VALIDADE || o.n - Date.now() > 5 * 60 * 1000 || !chavePub) return;
+      crypto.subtle.verify({ name: "ECDSA", hash: "SHA-256" }, chavePub, de64(o.s), corpo(o)).then(function (valido) {
+        if (!valido || !(o.n > ultimoN)) return;
+        ultimoN = o.n; ultimo = o;
+        if (!chavePriv && seguindo) aplicar();
+        mostrar();
+      }).catch(function () {});
+    }
+    function enviar(o) {
+      var texto = JSON.stringify(o), enviado = false;
+      clientes.forEach(function (c) { if (c.connected) { c.publish(TOPICO, texto, { retain: true, qos: 1 }); enviado = true; } });
+      pendente = enviado ? null : o;
+    }
+    function publicar(t, m) {
+      if (!chavePriv || remoto) return;
+      var o = { t: t, m: m, n: Date.now() };
+      ultimoN = o.n;
+      crypto.subtle.sign({ name: "ECDSA", hash: "SHA-256" }, chavePriv, corpo(o)).then(function (s) { o.s = para64(s); enviar(o); }).catch(function () {});
+    }
+    function manual() { if (aoVivo()) { seguindo = false; mostrar(); } }
+
+    function conectar() {
+      SERVIDORES.forEach(function (url) {
+        var c = window.mqtt.connect(url, { clientId: "jml-" + Math.random().toString(16).slice(2, 12), clean: true, reconnectPeriod: 4000, connectTimeout: 8000 });
+        clientes.push(c);
+        c.on("connect", function () {
+          c.subscribe(TOPICO, { qos: 0 });
+          if (chavePriv) { if (pendente) enviar(pendente); else if (atual >= 0) publicar(atual, mom); }
+          mostrar();
+        });
+        c.on("message", function (_, carga) { receber(carga.toString()); });
+        c.on("close", mostrar);
+        c.on("error", function () {});
+      });
+    }
+
+    function iniciar() {
+      if (!window.crypto || !crypto.subtle) return;
+      var guardada = null, params = new URLSearchParams(location.search);
+      try {
+        if (location.hash.indexOf("#k=") === 0) {
+          var k = location.hash.slice(3);
+          if (k === "sair") localStorage.removeItem("apresentadora"); else localStorage.setItem("apresentadora", k);
+        }
+        if (!params.has("publico")) guardada = localStorage.getItem("apresentadora");
+      } catch (e) {}
+      crypto.subtle.importKey("jwk", PUBLICA, { name: "ECDSA", namedCurve: "P-256" }, false, ["verify"]).then(function (pub) {
+        chavePub = pub;
+        if (!guardada) return null;
+        var jwk = { kty: "EC", crv: "P-256", x: PUBLICA.x, y: PUBLICA.y, d: guardada };
+        return crypto.subtle.importKey("jwk", jwk, { name: "ECDSA", namedCurve: "P-256" }, false, ["sign"]).catch(function () { return null; });
+      }).then(function (priv) {
+        chavePriv = priv; mostrar();
+        var s = document.createElement("script");
+        s.src = BIBLIOTECA; s.onload = conectar;
+        document.head.appendChild(s);
+      }).catch(function () {});
+    }
+    iniciar();
+    return { publicar: publicar, manual: manual, aoVivo: aoVivo };
+  }
 
   // ================================================== malha de rede ao fundo
   // Como o globo da capa do livro: pontos ligados por linhas, em movimento lento.
@@ -717,6 +827,7 @@
 
   // Inicio: #3 abre a tela 3; ?m=2 abre no segundo momento (usado na verificacao).
   var hi = parseInt(location.hash.slice(1), 10) || 1;
+  sinc = criarSinc();
   var mi = parseInt(new URLSearchParams(location.search).get("m"), 10) || 1;
   medirMalha();
   ir(hi - 1, 1);

@@ -1,0 +1,25 @@
+<!doctype html>
+<html lang="pt-BR">
+<meta charset="utf-8">
+<meta name="robots" content="noindex">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Encerrar transmissão</title>
+<body style="font: 16px system-ui; padding: 24px; background: #06162a; color: #f4f9fd">
+<p id="r">Encerrando a transmissão da apresentação...</p>
+<!-- Apaga o ultimo aviso guardado nos servidores de mensagens, para que quem abrir
+     a apresentacao depois de um ensaio comece na tela 1. -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mqtt/5.10.1/mqtt.min.js"></script>
+<script>
+  var TOPICO = "jml/apresentacao/custo-de-agentes/c3afb6c601ebe883", feitos = 0;
+  ["wss://broker.hivemq.com:8884/mqtt", "wss://broker.emqx.io:8084/mqtt"].forEach(function (url) {
+    var c = mqtt.connect(url, { connectTimeout: 8000, reconnectPeriod: 0 });
+    c.on("connect", function () {
+      c.publish(TOPICO, "", { retain: true, qos: 1 }, function () {
+        feitos++; document.getElementById("r").textContent = "Transmissão encerrada em " + feitos + " de 2 servidores.";
+        document.title = "encerrado " + feitos; c.end();
+      });
+    });
+  });
+</script>
+</body>
+</html>
