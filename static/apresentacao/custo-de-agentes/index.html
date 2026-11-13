@@ -1,0 +1,288 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#0a1218">
+<meta name="robots" content="noindex">
+<title>Custo de agentes de IA</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400..800&display=swap">
+<style>
+  /* Apresentacao para acompanhar no celular: uma tela por ideia, em pe.
+     Palco sempre escuro; azul = agente de classificacao, laranja = agente de resolucao. */
+  :root {
+    --fundo: #0a1218; --painel: #121e27; --linha: #22323e;
+    --texto: #eef4f8; --texto-2: #a9b9c5; --texto-3: #6f8291;
+    --a: #7cc0e0; --b: #f58a55; --neutro: #3a4c5a;
+    --fonte: "Inter", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  }
+  * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+  html, body { margin: 0; height: 100%; background: var(--fundo); color: var(--texto); font-family: var(--fonte); -webkit-font-smoothing: antialiased; overscroll-behavior: none; }
+  .tela { height: 100vh; height: 100dvh; max-width: 760px; margin: 0 auto; display: flex; flex-direction: column; padding: max(14px, env(safe-area-inset-top)) 18px max(12px, env(safe-area-inset-bottom)); user-select: none; cursor: pointer; }
+
+  header { display: flex; gap: 14px; align-items: center; flex: none; }
+  .num { flex: none; width: 46px; height: 46px; border-radius: 14px; display: grid; place-items: center; font-size: 24px; font-weight: 800; color: var(--fundo); background: linear-gradient(135deg, var(--a), var(--b)); }
+  .sobre { margin: 0 0 2px; font-size: 12px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; color: var(--texto-3); }
+  h1 { margin: 0; font-size: clamp(20px, 5.6vw, 30px); line-height: 1.15; font-weight: 800; letter-spacing: -.02em; min-height: 2.3em; display: flex; align-items: center; }
+
+  .palco { position: relative; flex: 1 1 auto; min-height: 150px; margin: 6px -18px 0; }
+  canvas { position: absolute; inset: 0; width: 100%; height: 100%; display: block; }
+
+  .stats { flex: none; display: grid; grid-template-columns: 1fr 1fr; gap: 12px; text-align: center; }
+  .col { padding: 10px 6px 12px; border-radius: 16px; background: var(--painel); border: 1px solid var(--linha); opacity: .28; transition: opacity .6s, border-color .6s, transform .6s; }
+  .col.ativo { opacity: 1; }
+  .col.a.ativo { border-color: color-mix(in srgb, var(--a) 55%, transparent); }
+  .col.b.ativo { border-color: color-mix(in srgb, var(--b) 55%, transparent); }
+  .nome { margin: 0 0 6px; font-size: 13px; font-weight: 700; letter-spacing: .02em; }
+  .a .nome { color: var(--a); } .b .nome { color: var(--b); }
+  .vol { margin: 0; font-size: 13px; color: var(--texto-2); font-variant-numeric: tabular-nums; }
+  .vol strong { display: block; font-size: clamp(20px, 5.4vw, 26px); font-weight: 750; color: var(--texto); letter-spacing: -.01em; }
+  .custo { margin: 8px 0 0; font-size: clamp(26px, 8vw, 40px); line-height: 1; font-weight: 800; letter-spacing: -.03em; font-variant-numeric: tabular-nums; }
+  .a .custo { color: var(--a); } .b .custo { color: var(--b); }
+  .custo small { font-size: .45em; font-weight: 700; letter-spacing: 0; margin-right: 4px; }
+  .un { margin: 4px 0 0; font-size: 12px; color: var(--texto-3); }
+
+  .painel { flex: none; overflow: hidden; max-height: 0; opacity: 0; transition: max-height .7s ease, opacity .7s ease, margin .7s ease; margin-top: 0; }
+  .painel.visivel { max-height: 120px; opacity: 1; margin-top: 12px; }
+  .painel p { margin: 0 0 6px; font-size: 12px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; color: var(--texto-3); }
+  .barra { display: flex; gap: 2px; height: 34px; border-radius: 10px; overflow: hidden; background: var(--painel); }
+  .barra i { display: grid; place-items: center; height: 100%; width: 0; font-style: normal; font-size: 15px; font-weight: 800; color: var(--fundo); white-space: nowrap; overflow: hidden; transition: width 1.4s cubic-bezier(.2,.8,.2,1) .25s; }
+  .barra .sa { background: var(--a); } .barra .sb { background: var(--b); } .barra .sn { background: var(--neutro); }
+  .chaves { display: flex; flex-wrap: wrap; gap: 4px 14px; margin: 8px 0 0; padding: 0; list-style: none; font-size: 12px; color: var(--texto-2); }
+  .chaves li::before { content: ""; display: inline-block; width: 9px; height: 9px; border-radius: 3px; margin-right: 6px; background: var(--cor); }
+
+  .legenda { flex: none; margin: 12px 0 0; min-height: 3.1em; font-size: clamp(15px, 4.1vw, 18px); line-height: 1.45; color: var(--texto-2); text-align: center; text-wrap: balance; transition: opacity .35s; }
+  .legenda strong { color: var(--texto); font-weight: 700; }
+
+  footer { flex: none; display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-top: 8px; font-size: 13px; color: var(--texto-3); }
+  button { font: 600 13px var(--fonte); color: var(--texto-2); background: transparent; border: 1px solid var(--linha); border-radius: 999px; padding: 8px 14px; cursor: pointer; }
+  button:focus-visible { outline: 2px solid var(--a); outline-offset: 2px; }
+  .passos { display: flex; gap: 6px; }
+  .passos i { width: 8px; height: 8px; border-radius: 50%; background: var(--linha); transition: background .3s, transform .3s; }
+  .passos i.on { background: var(--texto); transform: scale(1.15); }
+  @media (max-height: 620px) { .legenda { min-height: 0; margin-top: 8px; } .un { display: none; } }
+</style>
+</head>
+<body>
+<main class="tela" id="tela" aria-live="polite">
+  <header>
+    <span class="num" aria-label="Tela 2">2</span>
+    <div>
+      <p class="sobre">Custo de agentes de IA</p>
+      <h1 id="titulo"></h1>
+    </div>
+  </header>
+
+  <div class="palco"><canvas id="cv" role="img" aria-label="Animação: muitas mensagens atravessam o agente de classificação uma única vez; poucas solicitações entram no agente de resolução e percorrem vários passos dentro dele."></canvas></div>
+
+  <div class="stats">
+    <div class="col a" id="colA">
+      <p class="nome">Agente de classificação</p>
+      <p class="vol"><strong id="volA">0</strong>solicitações por mês</p>
+      <p class="custo"><small>US$</small><span id="custoA">0</span></p>
+      <p class="un">por mês</p>
+    </div>
+    <div class="col b" id="colB">
+      <p class="nome">Agente de resolução</p>
+      <p class="vol"><strong id="volB">0</strong>solicitações por mês</p>
+      <p class="custo"><small>US$</small><span id="custoB">0</span></p>
+      <p class="un">por mês</p>
+    </div>
+  </div>
+
+  <div class="painel" id="painel">
+    <p>Participação no custo mensal do assistente</p>
+    <div class="barra"><i class="sa" data-w="2.4"></i><i class="sb" data-w="85.4">85%</i><i class="sn" data-w="12.2"></i></div>
+    <ul class="chaves">
+      <li style="--cor: var(--a)">Classificação 2,4%</li>
+      <li style="--cor: var(--b)">Resolução 85,4%</li>
+      <li style="--cor: var(--neutro)">Demais componentes 12,2%</li>
+    </ul>
+  </div>
+
+  <p class="legenda" id="legenda"></p>
+
+  <footer>
+    <button type="button" id="repetir">Repetir</button>
+    <span id="dica">Toque para avançar</span>
+    <span class="passos" aria-hidden="true"><i></i><i></i><i></i></span>
+  </footer>
+</main>
+
+<script>
+(function () {
+  "use strict";
+  var MOMENTOS = [
+    null,
+    { titulo: "Um assistente, dois agentes",
+      legenda: "O agente de classificação recebe <strong>40.000 mensagens por mês</strong>. Cada mensagem passa por ele <strong>uma única vez</strong>." },
+    { titulo: "Menos solicitações, mais passos",
+      legenda: "O agente de resolução recebe <strong>9.000 solicitações</strong>. Cada uma percorre <strong>8 passos</strong>, e a cada passo todo o histórico é lido novamente." },
+    { titulo: "O volume não prevê o custo",
+      legenda: "O agente com <strong>menos solicitações</strong> responde por <strong>85% do custo</strong>. O que define o custo é a orquestração." }
+  ];
+  var VOL_A = 40000, VOL_B = 9000, CUSTO_A = 40, CUSTO_B = 1440, PASSOS_B = 8;
+
+  var $ = function (id) { return document.getElementById(id); };
+  var fmt = new Intl.NumberFormat("pt-BR");
+  var reduzido = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  var m = 0, contados = {};
+
+  function contar(id, alvo, ms) {
+    if (contados[id]) return;
+    contados[id] = true;
+    var el = $(id), t0 = performance.now();
+    if (reduzido) { el.textContent = fmt.format(alvo); return; }
+    (function passo(t) {
+      var k = Math.min(1, (t - t0) / ms), e = 1 - Math.pow(1 - k, 3);
+      el.textContent = fmt.format(Math.round(alvo * e));
+      if (k < 1) requestAnimationFrame(passo);
+    })(t0);
+  }
+  function zerar() {
+    contados = {};
+    ["volA", "volB", "custoA", "custoB"].forEach(function (id) { $(id).textContent = "0"; });
+  }
+
+  function momento(n) {
+    m = Math.max(1, Math.min(3, n));
+    $("titulo").textContent = MOMENTOS[m].titulo;
+    $("legenda").innerHTML = MOMENTOS[m].legenda;
+    $("colA").classList.toggle("ativo", m >= 1);
+    $("colB").classList.toggle("ativo", m >= 2);
+    if (m >= 1) { contar("volA", VOL_A, 1800); contar("custoA", CUSTO_A, 2600); }
+    if (m >= 2) { contar("volB", VOL_B, 1800); contar("custoB", CUSTO_B, 4200); }
+    var painel = $("painel");
+    painel.classList.toggle("visivel", m >= 3);
+    [].forEach.call(painel.querySelectorAll(".barra i"), function (s) { s.style.width = m >= 3 ? s.dataset.w + "%" : "0"; });
+    [].forEach.call(document.querySelectorAll(".passos i"), function (p, i) { p.classList.toggle("on", i === m - 1); });
+    $("dica").textContent = m < 3 ? "Toque para avançar" : "";
+    requestAnimationFrame(medir);
+  }
+
+  $("tela").addEventListener("click", function (e) {
+    if (e.target.closest("button")) return;
+    if (m < 3) momento(m + 1);
+  });
+  $("repetir").addEventListener("click", function () { zerar(); particulas.length = 0; faiscas.length = 0; momento(1); });
+  document.addEventListener("keydown", function (e) {
+    if (e.key === "ArrowRight" || e.key === " " || e.key === "Enter") { if (m < 3) momento(m + 1); }
+    if (e.key === "ArrowLeft") { if (m > 1) momento(m - 1); }
+  });
+
+  // ------------------------------------------------------------- animacao
+  var cv = $("cv"), ctx = cv.getContext("2d");
+  var W = 0, H = 0, DPR = 1, R = 40;
+  var COR_A = "124,192,224", COR_B = "245,138,85";
+  var particulas = [], faiscas = [];
+  var acumA = 0, acumB = 0, ultimo = 0;
+
+  function medir() {
+    var r = cv.getBoundingClientRect();
+    DPR = Math.min(2, window.devicePixelRatio || 1);
+    W = r.width; H = r.height;
+    cv.width = Math.round(W * DPR); cv.height = Math.round(H * DPR);
+    R = Math.max(26, Math.min(W * 0.115, H * 0.2, 62));
+  }
+  window.addEventListener("resize", medir);
+
+  function centro(lado) { return { x: W * (lado === "a" ? 0.25 : 0.75), y: H * 0.5 }; }
+  function suave(t) { t = Math.max(0, Math.min(1, t)); return t * t * (3 - 2 * t); }
+
+  function nascerA() {
+    var c = centro("a");
+    particulas.push({ lado: "a", t: 0, dur: 1.5 + Math.random() * 0.5,
+      x0: c.x + (Math.random() - 0.5) * W * 0.36, x1: c.x + (Math.random() - 0.5) * W * 0.36, r: 1.6 + Math.random() * 1.2 });
+  }
+  function nascerB() {
+    var c = centro("b");
+    particulas.push({ lado: "b", t: 0, queda: 0.8, orbita: 5.4 + Math.random() * 0.8, saida: 0.8,
+      x0: c.x + (Math.random() - 0.5) * W * 0.3, raio: R + 9 + Math.random() * 16, feitos: 0, r: 2.2 });
+  }
+
+  function no(lado, ativo) {
+    var c = centro(lado), cor = lado === "a" ? COR_A : COR_B;
+    ctx.globalAlpha = ativo ? 1 : 0.28;
+    var g = ctx.createRadialGradient(c.x, c.y, R * 0.2, c.x, c.y, R * 2.1);
+    g.addColorStop(0, "rgba(" + cor + ",.22)"); g.addColorStop(1, "rgba(" + cor + ",0)");
+    ctx.fillStyle = g; ctx.beginPath(); ctx.arc(c.x, c.y, R * 2.1, 0, 6.2832); ctx.fill();
+    ctx.fillStyle = "#0f1a22"; ctx.strokeStyle = "rgba(" + cor + ",.9)"; ctx.lineWidth = 2;
+    ctx.beginPath(); ctx.arc(c.x, c.y, R, 0, 6.2832); ctx.fill(); ctx.stroke();
+    ctx.fillStyle = "rgba(" + cor + ",1)"; ctx.textAlign = "center"; ctx.textBaseline = "middle";
+    ctx.font = "800 " + Math.round(R * 0.62) + "px Inter, system-ui, sans-serif";
+    ctx.fillText(lado === "a" ? "1" : String(PASSOS_B), c.x, c.y - R * 0.13);
+    ctx.font = "600 " + Math.round(Math.max(10, R * 0.25)) + "px Inter, system-ui, sans-serif";
+    ctx.fillStyle = "rgba(238,244,248,.75)";
+    ctx.fillText(lado === "a" ? "passo" : "passos", c.x, c.y + R * 0.36);
+    ctx.globalAlpha = 1;
+  }
+
+  function ponto(x, y, r, cor, alfa) {
+    ctx.fillStyle = "rgba(" + cor + "," + (alfa * 0.18) + ")";
+    ctx.beginPath(); ctx.arc(x, y, r * 3.2, 0, 6.2832); ctx.fill();
+    ctx.fillStyle = "rgba(" + cor + "," + alfa + ")";
+    ctx.beginPath(); ctx.arc(x, y, r, 0, 6.2832); ctx.fill();
+  }
+
+  function quadro(agora) {
+    var dt = Math.min(0.05, (agora - ultimo) / 1000 || 0); ultimo = agora;
+    if (!W) medir();
+    ctx.setTransform(DPR, 0, 0, DPR, 0, 0);
+    ctx.clearRect(0, 0, W, H);
+
+    // A proporcao de nascimento e a dos volumes: 40.000 para 9.000.
+    if (m >= 1) { acumA += dt * 15; while (acumA >= 1) { acumA--; nascerA(); } }
+    if (m >= 2) { acumB += dt * 15 * VOL_B / VOL_A; while (acumB >= 1) { acumB--; nascerB(); } }
+
+    ctx.globalCompositeOperation = "lighter";
+    for (var i = particulas.length - 1; i >= 0; i--) {
+      var p = particulas[i]; p.t += dt;
+      if (p.lado === "a") {
+        var k = p.t / p.dur;
+        if (k >= 1) { particulas.splice(i, 1); continue; }
+        var ca = centro("a"), y = -10 + (H + 20) * k, x;
+        var perto = 1 - Math.min(1, Math.abs(y - ca.y) / (H * 0.5));
+        x = (k < 0.5 ? p.x0 : p.x1) + (ca.x - (k < 0.5 ? p.x0 : p.x1)) * suave(perto * 1.25);
+        ponto(x, y, p.r, COR_A, 0.35 + 0.65 * Math.sin(Math.PI * k));
+      } else {
+        var cb = centro("b"), topo = cb.y - p.raio;
+        if (p.t < p.queda) {
+          var q = suave(p.t / p.queda);
+          ponto(p.x0 + (cb.x - p.x0) * q, -10 + (topo + 10) * q, p.r, COR_B, 0.9);
+        } else if (p.t < p.queda + p.orbita) {
+          var f = (p.t - p.queda) / p.orbita, giros = f * PASSOS_B, ang = -Math.PI / 2 + giros * 6.2832;
+          var feitos = Math.floor(giros);
+          if (feitos > p.feitos) { p.feitos = feitos; faiscas.push({ x: cb.x, y: cb.y + p.raio, t: 0, peso: feitos }); }
+          // O rastro e o historico relido: mais longo e mais espesso a cada passo.
+          var cauda = Math.min(5.6, 0.5 + giros * 0.7), esp = 1.2 + giros * 0.55;
+          ctx.strokeStyle = "rgba(" + COR_B + "," + (0.16 + giros * 0.035) + ")"; ctx.lineWidth = esp; ctx.lineCap = "round";
+          ctx.beginPath(); ctx.arc(cb.x, cb.y, p.raio, ang - cauda, ang); ctx.stroke();
+          ponto(cb.x + Math.cos(ang) * p.raio, cb.y + Math.sin(ang) * p.raio, p.r + giros * 0.28, COR_B, 1);
+        } else {
+          var s = (p.t - p.queda - p.orbita) / p.saida;
+          if (s >= 1) { particulas.splice(i, 1); continue; }
+          ponto(cb.x, cb.y - p.raio + (H + 10 - cb.y + p.raio) * suave(s) , p.r + 2.2, COR_B, 1 - s);
+        }
+      }
+    }
+    // Cada passo concluido gera custo: a faisca desce ate o valor do agente.
+    for (var j = faiscas.length - 1; j >= 0; j--) {
+      var z = faiscas[j]; z.t += dt / 0.7;
+      if (z.t >= 1) { faiscas.splice(j, 1); continue; }
+      ponto(z.x + Math.sin(z.t * 9 + j) * 5, z.y + (H - z.y) * z.t * z.t, 1.3 + z.peso * 0.22, "255,214,170", 1 - z.t);
+    }
+    ctx.globalCompositeOperation = "source-over";
+    no("a", m >= 1); no("b", m >= 2);
+    if (!reduzido) requestAnimationFrame(quadro);
+  }
+
+  var inicio = parseInt(new URLSearchParams(location.search).get("m"), 10) || 1;
+  momento(1); if (inicio > 1) { momento(2); } if (inicio > 2) { momento(3); }
+  medir();
+  if (reduzido) { quadro(0); } else { requestAnimationFrame(function (t) { ultimo = t; quadro(t); }); }
+})();
+</script>
+</body>
+</html>
