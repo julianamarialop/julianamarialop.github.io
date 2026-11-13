@@ -175,6 +175,62 @@
   .ajustes { display: flex; flex-wrap: wrap; justify-content: center; gap: 6px; margin: 0; padding: 0; list-style: none; }
   .ajustes li { padding: 5px 10px; border-radius: 999px; font-size: 12px; font-weight: 500; color: var(--b); border: 1px solid color-mix(in srgb, var(--b) 45%, transparent); }
 
+  /* parte 2: antes e depois, tarefas e modelos */
+  .ad { display: grid; grid-template-columns: 1fr auto 1fr; align-items: center; gap: 6px 10px; text-align: center; padding: 12px; border-radius: 16px; background: color-mix(in srgb, var(--painel) 86%, transparent); border: 1px solid var(--linha); }
+  .ad .ad-r { grid-column: 1 / -1; margin: 0; }
+  .ad .rot { margin: 0 0 4px; letter-spacing: .06em; }
+  .ad .v { margin: 0; font-size: clamp(26px, 8vw, 40px); line-height: 1; font-weight: 800; letter-spacing: -.02em; font-variant-numeric: tabular-nums; }
+  .ad .velho { color: var(--texto-3); text-decoration: line-through; text-decoration-thickness: 2px; }
+  .ad .novo { transition: opacity .6s; }
+  .ad .novo .v { color: var(--b); text-shadow: 0 0 26px rgb(53 208 247 / 40%); }
+  .seta { align-self: center; font-size: 24px; font-weight: 700; color: var(--b); }
+  .caixa { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px; padding: 12px 8px; border-radius: 14px; border: 1px solid var(--linha); background: color-mix(in srgb, var(--painel) 86%, transparent); text-align: center; font-size: 14px; font-weight: 600; color: var(--texto); }
+  .caixa small { display: block; font-size: 12px; font-weight: 500; color: var(--texto-2); }
+  .caixa.mod { color: var(--b); border-color: color-mix(in srgb, var(--b) 55%, transparent); }
+  .par { display: grid; grid-template-columns: 1fr auto 1fr; gap: 8px; transition: opacity .6s; }
+  .robo { flex: none; color: var(--b); }
+  .fluxo { display: grid; gap: 6px; }
+  .fluxo .caixa { flex-direction: row; justify-content: flex-start; gap: 12px; text-align: left; }
+  .desce { margin: 0; text-align: center; font-size: 13px; font-weight: 600; color: var(--alerta); }
+  .pilhas { display: flex; align-items: flex-end; justify-content: center; gap: 6px; flex: 1 1 auto; min-height: 120px; }
+  .pl { flex: 1; max-width: 46px; display: flex; flex-direction: column-reverse; gap: 3px; }
+  .pl b { margin-top: 4px; font-size: 11px; font-weight: 600; color: var(--texto-3); text-align: center; }
+  .pg { display: block; height: clamp(14px, 3.6vh, 30px); border-radius: 4px; background: var(--b); animation: cai .4s ease backwards; box-shadow: inset 0 -3px 0 rgb(4 16 29 / 25%); }
+  .pg.ins { background: var(--a); }
+  .pg.res { background: var(--alerta); }
+  .contexto { margin: 0; text-align: center; font-size: clamp(15px, 4.2vw, 19px); line-height: 1.35; font-weight: 600; color: var(--texto); text-wrap: balance; }
+  .robo { animation: flutua 3.2s ease-in-out infinite; filter: drop-shadow(0 0 10px rgb(53 208 247 / 45%)); }
+  .robo .olho { transform-box: fill-box; transform-origin: center; animation: pisca 4.2s infinite; }
+  @keyframes flutua { 50% { transform: translateY(-4px); } }
+  @keyframes pisca { 0%, 92%, 100% { transform: scaleY(1); } 95% { transform: scaleY(.1); } }
+  .par .caixa { min-height: 112px; }
+  .fio { align-self: center; position: relative; width: 34px; height: 8px; }
+  .fio i { position: absolute; top: 1px; left: 0; width: 6px; height: 6px; border-radius: 50%; background: var(--b); box-shadow: 0 0 8px var(--b); animation: anda 1.5s linear infinite; }
+  .fio i:nth-child(2) { animation-delay: .5s; } .fio i:nth-child(3) { animation-delay: 1s; }
+  @keyframes anda { from { transform: translateX(0); opacity: 0; } 20%, 80% { opacity: 1; } to { transform: translateX(28px); opacity: 0; } }
+  .ad-b { grid-column: 1 / -1; display: grid; gap: 4px; margin-top: 8px; }
+  .ad-b i { display: block; height: 10px; border-radius: 5px; transition: width 1.2s cubic-bezier(.2,.8,.2,1); }
+  .ad-b .ba { background: var(--texto-3); opacity: .45; }
+  .ad-b .bd { background: var(--b); box-shadow: 0 0 12px rgb(53 208 247 / 55%); }
+  .ad:has(.novo.apagado) .bd { width: 0 !important; }
+  .pilhas.baixa { min-height: 110px; max-height: 230px; }
+  .pilhas.baixa .pg { height: clamp(10px, 2.6vh, 22px); }
+  .pilhas .pg.ins { transition: background .6s, box-shadow .6s; }
+  .pilhas.cache .pg.ins { background: repeating-linear-gradient(135deg, #17395a 0 6px, #2f6492 6px 12px); box-shadow: inset 0 0 0 1px var(--a); }
+  .chaves li { transition: opacity .5s; }
+  .fluxo .caixa { min-height: 88px; }
+  .oks { margin-left: auto; display: flex; flex-wrap: wrap; justify-content: flex-end; gap: 2px 6px; max-width: 84px; }
+  .oks b { font-size: 17px; color: var(--b); text-shadow: 0 0 10px rgb(53 208 247 / 60%); animation: cai .4s ease backwards; }
+  .desce { display: flex; align-items: center; justify-content: center; gap: 10px; margin: 0; font-size: 13px; font-weight: 600; color: var(--alerta); }
+  .queda { position: relative; width: 8px; height: 34px; }
+  .queda i { position: absolute; left: 1px; top: 0; width: 6px; height: 6px; border-radius: 50%; background: var(--alerta); box-shadow: 0 0 8px var(--alerta); animation: desce 1.6s linear infinite; }
+  .queda i:nth-child(2) { animation-delay: .4s; } .queda i:nth-child(3) { animation-delay: .8s; } .queda i:nth-child(4) { animation-delay: 1.2s; }
+  @keyframes desce { from { transform: translateY(0); opacity: 0; } 20%, 80% { opacity: 1; } to { transform: translateY(28px); opacity: 0; } }
+  .perguntas { list-style: none; margin: 0; padding: 0; display: grid; gap: 14px; }
+  .perguntas li { padding: 20px 16px; border-radius: 18px; text-align: center; font-size: clamp(19px, 5.4vw, 26px); line-height: 1.25; font-weight: 700; text-wrap: balance; background: color-mix(in srgb, var(--painel) 86%, transparent); border: 1px solid color-mix(in srgb, var(--b) 50%, transparent); box-shadow: 0 0 26px rgb(53 208 247 / 14%); animation: cai .5s ease backwards; }
+  .perguntas li:nth-child(2) { animation-delay: .25s; } .perguntas li:nth-child(3) { animation-delay: .5s; }
+  @keyframes cai { from { opacity: 0; transform: translateY(-10px); } to { opacity: 1; transform: none; } }
+
   /* tela 9: escada */
   .escada { display: grid; gap: 12px; }
   .degrau { opacity: 0; transform: translateY(8px); transition: opacity .5s, transform .5s; }
@@ -196,7 +252,7 @@
   .livros { display: flex; justify-content: center; gap: 14px; flex: 0 1 auto; min-height: 0; }
   .livros img { display: block; height: min(34vh, 300px); width: auto; border-radius: 6px; box-shadow: 0 10px 34px rgb(0 0 0 / 55%), 0 0 30px rgb(53 208 247 / 25%); }
   .livro1 { display: flex; gap: 14px; align-items: center; }
-  .livro1 img { flex: none; display: block; width: min(34vw, 170px); height: auto; border-radius: 6px; box-shadow: 0 10px 34px rgb(0 0 0 / 55%), 0 0 30px rgb(53 208 247 / 25%); }
+  .livro1 img { flex: none; display: block; width: min(42vw, 220px); height: auto; border-radius: 6px; box-shadow: 0 10px 34px rgb(0 0 0 / 55%), 0 0 30px rgb(53 208 247 / 25%); }
   .compras { flex: 1; min-width: 0; display: grid; gap: 6px; }
   .compras .rot { margin: 4px 0 0; }
   .links3 { display: grid; grid-template-columns: 1fr; gap: 6px; }
@@ -218,7 +274,7 @@
   <header>
     <span class="num" id="num">1</span>
     <div>
-      <p class="sobre">Engenharia de agentes de IA</p>
+      <p class="sobre" id="sobre"></p>
       <h1 id="titulo"></h1>
     </div>
   </header>
@@ -287,9 +343,11 @@
     else sinc.manual();
   }
 
+  var PARTES = ["Engenharia de agentes de IA", "A história", "Quatro decisões", "O raciocínio", "A conversa"];
+
   // 1. Abertura ------------------------------------------------------------
   telas.push({
-    momentos: [{ t: "Quanto custa um <em>agente de IA?</em>",
+    momentos: [{ t: "Por que o custo da IA <em>sai tão alto?</em>",
       l: "O custo de um agente é uma <strong>decisão de arquitetura</strong>, não uma contagem de tokens." }],
     html: '<div class="capa corpo" style="padding:0;animation:none">' +
       '<div class="qr" id="qr" role="img" aria-label="QR code desta apresentação"></div>' +
@@ -311,7 +369,7 @@
   // 1b. Quem apresenta ---------------------------------------------------------
   telas.push({
     momentos: [{ t: "Quem conduz <em>esta conversa</em>",
-      l: "Mais de 25 anos em <strong>Inteligência Artificial, Dados e Analytics</strong>, com atuação em arquitetura de soluções e modernização de plataformas, em especial <strong>Azure, Databricks e IA</strong>." }],
+      l: "Mais de 25 anos em <strong>IA, Dados e Analytics</strong>, com foco em <strong>Azure, Databricks e IA</strong>." }],
     html: '<div class="perfil">' +
       '<img class="foto" src="autora.jpg" alt="Juliana Maria Lopes" width="360" height="360">' +
       '<h2>Juliana Maria Lopes</h2>' +
@@ -481,14 +539,14 @@
     };
   })();
 
-  telas.push({
+  telas.push({ parte: PARTES[1],
     momentos: [
-      { t: "Um agente atende " + num(CL.volume) + " solicitações e custa <em>" + num(CL.custo) + " dólares</em>",
-        l: "O agente de classificação recebe <strong>" + num(CL.volume) + " mensagens por mês</strong>. Cada mensagem passa por ele <strong>uma única vez</strong>." },
-      { t: "Outro atende " + num(AG.volume) + " e custa <em>" + num(AG.custo) + " dólares</em>",
-        l: "O agente de resolução recebe <strong>" + num(AG.volume) + " solicitações</strong>. Para responder, consulta pedidos, entrega e política em <strong>" + AG.passos + " passos</strong>, e a cada passo lê novamente todo o histórico." },
-      { t: "O agente de menor volume responde por <em>" + Math.round(D.participacao.agente) + "% do custo</em>",
-        l: "O agente com <strong>menos solicitações</strong> responde por <strong>" + Math.round(D.participacao.agente) + "% do custo</strong>. O que define o custo é a orquestração." }
+      { t: "Um agente atende muito e <em>custa pouco</em>",
+        l: "O agente de classificação recebe <strong>" + num(CL.volume) + " mensagens por mês</strong> e lê cada uma <strong>uma única vez</strong>." },
+      { t: "Outro atende pouco e <em>custa muito</em>",
+        l: "O agente de resolução recebe <strong>" + num(AG.volume) + " pedidos</strong> e consulta pedidos, entrega e política em <strong>" + AG.passos + " passos</strong>." },
+      { t: "Por que o que atende menos <em>custa mais?</em>",
+        l: "O agente com <strong>menos pedidos</strong> responde por <strong>" + Math.round(D.participacao.agente) + "% do custo</strong>." }
     ],
     html: '<div class="palco"><canvas id="cv" role="img" aria-label="Animação: muitas mensagens atravessam o agente de classificação uma única vez; poucas solicitações entram no agente de resolução, que consulta três sistemas em vários passos."></canvas></div>' +
       '<div class="duas">' +
@@ -510,10 +568,155 @@
     quadro: cena.quadro
   });
 
-  // 3. Por que: o historico cresce -----------------------------------------
-  telas.push({
+  // 4. A causa: a cada passo, a pilha do que o agente le fica maior ----------------
+  // Um personagem simples, usado nas telas das decisoes: o tamanho indica o modelo.
+  function robo(s) {
+    return '<svg class="robo" viewBox="0 0 40 40" width="' + s + '" height="' + s + '" aria-hidden="true">' +
+      '<line x1="20" y1="4" x2="20" y2="10" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"/><circle cx="20" cy="4" r="2.6" fill="currentColor"/>' +
+      '<rect x="6" y="10" width="28" height="24" rx="9" fill="#0a2038" stroke="currentColor" stroke-width="2.4"/>' +
+      '<circle class="olho" cx="15" cy="21" r="3" fill="currentColor"/><circle class="olho" cx="25" cy="21" r="3" fill="currentColor"/></svg>';
+  }
+  // Uma coluna por passo; cada bloco e uma parte do que o agente le naquele passo.
+  function pilhas(n, resumido) {
+    var h = "";
+    for (var i = 0; i < n; i++) {
+      var pg = ["ins"];
+      if (resumido) { if (i >= 2) pg.push("res"); if (i >= 1) pg.push("hist"); }
+      else for (var j = 0; j < i; j++) pg.push("hist");
+      h += '<div class="pl"><b>' + (i + 1) + "</b>" + pg.map(function (c, j) {
+        return '<i class="pg ' + c + '" style="animation-delay:' + (i * 0.16 + j * 0.04).toFixed(2) + 's"></i>';
+      }).join("") + "</div>";
+    }
+    return h;
+  }
+  // Um numero por decisao, sempre no formato antes e depois.
+  function antesDepois(a, ra, b, rb, oculto) {
+    return '<div class="ad"><p class="rot ad-r">Custo por mês</p>' +
+      '<div class="lado"><p class="rot">' + ra + '</p><p class="v velho">' + usd(a) + "</p></div>" +
+      '<span class="seta" aria-hidden="true">→</span>' +
+      '<div class="lado novo' + (oculto ? " apagado" : "") + '" id="adNovo"><p class="rot">' + rb + '</p><p class="v">' + usd(b) + "</p></div>" +
+      '<div class="ad-b" aria-hidden="true"><i class="ba" style="width:100%"></i><i class="bd" style="width:' + (b / a * 100).toFixed(1) + '%"></i></div></div>';
+  }
+  function fio() { return '<span class="fio" aria-hidden="true"><i></i><i></i><i></i></span>'; }
+  function contexto(s) { return '<p class="contexto">' + s + "</p>"; }
+  function oks(n) {
+    for (var h = "", i = 0; i < n; i++) h += '<b style="animation-delay:' + (0.3 + i * 0.12).toFixed(2) + 's">✓</b>';
+    return '<span class="oks" aria-hidden="true">' + h + "</span>";
+  }
+
+  telas.push({ parte: PARTES[1],
+    momentos: [{ t: "A cada passo, o agente relê <em>tudo novamente</em>",
+      l: "O modelo <strong>não guarda memória</strong> entre os passos. Por isso, o agente reenvia as instruções e <strong>todo o histórico</strong> a cada passo." }],
+    html: '<p class="rot" style="text-align:center;margin:0">O que o agente lê em cada passo</p>' +
+      '<div class="pilhas" id="pil"></div>' +
+      '<ul class="chaves"><li style="--cor: var(--a)">Instruções</li><li style="--cor: var(--b)">Histórico</li></ul>',
+    entrar: function () { $("pil").innerHTML = pilhas(AG.passos, false); }
+  });
+
+  // 5. Decisao 1: o modelo adequado ---------------------------------------------
+  telas.push({ parte: PARTES[2],
     momentos: [
-      { t: "O motivo: a cada passo, o agente relê <em>todo o histórico</em>",
+      { t: "Decisão 1: tarefa simples, <em>modelo pequeno</em>",
+        l: "Classificar uma mensagem é simples. No modelo grande, o custo seria <strong>mais de três vezes maior</strong>, sem ganho na resposta." },
+      { t: "Tarefa difícil, <em>modelo grande</em>",
+        l: "Resolver o pedido exige decisões em vários passos, e <strong>um erro compromete os passos seguintes</strong>. Nesse caso, o modelo grande é o adequado." }
+    ],
+    html: contexto("Nem toda tarefa precisa do modelo mais caro.") +
+      '<div class="par"><span class="caixa">Tarefa simples<small>classificar a mensagem</small></span>' + fio() + '<span class="caixa mod">' + robo(48) + 'Modelo pequeno</span></div>' +
+      '<div class="par apagado" id="par2"><span class="caixa">Tarefa difícil<small>resolver o pedido</small></span>' + fio() + '<span class="caixa mod">' + robo(80) + 'Modelo grande</span></div>' +
+      antesDepois(CL.custo_modelo_maior, "no modelo grande", CL.custo, "no modelo pequeno"),
+    momento: function (m) { $("par2").classList.toggle("apagado", m < 2); }
+  });
+
+  // 6. Decisao 2: o cache, na mesma pilha da tela 4 ----------------------------------
+  telas.push({ parte: PARTES[2],
+    momentos: [
+      { t: "Decisão 2: o que se repete <em>vem do cache</em>",
+        l: "As instruções do agente são <strong>as mesmas em todos os passos</strong>. Sem cache, elas são pagas a preço integral em cada passo." },
+      { t: "Com o cache, o custo cai <em>para menos da metade</em>",
+        l: "A parte que se repete passa a ser lida por <strong>um décimo do preço</strong>." }
+    ],
+    html: contexto("Uma parte do que o agente lê é sempre igual: as instruções.") +
+      '<div class="pilhas baixa" id="pil"></div>' +
+      '<ul class="chaves"><li style="--cor: var(--a)">Instruções</li><li style="--cor: var(--b)">Histórico</li>' +
+      '<li class="apagado" id="chC" style="--cor: repeating-linear-gradient(135deg, #17395a 0 3px, #4f86b3 3px 6px)">Lidas do cache</li></ul>' +
+      antesDepois(AG.sem_cache, "sem cache", AG.custo, "com cache", true),
+    entrar: function () { $("pil").innerHTML = pilhas(AG.passos, false); },
+    momento: function (m) {
+      $("pil").classList.toggle("cache", m >= 2);
+      $("chC").classList.toggle("apagado", m < 2);
+      $("adNovo").classList.toggle("apagado", m < 2);
+    }
+  });
+
+  // 7. Decisao 3: menos passos e historico resumido -----------------------------------
+  telas.push({ parte: PARTES[2],
+    momentos: [
+      { t: "Decisão 3: <em>menos passos</em>",
+        l: "Cada passo novo relê um histórico maior. <strong>Limitar os passos</strong> limita o custo." },
+      { t: "E um histórico <em>resumido</em>",
+        l: "Entre um passo e outro, o histórico é <strong>resumido</strong>. Com 5 passos, cada passo lê muito menos." }
+    ],
+    html: contexto("Quanto mais passos, maior o histórico que o agente relê.") +
+      '<div class="pilhas baixa" id="pil"></div>' +
+      '<ul class="chaves"><li style="--cor: var(--a)">Instruções</li><li style="--cor: var(--b)">Histórico</li><li style="--cor: var(--alerta)">Resumo</li></ul>' +
+      antesDepois(D.escada[1], "8 passos", D.escada[2], "5 passos e resumo", true),
+    momento: function (m) {
+      $("pil").innerHTML = pilhas(m < 2 ? AG.passos : 5, m >= 2);
+      $("adNovo").classList.toggle("apagado", m < 2);
+    }
+  });
+
+  // 8. Decisao 4: o modelo mais barato primeiro ------------------------------------
+  telas.push({ parte: PARTES[2],
+    momentos: [{ t: "Decisão 4: o modelo <em>mais barato primeiro</em>",
+      l: "O modelo pequeno tenta primeiro. Só o que ele <strong>não resolve</strong> segue para o modelo grande." }],
+    html: contexto("Muitos pedidos são simples e se resolvem no primeiro nível.") +
+      '<div class="fluxo"><div class="caixa mod">' + robo(48) + '<span>Modelo pequeno<small>resolve 60 de cada 100 pedidos</small></span>' + oks(6) + "</div>" +
+      '<div class="desce"><span class="queda" aria-hidden="true"><i></i><i></i><i></i><i></i></span>seguem 40 de cada 100</div>' +
+      '<div class="caixa mod">' + robo(72) + '<span>Modelo grande<small>resolve o restante</small></span>' + oks(4) + "</div></div>" +
+      antesDepois(D.cascata.direto, "tudo no modelo grande", D.cascata.curva[60], "o pequeno primeiro")
+  });
+
+  // 8. A escada: um degrau por decisao -------------------------------------------
+  var ESC = D.escada, ESC_ROT = [
+    ["Ponto de partida", "sem nenhum ajuste"],
+    ["Segunda decisão", "cache das instruções"],
+    ["Terceira decisão", "5 passos e histórico resumido"],
+    ["Quarta decisão", "primeiro nível, 60 de cada 100"]
+  ];
+  function centavos(v) { return Math.round(v / AG.volume * 100); }
+  telas.push({ parte: PARTES[3],
+    momentos: [
+      { t: "Ponto de partida: <em>" + usd(ESC[0]) + " por mês</em>",
+        l: "O agente de resolução <strong>sem nenhum ajuste</strong>: " + num(AG.volume) + " pedidos por mês, " + AG.passos + " passos e todas as instruções lidas a preço integral." },
+      { t: "Com o cache, <em>" + usd(ESC[1]) + "</em>",
+        l: "As instruções fixas passam a ser <strong>lidas do cache</strong>, em todos os passos." },
+      { t: "Com 5 passos e histórico resumido, <em>" + usd(ESC[2]) + "</em>",
+        l: "O agente passa a ter <strong>limite de 5 passos</strong>, e o histórico é <strong>resumido</strong> entre um passo e outro." },
+      { t: "Somadas, as decisões reduzem o custo <em>a um nono</em>",
+        l: "Com o modelo mais barato resolvendo <strong>60 de cada 100 pedidos</strong>. O limite de passos e essa parcela dependem da tarefa e devem ser medidos em um piloto." }
+    ],
+    html: '<div class="escada" id="escada">' + ESC.map(function (v, i) {
+        return '<div class="degrau" data-i="' + i + '"><p><span><b>' + ESC_ROT[i][0] + "</b> · " + ESC_ROT[i][1] + "</span><strong>" + usd(v) + "</strong></p><i data-w=\"" + (v / ESC[0] * 100) + "\"></i></div>";
+      }).join("") + "</div>" +
+      '<div class="final" id="final"><p class="grande">De <b>' + centavos(ESC[0]) + " centavos</b> para <b>" + centavos(ESC[3]) + " centavos</b> por pedido resolvido.</p>" +
+      "<p>E quanto custa esse mesmo atendimento feito por uma pessoa?</p></div>",
+    momento: function (m) {
+      [].forEach.call(document.querySelectorAll("#escada .degrau"), function (d, i) {
+        var visivel = i < m;
+        d.classList.toggle("visivel", visivel);
+        d.classList.toggle("atual", i === m - 1);
+        d.querySelector("i").style.width = visivel ? d.querySelector("i").dataset.w + "%" : "0";
+      });
+      $("final").classList.toggle("visivel", m >= ESC.length);
+    }
+  });
+
+  // 3. Por que: o historico cresce -----------------------------------------
+  telas.push({ parte: PARTES[3],
+    momentos: [
+      { t: "Por que funciona: o histórico <em>cresce a cada passo</em>",
         l: "O modelo <strong>não guarda memória</strong> entre um passo e outro. A cada passo, o agente envia novamente as instruções e <strong>todo o histórico acumulado</strong>." },
       { t: "Em dez passos, ele lê <em>mais que o dobro</em> do previsto",
         l: "Dez passos somam <strong>" + num(D.inflacao.total) + " tokens</strong> lidos. A estimativa simples, que considera o mesmo volume em todos os passos, prevê <strong>" + num(D.inflacao.simples) + "</strong>." }
@@ -542,63 +745,10 @@
     }
   });
 
-  // 4. O modelo adequado -----------------------------------------------------
-  telas.push({
-    momentos: [
-      { t: "Primeira decisão: cada papel no <em>modelo adequado</em>",
-        l: "A classificação é uma tarefa simples. No modelo de maior capacidade, custaria <strong>mais de três vezes</strong> o valor, sem ganho na resposta." },
-      { t: "O menor preço nem sempre é <em>o modelo adequado</em>",
-        l: "A resolução decide quais sistemas consultar e o que fazer com cada resultado. No modelo de menor custo o valor cai, mas <strong>um erro em um passo compromete os seguintes</strong>." }
-    ],
-    html: '<p class="rot" style="text-align:center;margin:0">Preço por milhão de tokens: entrada / saída</p>' +
-      '<div class="niveis"><div class="nivel"><b>US$ ' + D.modelos["Claude Haiku 4.5"].join(" / ") + '</b>menor custo</div>' +
-      '<div class="nivel"><b>US$ ' + D.modelos["Claude Sonnet 5"].join(" / ") + '</b>intermediário</div>' +
-      '<div class="nivel m3"><b>US$ ' + D.modelos["Claude Opus 5"].join(" / ") + '</b>maior capacidade</div></div>' +
-      '<div class="cartao papel" id="p1"><h2>Agente de classificação</h2>' +
-      '<div class="opc errada"><span>Modelo de maior capacidade<small>acima do que a tarefa exige</small></span><b>' + usd(CL.custo_modelo_maior) + '</b></div>' +
-      '<div class="opc certa"><span>Modelo de menor custo<small>adequado</small></span><b>' + usd(CL.custo) + '</b></div></div>' +
-      '<div class="cartao papel" id="p2"><h2>Agente de resolução</h2>' +
-      '<div class="opc errada"><span>Modelo de menor custo<small>abaixo do que a tarefa exige</small></span><b>' + usd(AG.custo_modelo_menor) + '</b></div>' +
-      '<div class="opc certa"><span>Modelo de maior capacidade<small>adequado</small></span><b>' + usd(AG.custo) + '</b></div></div>' +
-      '<p class="nota">Valores mensais, com preços de referência de três modelos Claude.</p>',
-    momento: function (m) { $("p2").classList.toggle("apagado", m < 2); }
-  });
-
-  // 5. Cache -----------------------------------------------------------------
-  telas.push({
-    momentos: [
-      { t: "Segunda decisão: ler do cache <em>o que se repete</em>",
-        l: "As instruções do agente são <strong>as mesmas em todos os passos</strong>. Com o cache, essa parte fixa é lida por <strong>um décimo do preço</strong>. Ative o cache para comparar." },
-      { t: "O cache só é aplicado acima de <em>um tamanho mínimo</em>",
-        l: "Cada modelo exige um tamanho mínimo de prompt para o cache. Abaixo dele, <strong>o cache não é aplicado e a API não informa</strong>: a estimativa indica economia que não ocorre." }
-    ],
-    html: '<p class="rot" style="text-align:center;margin:0">O que o agente lê em cada passo</p>' +
-      '<div class="prompt" id="prompt"><span class="fixa" id="fixa">Instruções fixas · ' + num(AG.prefixo) + ' tokens</span><span class="hist">Histórico</span></div>' +
-      '<button type="button" class="chave sem-toque" id="chCache" aria-pressed="false"><span>Cache das instruções</span><i></i></button>' +
-      '<div class="cartao" style="text-align:center"><p class="rot">Custo mensal do agente de resolução</p>' +
-      '<p class="valor"><small>US$</small><span id="vCache">0</span></p><p class="sub" id="sCache"></p></div>' +
-      '<div class="duas" id="pisos"><div class="cartao"><p class="rot">Modelo de menor custo</p><p class="valor aco" style="font-size:26px">' + num(D.piso_cache["Claude Haiku 4.5"]) + '</p><p class="sub">tokens no mínimo</p></div>' +
-      '<div class="cartao"><p class="rot">Modelo de maior capacidade</p><p class="valor aco" style="font-size:26px">' + num(D.piso_cache["Claude Opus 5"]) + '</p><p class="sub">tokens no mínimo</p></div></div>',
-    entrar: function () {
-      function aplicar() {
-        var ligado = E.cache;
-        $("chCache").setAttribute("aria-pressed", String(ligado));
-        $("prompt").classList.toggle("cache", ligado);
-        $("fixa").textContent = ligado ? "Instruções fixas · lidas do cache" : "Instruções fixas · " + num(AG.prefixo) + " tokens";
-        animar($("vCache"), ligado ? AG.custo : AG.sem_cache, 900, num);
-        $("sCache").textContent = ligado ? "com cache: menos da metade" : "sem cache: preço integral em todos os passos";
-      }
-      $("chCache").addEventListener("click", function () { E.cache = !E.cache; aplicar(); controleAlterado(); });
-      this.sincronizar = aplicar;
-      aplicar();
-    },
-    momento: function (m) { $("pisos").classList.toggle("apagado", m < 2); }
-  });
-
   // 6. Menos passos e historico resumido ---------------------------------------
-  telas.push({
+  telas.push({ parte: PARTES[3],
     momentos: [
-      { t: "Terceira decisão: <em>o limite de passos</em>",
+      { t: "O limite de passos <em>em detalhe</em>",
         l: "O limite de passos é uma decisão de arquitetura. De 8 para 16 passos, o custo <strong>triplica</strong>, porque o histórico lido também cresce. Altere o limite para comparar." },
       { t: "O histórico também pode ser <em>resumido</em>",
         l: "Resumir o histórico entre os passos reduz o que é lido novamente. O resumo tem custo próprio: no exemplo, <strong>" + usd(D.compressor) + " por mês</strong> em um modelo de menor custo." }
@@ -632,9 +782,9 @@
   });
 
   // 7. Cascata: o grafico de custo conforme os pedidos resolvidos -----------------------------------------------------------------
-  telas.push({
+  telas.push({ parte: PARTES[3],
     momentos: [
-      { t: "Quarta decisão: o modelo <em>mais barato primeiro</em>",
+      { t: "O limite do modelo <em>mais barato primeiro</em>",
         l: "Todo pedido passa primeiro pelo modelo mais barato. Só os que ele <strong>não resolve</strong> seguem para o modelo mais caro. Mova a régua." },
       { t: "Abaixo de " + Math.round(D.cascata.equilibrio * 100) + " em cada 100, <em>a economia se inverte</em>",
         l: "Os pedidos não resolvidos <strong>pagam duas vezes</strong>. Se o modelo mais barato resolve menos de " + Math.round(D.cascata.equilibrio * 100) + " em cada 100, o custo sobe. A resposta dele precisa ser <strong>validada por código</strong>." }
@@ -686,43 +836,8 @@
     }
   });
 
-  // 8. A escada: um degrau por decisao -------------------------------------------
-  var ESC = D.escada, ESC_ROT = [
-    ["Ponto de partida", "sem nenhum ajuste"],
-    ["Segunda decisão", "cache das instruções"],
-    ["Terceira decisão", "5 passos e histórico resumido"],
-    ["Quarta decisão", "primeiro nível, 60 de cada 100"]
-  ];
-  function centavos(v) { return Math.round(v / AG.volume * 100); }
-  telas.push({
-    momentos: [
-      { t: "Ponto de partida: <em>" + usd(ESC[0]) + " por mês</em>",
-        l: "O agente de resolução <strong>sem nenhum ajuste</strong>: " + num(AG.volume) + " pedidos por mês, " + AG.passos + " passos e todas as instruções lidas a preço integral." },
-      { t: "Com o cache, <em>" + usd(ESC[1]) + "</em>",
-        l: "As instruções fixas passam a ser <strong>lidas do cache</strong>, em todos os passos." },
-      { t: "Com 5 passos e histórico resumido, <em>" + usd(ESC[2]) + "</em>",
-        l: "O agente passa a ter <strong>limite de 5 passos</strong>, e o histórico é <strong>resumido</strong> entre um passo e outro." },
-      { t: "Somadas, as decisões reduzem o custo <em>a um nono</em>",
-        l: "Com o modelo mais barato resolvendo <strong>60 de cada 100 pedidos</strong>. O limite de passos e essa parcela dependem da tarefa e devem ser medidos em um piloto." }
-    ],
-    html: '<div class="escada" id="escada">' + ESC.map(function (v, i) {
-        return '<div class="degrau" data-i="' + i + '"><p><span><b>' + ESC_ROT[i][0] + "</b> · " + ESC_ROT[i][1] + "</span><strong>" + usd(v) + "</strong></p><i data-w=\"" + (v / ESC[0] * 100) + "\"></i></div>";
-      }).join("") + "</div>" +
-      '<div class="final" id="final"><p class="grande">De <b>' + centavos(ESC[0]) + " centavos</b> para <b>" + centavos(ESC[3]) + " centavos</b> por pedido resolvido.</p>" +
-      "<p>E quanto custa esse mesmo atendimento feito por uma pessoa?</p></div>",
-    momento: function (m) {
-      [].forEach.call(document.querySelectorAll("#escada .degrau"), function (d, i) {
-        var visivel = i < m;
-        d.classList.toggle("visivel", visivel);
-        d.classList.toggle("atual", i === m - 1);
-        d.querySelector("i").style.width = visivel ? d.querySelector("i").dataset.w + "%" : "0";
-      });
-      $("final").classList.toggle("visivel", m >= ESC.length);
-    }
-  });
-
   // 9. O livro e o codigo ---------------------------------------------------------
-  telas.push({
+  telas.push({ parte: PARTES[4],
     momentos: [
       { t: "O cálculo está aqui. <em>O método está no livro.</em>",
         l: "<strong>Construindo Agentes Inteligentes</strong>: Skills, Automação e Economia de Tokens. Esta apresentação mostra o cálculo; o livro apresenta o método." }
@@ -743,6 +858,13 @@
       '<a class="larga sem-toque" href="https://www.linkedin.com/in/julianamarialopes/" target="_blank" rel="noopener">Juliana Maria Lopes no LinkedIn</a></div>'
   });
 
+  // 10. A conversa da mesa ---------------------------------------------------------
+  telas.push({ parte: PARTES[4],
+    momentos: [{ t: "E os seus <em>agentes?</em>",
+      l: "Esta é a conversa da mesa. <strong>Compartilhe a sua experiência.</strong>" }],
+    html: '<ul class="perguntas"><li>Quantos passos os seus agentes executam?</li><li>O cache está ativo?</li><li>Quanto custa cada pedido resolvido?</li></ul>'
+  });
+
   // ================================================================== navegacao
   var atual = -1, mom = 1, sinc = null;
   function ir(i, m) {
@@ -759,6 +881,7 @@
     }
     mom = m;
     $("num").textContent = i + 1;
+    $("sobre").textContent = tela.parte || PARTES[0];
     $("titulo").innerHTML = "<span>" + tela.momentos[m - 1].t + "</span>";
     $("legenda").innerHTML = tela.momentos[m - 1].l;
     if (tela.momento) tela.momento(m);
