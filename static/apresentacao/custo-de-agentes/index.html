@@ -926,7 +926,7 @@
       }).catch(function () {});
     }
     // Transmissao desligada: cada pessoa navega a apresentacao por conta propria.
-    // Para religar, basta chamar iniciar() e setInterval(mostrar, 30000) neste ponto.
+    // Para religar, chamar iniciar() e setInterval(mostrar, 30000) neste ponto.
     return { publicar: publicar, manual: manual, aoVivo: aoVivo, apresentadora: function () { return !!chavePriv; } };
   }
 
